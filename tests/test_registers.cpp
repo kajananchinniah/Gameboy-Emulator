@@ -50,6 +50,21 @@ TEST(RegisterC, RandomNumber) {
   uint8_t extracted_value = registers.getBC() & 0x00ff;
   EXPECT_EQ(extracted_value, test_value);
 }
+
+TEST(RegisterD, RandomNumber) {
+  Registers registers;
+  std::random_device rd;
+  std::mt19937 mt(rd());
+  std::uniform_int_distribution<int> dist(0, 255);
+
+  uint8_t test_value = dist(mt);
+  registers.setD(test_value);
+
+  EXPECT_EQ(registers.getD(), test_value);
+
+  uint8_t extracted_value = registers.getDE() & 0x00ff;
+  EXPECT_EQ(extracted_value, test_value);
+}
 }  // namespace GB
 
 int main(int argc, char **argv) {
