@@ -118,14 +118,42 @@ TEST(RegisterAF, RandomNumber) {
   registers.setAF(test_value);
 
   EXPECT_EQ(registers.getAF(), test_value);
-
-  uint8_t extracted_high = registers.getAF() >> 8;
-  EXPECT_EQ(extracted_high, test_value >> 8);
-
-  uint8_t extracted_low = registers.getAF() & 0x00ff;
-  EXPECT_EQ(extracted_low, test_value & 0x00ff);
+  EXPECT_EQ(registers.getA(), test_value >> 8);
+  EXPECT_EQ(registers.getF(), test_value & 0x00ff);
 }
 
+TEST(RegisterBC, RandomNumber) {
+  Registers registers;
+
+  uint16_t test_value = generateRandomTestNumber<uint16_t>(0, 65535);
+  registers.setBC(test_value);
+
+  EXPECT_EQ(registers.getBC(), test_value);
+  EXPECT_EQ(registers.getB(), test_value >> 8);
+  EXPECT_EQ(registers.getC(), test_value & 0x00ff);
+}
+
+TEST(RegisterDE, RandomNumber) {
+  Registers registers;
+
+  uint16_t test_value = generateRandomTestNumber<uint16_t>(0, 65535);
+  registers.setDE(test_value);
+
+  EXPECT_EQ(registers.getDE(), test_value);
+  EXPECT_EQ(registers.getD(), test_value >> 8);
+  EXPECT_EQ(registers.getE(), test_value & 0x00ff);
+}
+
+TEST(RegisterHL, RandomNumber) {
+  Registers registers;
+
+  uint16_t test_value = generateRandomTestNumber<uint16_t>(0, 65535);
+  registers.setHL(test_value);
+
+  EXPECT_EQ(registers.getHL(), test_value);
+  EXPECT_EQ(registers.getH(), test_value >> 8);
+  EXPECT_EQ(registers.getL(), test_value & 0x00ff);
+}
 }  // namespace GB
 
 int main(int argc, char **argv) {
