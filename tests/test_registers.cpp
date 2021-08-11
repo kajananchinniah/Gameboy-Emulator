@@ -62,7 +62,7 @@ TEST(RegisterD, RandomNumber) {
 
   EXPECT_EQ(registers.getD(), test_value);
 
-  uint8_t extracted_value = registers.getDE() & 0x00ff;
+  uint8_t extracted_value = registers.getDE() >> 8;
   EXPECT_EQ(extracted_value, test_value);
 }
 }  // namespace GB
