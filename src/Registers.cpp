@@ -1,4 +1,4 @@
-#include <GB/Registers.hpp>
+#include "GB/Registers.hpp"
 
 namespace GB {
 Registers::Registers() {}
