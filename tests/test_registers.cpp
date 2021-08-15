@@ -6,7 +6,6 @@
 #include "GB/Registers.hpp"
 
 namespace GB {
-
 template <typename T>
 T generateRandomTestNumber(T min, T max) {
   std::random_device rd;
@@ -153,6 +152,46 @@ TEST(RegisterHL, RandomNumber) {
   EXPECT_EQ(registers.getHL(), test_value);
   EXPECT_EQ(registers.getH(), test_value >> 8);
   EXPECT_EQ(registers.getL(), test_value & 0x00ff);
+}
+
+TEST(ZeroFlag, AllOp) {
+  Registers registers;
+  registers.setZeroFlag();
+  EXPECT_EQ(registers.getZeroFlag(), 1);
+  EXPECT_EQ(registers.getF(), 0b10000000);
+  registers.clearZeroFlag();
+  EXPECT_EQ(registers.getZeroFlag(), 0);
+  EXPECT_EQ(registers.getF(), 0);
+}
+
+TEST(SubtractionFlag, AllOp) {
+  Registers registers;
+  registers.setSubtractionFlag();
+  EXPECT_EQ(registers.getSubtractionFlag(), 1);
+  EXPECT_EQ(registers.getF(), 0b01000000);
+  registers.clearSubtractionFlag();
+  EXPECT_EQ(registers.getSubtractionFlag(), 0);
+  EXPECT_EQ(registers.getF(), 0);
+}
+
+TEST(HalfCarryFlag, AllOp) {
+  Registers registers;
+  registers.setHalfCarryFlag();
+  EXPECT_EQ(registers.getHalfCarryFlag(), 1);
+  EXPECT_EQ(registers.getF(), 0b00100000);
+  registers.clearHalfCarryFlag();
+  EXPECT_EQ(registers.getHalfCarryFlag(), 0);
+  EXPECT_EQ(registers.getF(), 0);
+}
+
+TEST(CarryFlag, AllOp) {
+  Registers registers;
+  registers.setCarryFlag();
+  EXPECT_EQ(registers.getCarryFlag(), 1);
+  EXPECT_EQ(registers.getF(), 0b00010000);
+  registers.clearCarryFlag();
+  EXPECT_EQ(registers.getCarryFlag(), 0);
+  EXPECT_EQ(registers.getF(), 0);
 }
 }  // namespace GB
 
