@@ -64,14 +64,14 @@ void Registers::setSP(uint16_t data) { SP = data; }
 uint16_t Registers::getSP() { return SP; }
 
 uint16_t Registers::create16BitRegister(uint8_t high, uint8_t low) {
-  uint16_t high_byte = (high << 8) & 0xff00;
-  uint16_t low_byte = low & 0x00ff;
+  uint16_t high_byte = (high << 8) & 0xFF00;
+  uint16_t low_byte = low & 0x00FF;
   return high_byte | low_byte;
 }
 
 void Registers::write16BitData(uint16_t data, uint8_t *high, uint8_t *low) {
   uint8_t high_data = data >> 8;
-  uint8_t low_data = data & 0x00ff;
+  uint8_t low_data = data & 0x00FF;
   *high = high_data;
   *low = low_data;
 }

@@ -46,7 +46,7 @@ TEST(RegisterC, RandomNumber) {
 
   EXPECT_EQ(registers.getC(), test_value);
 
-  uint8_t extracted_value = registers.getBC() & 0x00ff;
+  uint8_t extracted_value = registers.getBC() & 0x00FF;
   EXPECT_EQ(extracted_value, test_value);
 }
 
@@ -70,7 +70,7 @@ TEST(RegisterE, RandomNumber) {
 
   EXPECT_EQ(registers.getE(), test_value);
 
-  uint8_t extracted_value = registers.getDE() & 0x00ff;
+  uint8_t extracted_value = registers.getDE() & 0x00FF;
   EXPECT_EQ(extracted_value, test_value);
 }
 
@@ -82,7 +82,7 @@ TEST(RegisterF, RandomNumber) {
 
   EXPECT_EQ(registers.getF(), test_value);
 
-  uint8_t extracted_value = registers.getAF() & 0x00ff;
+  uint8_t extracted_value = registers.getAF() & 0x00FF;
   EXPECT_EQ(extracted_value, test_value);
 }
 
@@ -106,7 +106,7 @@ TEST(RegisterL, RandomNumber) {
 
   EXPECT_EQ(registers.getL(), test_value);
 
-  uint8_t extracted_value = registers.getHL() & 0x00ff;
+  uint8_t extracted_value = registers.getHL() & 0x00FF;
   EXPECT_EQ(extracted_value, test_value);
 }
 
@@ -118,7 +118,7 @@ TEST(RegisterAF, RandomNumber) {
 
   EXPECT_EQ(registers.getAF(), test_value);
   EXPECT_EQ(registers.getA(), test_value >> 8);
-  EXPECT_EQ(registers.getF(), test_value & 0x00ff);
+  EXPECT_EQ(registers.getF(), test_value & 0x00FF);
 }
 
 TEST(RegisterBC, RandomNumber) {
@@ -129,7 +129,7 @@ TEST(RegisterBC, RandomNumber) {
 
   EXPECT_EQ(registers.getBC(), test_value);
   EXPECT_EQ(registers.getB(), test_value >> 8);
-  EXPECT_EQ(registers.getC(), test_value & 0x00ff);
+  EXPECT_EQ(registers.getC(), test_value & 0x00FF);
 }
 
 TEST(RegisterDE, RandomNumber) {
@@ -140,7 +140,7 @@ TEST(RegisterDE, RandomNumber) {
 
   EXPECT_EQ(registers.getDE(), test_value);
   EXPECT_EQ(registers.getD(), test_value >> 8);
-  EXPECT_EQ(registers.getE(), test_value & 0x00ff);
+  EXPECT_EQ(registers.getE(), test_value & 0x00FF);
 }
 
 TEST(RegisterHL, RandomNumber) {
@@ -151,7 +151,7 @@ TEST(RegisterHL, RandomNumber) {
 
   EXPECT_EQ(registers.getHL(), test_value);
   EXPECT_EQ(registers.getH(), test_value >> 8);
-  EXPECT_EQ(registers.getL(), test_value & 0x00ff);
+  EXPECT_EQ(registers.getL(), test_value & 0x00FF);
 }
 
 TEST(ZeroFlag, AllOp) {
