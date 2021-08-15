@@ -193,6 +193,45 @@ TEST(CarryFlag, AllOp) {
   EXPECT_EQ(registers.getCarryFlag(), 0);
   EXPECT_EQ(registers.getF(), 0);
 }
+
+TEST(PC, RandomNumber) {
+  Registers registers;
+  uint16_t test_value = 65535;
+  uint16_t test_increment = 65535;
+
+  // Chosen values should not cause overflow
+  while (static_cast<uint32_t>(test_value + test_increment) > 65535) {
+    test_value = generateRandomTestNumber<uint16_t>(0, 65535);
+    test_increment = generateRandomTestNumber<uint16_t>(0, 65535);
+  }
+
+  registers.setPC(test_value);
+  EXPECT_EQ(registers.getPC(), test_value);
+  registers.incrementPC(test_increment);
+  EXPECT_EQ(registers.getPC(), test_value + test_increment);
+  registers.decrementPC(test_increment);
+  EXPECT_EQ(registers.getPC(), test_value);
+}
+
+TEST(SP, RandomNumber) {
+  Registers registers;
+  uint16_t test_value = 65535;
+  uint16_t test_increment = 65535;
+
+  // Chosen values should not cause overflow
+  while (static_cast<uint32_t>(test_value + test_increment) > 65535) {
+    test_value = generateRandomTestNumber<uint16_t>(0, 65535);
+    test_increment = generateRandomTestNumber<uint16_t>(0, 65535);
+  }
+
+  registers.setSP(test_value);
+  EXPECT_EQ(registers.getSP(), test_value);
+  registers.incrementSP(test_increment);
+  EXPECT_EQ(registers.getSP(), test_value + test_increment);
+  registers.decrementSP(test_increment);
+  EXPECT_EQ(registers.getSP(), test_value);
+}
+
 }  // namespace GB
 
 int main(int argc, char **argv) {
