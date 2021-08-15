@@ -1,10 +1,6 @@
 #include "GB/Registers.hpp"
 
 namespace GB {
-Registers::Registers() {}
-
-Registers::~Registers() {}
-
 uint8_t Registers::getA() { return A; }
 void Registers::setA(uint8_t data) { A = data; }
 

@@ -7,9 +7,6 @@ namespace GB {
 
 class Registers {
  public:
-  Registers();
-  ~Registers();
-
   uint8_t getA();
   void setA(uint8_t data);
 
