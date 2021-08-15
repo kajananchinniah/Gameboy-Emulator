@@ -53,6 +53,16 @@ uint8_t Registers::getCarryFlag() { return getBit(F, 4); }
 void Registers::setCarryFlag() { setBit(&F, 4); }
 void Registers::clearCarryFlag() { clearBit(&F, 4); }
 
+void Registers::incrementPC(uint16_t amount) { PC += amount; }
+void Registers::decrementPC(uint16_t amount) { PC -= amount; }
+void Registers::setPC(uint16_t data) { PC = data; }
+uint16_t Registers::getPC() { return PC; }
+
+void Registers::incrementSP(uint16_t amount) { SP += amount; }
+void Registers::decrementSP(uint16_t amount) { SP -= amount; }
+void Registers::setSP(uint16_t data) { SP = data; }
+uint16_t Registers::getSP() { return SP; }
+
 uint16_t Registers::create16BitRegister(uint8_t high, uint8_t low) {
   uint16_t high_byte = (high << 8) & 0xff00;
   uint16_t low_byte = low & 0x00ff;

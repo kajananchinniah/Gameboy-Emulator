@@ -59,6 +59,16 @@ class Registers {
   void setCarryFlag();
   void clearCarryFlag();
 
+  void incrementPC(uint16_t amount);
+  void decrementPC(uint16_t amount);
+  void setPC(uint16_t data);
+  uint16_t getPC();
+
+  void incrementSP(uint16_t amount);
+  void decrementSP(uint16_t amount);
+  void setSP(uint16_t data);
+  uint16_t getSP();
+
  private:
   uint8_t A = 0x0;
   uint8_t B = 0x0;
@@ -68,6 +78,8 @@ class Registers {
   uint8_t F = 0x0;
   uint8_t H = 0x0;
   uint8_t L = 0x0;
+  uint16_t PC = 0x0;
+  uint16_t SP = 0x0;
 
   uint16_t create16BitRegister(uint8_t high, uint8_t low);
   void write16BitData(uint16_t, uint8_t *high, uint8_t *low);
