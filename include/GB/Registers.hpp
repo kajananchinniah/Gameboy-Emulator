@@ -29,7 +29,7 @@ class Register {
   Data data_;
 };
 
-class RegisterAF : Register {
+class RegisterAF : public Register {
  public:
   uint8_t getZeroFlag();
   void setZeroFlag();

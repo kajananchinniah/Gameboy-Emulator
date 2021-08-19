@@ -141,17 +141,19 @@ TEST(Register, RandomNumberFullDirectWrite) {
   EXPECT_EQ(*(random_register.getFullRegister()), test_value);
 }
 
-/*
 TEST(ZeroFlag, AllOp) {
-  Registers registers;
-  registers.setZeroFlag();
-  EXPECT_EQ(registers.getZeroFlag(), 1);
-  EXPECT_EQ(registers.getF(), 0b10000000);
-  registers.clearZeroFlag();
-  EXPECT_EQ(registers.getZeroFlag(), 0);
-  EXPECT_EQ(registers.getF(), 0);
+  RegisterAF AF;
+  AF.setZeroFlag();
+  EXPECT_EQ(AF.getZeroFlag(), 1);
+  EXPECT_EQ(AF.getLowValue(), 0b10000000);
+  EXPECT_EQ(*(AF.getLowRegister()), 0b10000000);
+  AF.clearZeroFlag();
+  EXPECT_EQ(AF.getZeroFlag(), 0);
+  EXPECT_EQ(AF.getLowValue(), 0);
+  EXPECT_EQ(*(AF.getLowRegister()), 0);
 }
 
+/*
 TEST(SubtractionFlag, AllOp) {
   Registers registers;
   registers.setSubtractionFlag();
