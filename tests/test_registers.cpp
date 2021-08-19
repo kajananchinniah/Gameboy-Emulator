@@ -153,76 +153,137 @@ TEST(ZeroFlag, AllOp) {
   EXPECT_EQ(*(AF.getLowRegister()), 0);
 }
 
-/*
 TEST(SubtractionFlag, AllOp) {
-  Registers registers;
-  registers.setSubtractionFlag();
-  EXPECT_EQ(registers.getSubtractionFlag(), 1);
-  EXPECT_EQ(registers.getF(), 0b01000000);
-  registers.clearSubtractionFlag();
-  EXPECT_EQ(registers.getSubtractionFlag(), 0);
-  EXPECT_EQ(registers.getF(), 0);
+  RegisterAF AF;
+  AF.setSubtractionFlag();
+  EXPECT_EQ(AF.getSubtractionFlag(), 1);
+  EXPECT_EQ(AF.getLowValue(), 0b01000000);
+  EXPECT_EQ(*(AF.getLowRegister()), 0b01000000);
+  AF.clearSubtractionFlag();
+  EXPECT_EQ(AF.getSubtractionFlag(), 0);
+  EXPECT_EQ(AF.getLowValue(), 0);
+  EXPECT_EQ(*(AF.getLowRegister()), 0);
 }
 
 TEST(HalfCarryFlag, AllOp) {
-  Registers registers;
-  registers.setHalfCarryFlag();
-  EXPECT_EQ(registers.getHalfCarryFlag(), 1);
-  EXPECT_EQ(registers.getF(), 0b00100000);
-  registers.clearHalfCarryFlag();
-  EXPECT_EQ(registers.getHalfCarryFlag(), 0);
-  EXPECT_EQ(registers.getF(), 0);
+  RegisterAF AF;
+  AF.setHalfCarryFlag();
+  EXPECT_EQ(AF.getHalfCarryFlag(), 1);
+  EXPECT_EQ(AF.getLowValue(), 0b00100000);
+  EXPECT_EQ(*(AF.getLowRegister()), 0b00100000);
+  AF.clearHalfCarryFlag();
+  EXPECT_EQ(AF.getHalfCarryFlag(), 0);
+  EXPECT_EQ(AF.getLowValue(), 0);
+  EXPECT_EQ(*(AF.getLowRegister()), 0);
 }
 
 TEST(CarryFlag, AllOp) {
-  Registers registers;
-  registers.setCarryFlag();
-  EXPECT_EQ(registers.getCarryFlag(), 1);
-  EXPECT_EQ(registers.getF(), 0b00010000);
-  registers.clearCarryFlag();
-  EXPECT_EQ(registers.getCarryFlag(), 0);
-  EXPECT_EQ(registers.getF(), 0);
+  RegisterAF AF;
+  AF.setCarryFlag();
+  EXPECT_EQ(AF.getCarryFlag(), 1);
+  EXPECT_EQ(AF.getLowValue(), 0b00010000);
+  EXPECT_EQ(*(AF.getLowRegister()), 0b00010000);
+  AF.clearCarryFlag();
+  EXPECT_EQ(AF.getCarryFlag(), 0);
+  EXPECT_EQ(AF.getLowValue(), 0);
+  EXPECT_EQ(*(AF.getLowRegister()), 0);
 }
 
-TEST(PC, RandomNumber) {
-  Registers registers;
+TEST(ProgramCounter, RandomNumberSetter) {
+  ProgramCounter PC;
   uint16_t test_value = 65535;
   uint16_t test_increment = 65535;
 
-  // Chosen values should not cause overflow
   while (static_cast<uint32_t>(test_value + test_increment) > 65535) {
     test_value = generateRandomTestNumber<uint16_t>(0, 65535);
     test_increment = generateRandomTestNumber<uint16_t>(0, 65535);
   }
 
-  registers.setPC(test_value);
-  EXPECT_EQ(registers.getPC(), test_value);
-  registers.incrementPC(test_increment);
-  EXPECT_EQ(registers.getPC(), test_value + test_increment);
-  registers.decrementPC(test_increment);
-  EXPECT_EQ(registers.getPC(), test_value);
+  PC.setPC(test_value);
+  EXPECT_EQ(PC.getPCValue(), test_value);
+  EXPECT_EQ(*(PC.getPC()), test_value);
+
+  PC.incrementPC(test_increment);
+  EXPECT_EQ(PC.getPCValue(), test_value + test_increment);
+  EXPECT_EQ(*(PC.getPC()), test_value + test_increment);
+
+  PC.decrementPC(test_increment);
+  EXPECT_EQ(PC.getPCValue(), test_value);
+  EXPECT_EQ(*(PC.getPC()), test_value);
 }
 
-TEST(SP, RandomNumber) {
-  Registers registers;
+TEST(ProgramCounter, RandomNumberDirectValue) {
+  ProgramCounter PC;
   uint16_t test_value = 65535;
   uint16_t test_increment = 65535;
 
-  // Chosen values should not cause overflow
   while (static_cast<uint32_t>(test_value + test_increment) > 65535) {
     test_value = generateRandomTestNumber<uint16_t>(0, 65535);
     test_increment = generateRandomTestNumber<uint16_t>(0, 65535);
   }
 
-  registers.setSP(test_value);
-  EXPECT_EQ(registers.getSP(), test_value);
-  registers.incrementSP(test_increment);
-  EXPECT_EQ(registers.getSP(), test_value + test_increment);
-  registers.decrementSP(test_increment);
-  EXPECT_EQ(registers.getSP(), test_value);
-}
-*/
+  uint16_t *PC_ptr = PC.getPC();
+  *PC_ptr = test_value;
 
+  EXPECT_EQ(PC.getPCValue(), test_value);
+  EXPECT_EQ(*(PC.getPC()), test_value);
+
+  *PC_ptr += test_increment;
+  EXPECT_EQ(PC.getPCValue(), test_value + test_increment);
+  EXPECT_EQ(*(PC.getPC()), test_value + test_increment);
+
+  *PC_ptr -= test_increment;
+  EXPECT_EQ(PC.getPCValue(), test_value);
+  EXPECT_EQ(*(PC.getPC()), test_value);
+}
+
+TEST(StackPointer, RandomNumberSetter) {
+  StackPointer SP;
+  uint16_t test_value = 65535;
+  uint16_t test_increment = 65535;
+
+  while (static_cast<uint32_t>(test_value + test_increment) > 65535) {
+    test_value = generateRandomTestNumber<uint16_t>(0, 65535);
+    test_increment = generateRandomTestNumber<uint16_t>(0, 65535);
+  }
+
+  SP.setSP(test_value);
+  EXPECT_EQ(SP.getSPValue(), test_value);
+  EXPECT_EQ(*(SP.getSP()), test_value);
+
+  SP.incrementSP(test_increment);
+  EXPECT_EQ(SP.getSPValue(), test_value + test_increment);
+  EXPECT_EQ(*(SP.getSP()), test_value + test_increment);
+
+  SP.decrementSP(test_increment);
+  EXPECT_EQ(SP.getSPValue(), test_value);
+  EXPECT_EQ(*(SP.getSP()), test_value);
+}
+
+TEST(StackPointer, RandomNumberDirectValue) {
+  StackPointer SP;
+  uint16_t test_value = 65535;
+  uint16_t test_increment = 65535;
+
+  while (static_cast<uint32_t>(test_value + test_increment) > 65535) {
+    test_value = generateRandomTestNumber<uint16_t>(0, 65535);
+    test_increment = generateRandomTestNumber<uint16_t>(0, 65535);
+  }
+
+  uint16_t *SP_ptr = SP.getSP();
+  *SP_ptr = test_value;
+
+  EXPECT_EQ(SP.getSPValue(), test_value);
+  EXPECT_EQ(*(SP.getSP()), test_value);
+
+  *SP_ptr += test_increment;
+  EXPECT_EQ(SP.getSPValue(), test_value + test_increment);
+  EXPECT_EQ(*(SP.getSP()), test_value + test_increment);
+
+  *SP_ptr -= test_increment;
+  EXPECT_EQ(SP.getSPValue(), test_value);
+  EXPECT_EQ(*(SP.getSP()), test_value);
+}
 }  // namespace GB
 
 int main(int argc, char **argv) {
