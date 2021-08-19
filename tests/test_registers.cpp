@@ -14,146 +14,134 @@ T generateRandomTestNumber(T min, T max) {
   return dist(mt);
 }
 
-TEST(RegisterA, RandomNumber) {
-  Registers registers;
-
+TEST(Register, RandomNumberHighSetter) {
+  Register random_register;
   uint8_t test_value = generateRandomTestNumber<uint8_t>(0, 255);
-  registers.setA(test_value);
+  random_register.setHighValue(test_value);
 
-  EXPECT_EQ(registers.getA(), test_value);
+  EXPECT_EQ(random_register.getHighValue(), test_value);
+  EXPECT_EQ(random_register.getLowValue(), 0x00);
 
-  uint8_t extracted_value = registers.getAF() >> 8;
-  EXPECT_EQ(extracted_value, test_value);
+  EXPECT_EQ(*(random_register.getHighRegister()), test_value);
+  EXPECT_EQ(*(random_register.getLowRegister()), 0x00);
+
+  uint8_t extracted_value_high = random_register.getFullValue() >> 8;
+  uint8_t extracted_value_low = random_register.getFullValue() & 0x00FF;
+  EXPECT_EQ(extracted_value_high, test_value);
+  EXPECT_EQ(extracted_value_low, 0x00);
+
+  extracted_value_high = *(random_register.getFullRegister()) >> 8;
+  extracted_value_low = *(random_register.getFullRegister()) & 0x00FF;
+  EXPECT_EQ(extracted_value_high, test_value);
+  EXPECT_EQ(extracted_value_low, 0x00);
 }
 
-TEST(RegisterB, RandomNumber) {
-  Registers registers;
-
+TEST(Register, RandomNumberHighDirectWrite) {
+  Register random_register;
   uint8_t test_value = generateRandomTestNumber<uint8_t>(0, 255);
-  registers.setB(test_value);
+  uint8_t *high = random_register.getHighRegister();
+  *high = test_value;
 
-  EXPECT_EQ(registers.getB(), test_value);
+  EXPECT_EQ(random_register.getHighValue(), test_value);
+  EXPECT_EQ(random_register.getLowValue(), 0x00);
 
-  uint8_t extracted_value = registers.getBC() >> 8;
-  EXPECT_EQ(extracted_value, test_value);
+  EXPECT_EQ(*(random_register.getHighRegister()), test_value);
+  EXPECT_EQ(*(random_register.getLowRegister()), 0x00);
+
+  uint8_t extracted_value_high = random_register.getFullValue() >> 8;
+  uint8_t extracted_value_low = random_register.getFullValue() & 0x00FF;
+  EXPECT_EQ(extracted_value_high, test_value);
+  EXPECT_EQ(extracted_value_low, 0x00);
+
+  extracted_value_high = *(random_register.getFullRegister()) >> 8;
+  EXPECT_EQ(extracted_value_high, test_value);
+  EXPECT_EQ(extracted_value_low, 0x00);
 }
 
-TEST(RegisterC, RandomNumber) {
-  Registers registers;
-
+TEST(Register, RandomNumberLowSetter) {
+  Register random_register;
   uint8_t test_value = generateRandomTestNumber<uint8_t>(0, 255);
-  registers.setC(test_value);
+  random_register.setLowValue(test_value);
 
-  EXPECT_EQ(registers.getC(), test_value);
+  EXPECT_EQ(random_register.getHighValue(), 0x00);
+  EXPECT_EQ(random_register.getLowValue(), test_value);
 
-  uint8_t extracted_value = registers.getBC() & 0x00FF;
-  EXPECT_EQ(extracted_value, test_value);
+  EXPECT_EQ(*(random_register.getHighRegister()), 0x00);
+  EXPECT_EQ(*(random_register.getLowRegister()), test_value);
+
+  uint8_t extracted_value_high = random_register.getFullValue() >> 8;
+  uint8_t extracted_value_low = random_register.getFullValue() & 0x00FF;
+  EXPECT_EQ(extracted_value_high, 0x00);
+  EXPECT_EQ(extracted_value_low, test_value);
+
+  extracted_value_high = *(random_register.getFullRegister()) >> 8;
+  extracted_value_low = *(random_register.getFullRegister()) & 0x00FF;
+  EXPECT_EQ(extracted_value_high, 0x00);
+  EXPECT_EQ(extracted_value_low, test_value);
 }
 
-TEST(RegisterD, RandomNumber) {
-  Registers registers;
-
+TEST(Register, RandomNumberLowDirectWrite) {
+  Register random_register;
   uint8_t test_value = generateRandomTestNumber<uint8_t>(0, 255);
-  registers.setD(test_value);
+  uint8_t *low = random_register.getLowRegister();
+  *low = test_value;
 
-  EXPECT_EQ(registers.getD(), test_value);
+  EXPECT_EQ(random_register.getHighValue(), 0x00);
+  EXPECT_EQ(random_register.getLowValue(), test_value);
 
-  uint8_t extracted_value = registers.getDE() >> 8;
-  EXPECT_EQ(extracted_value, test_value);
+  EXPECT_EQ(*(random_register.getHighRegister()), 0x00);
+  EXPECT_EQ(*(random_register.getLowRegister()), test_value);
+
+  uint8_t extracted_value_high = random_register.getFullValue() >> 8;
+  uint8_t extracted_value_low = random_register.getFullValue() & 0x00FF;
+  EXPECT_EQ(extracted_value_high, 0x00);
+  EXPECT_EQ(extracted_value_low, test_value);
+
+  extracted_value_high = *(random_register.getFullRegister()) >> 8;
+  extracted_value_low = *(random_register.getFullRegister()) & 0x00FF;
+  EXPECT_EQ(extracted_value_high, 0x00);
+  EXPECT_EQ(extracted_value_low, test_value);
 }
 
-TEST(RegisterE, RandomNumber) {
-  Registers registers;
+TEST(Register, RandomNumberFullSetter) {
+  Register random_register;
+  uint16_t test_value = generateRandomTestNumber<uint16_t>(0, 65535);
+  uint8_t test_high_value = test_value >> 8;
+  uint8_t test_low_value = test_value & 0x00FF;
 
-  uint8_t test_value = generateRandomTestNumber<uint8_t>(0, 255);
-  registers.setE(test_value);
+  random_register.setFullValue(test_value);
 
-  EXPECT_EQ(registers.getE(), test_value);
+  EXPECT_EQ(random_register.getHighValue(), test_high_value);
+  EXPECT_EQ(random_register.getLowValue(), test_low_value);
 
-  uint8_t extracted_value = registers.getDE() & 0x00FF;
-  EXPECT_EQ(extracted_value, test_value);
+  EXPECT_EQ(*(random_register.getHighRegister()), test_high_value);
+  EXPECT_EQ(*(random_register.getLowRegister()), test_low_value);
+
+  EXPECT_EQ(random_register.getFullValue(), test_value);
+  EXPECT_EQ(*(random_register.getFullRegister()), test_value);
 }
 
-TEST(RegisterF, RandomNumber) {
-  Registers registers;
-
-  uint8_t test_value = generateRandomTestNumber<uint8_t>(0, 255);
-  registers.setF(test_value);
-
-  EXPECT_EQ(registers.getF(), test_value);
-
-  uint8_t extracted_value = registers.getAF() & 0x00FF;
-  EXPECT_EQ(extracted_value, test_value);
-}
-
-TEST(RegisterH, RandomNumber) {
-  Registers registers;
-
-  uint8_t test_value = generateRandomTestNumber<uint8_t>(0, 255);
-  registers.setH(test_value);
-
-  EXPECT_EQ(registers.getH(), test_value);
-
-  uint8_t extracted_value = registers.getHL() >> 8;
-  EXPECT_EQ(extracted_value, test_value);
-}
-
-TEST(RegisterL, RandomNumber) {
-  Registers registers;
-
-  uint8_t test_value = generateRandomTestNumber<uint8_t>(0, 255);
-  registers.setL(test_value);
-
-  EXPECT_EQ(registers.getL(), test_value);
-
-  uint8_t extracted_value = registers.getHL() & 0x00FF;
-  EXPECT_EQ(extracted_value, test_value);
-}
-
-TEST(RegisterAF, RandomNumber) {
-  Registers registers;
+TEST(Register, RandomNumberFullDirectWrite) {
+  Register random_register;
 
   uint16_t test_value = generateRandomTestNumber<uint16_t>(0, 65535);
-  registers.setAF(test_value);
+  uint8_t test_high_value = test_value >> 8;
+  uint8_t test_low_value = test_value & 0x00FF;
 
-  EXPECT_EQ(registers.getAF(), test_value);
-  EXPECT_EQ(registers.getA(), test_value >> 8);
-  EXPECT_EQ(registers.getF(), test_value & 0x00FF);
+  uint16_t *full = random_register.getFullRegister();
+  *full = test_value;
+
+  EXPECT_EQ(random_register.getHighValue(), test_high_value);
+  EXPECT_EQ(random_register.getLowValue(), test_low_value);
+
+  EXPECT_EQ(*(random_register.getHighRegister()), test_high_value);
+  EXPECT_EQ(*(random_register.getLowRegister()), test_low_value);
+
+  EXPECT_EQ(random_register.getFullValue(), test_value);
+  EXPECT_EQ(*(random_register.getFullRegister()), test_value);
 }
 
-TEST(RegisterBC, RandomNumber) {
-  Registers registers;
-
-  uint16_t test_value = generateRandomTestNumber<uint16_t>(0, 65535);
-  registers.setBC(test_value);
-
-  EXPECT_EQ(registers.getBC(), test_value);
-  EXPECT_EQ(registers.getB(), test_value >> 8);
-  EXPECT_EQ(registers.getC(), test_value & 0x00FF);
-}
-
-TEST(RegisterDE, RandomNumber) {
-  Registers registers;
-
-  uint16_t test_value = generateRandomTestNumber<uint16_t>(0, 65535);
-  registers.setDE(test_value);
-
-  EXPECT_EQ(registers.getDE(), test_value);
-  EXPECT_EQ(registers.getD(), test_value >> 8);
-  EXPECT_EQ(registers.getE(), test_value & 0x00FF);
-}
-
-TEST(RegisterHL, RandomNumber) {
-  Registers registers;
-
-  uint16_t test_value = generateRandomTestNumber<uint16_t>(0, 65535);
-  registers.setHL(test_value);
-
-  EXPECT_EQ(registers.getHL(), test_value);
-  EXPECT_EQ(registers.getH(), test_value >> 8);
-  EXPECT_EQ(registers.getL(), test_value & 0x00FF);
-}
-
+/*
 TEST(ZeroFlag, AllOp) {
   Registers registers;
   registers.setZeroFlag();
@@ -231,6 +219,7 @@ TEST(SP, RandomNumber) {
   registers.decrementSP(test_increment);
   EXPECT_EQ(registers.getSP(), test_value);
 }
+*/
 
 }  // namespace GB
 

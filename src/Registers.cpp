@@ -1,89 +1,55 @@
 #include "GB/Registers.hpp"
 
 namespace GB {
-uint8_t Registers::getA() { return A; }
-void Registers::setA(uint8_t data) { A = data; }
 
-uint8_t Registers::getB() { return B; }
-void Registers::setB(uint8_t data) { B = data; }
+uint16_t *Register::getFullRegister() { return &data_.full; }
+uint8_t *Register::getHighRegister() { return &data_.high; }
+uint8_t *Register::getLowRegister() { return &data_.low; }
 
-uint8_t Registers::getC() { return C; }
-void Registers::setC(uint8_t data) { C = data; }
+uint16_t Register::getFullValue() { return data_.full; }
+uint8_t Register::getHighValue() { return data_.high; }
+uint8_t Register::getLowValue() { return data_.low; }
 
-uint8_t Registers::getD() { return D; }
-void Registers::setD(uint8_t data) { D = data; }
+void Register::setFullValue(uint16_t data) { data_.full = data; }
+void Register::setHighValue(uint8_t data) { data_.high = data; }
+void Register::setLowValue(uint8_t data) { data_.low = data; }
 
-uint8_t Registers::getE() { return E; }
-void Registers::setE(uint8_t data) { E = data; }
+uint8_t RegisterAF::getZeroFlag() { return getBit(data_.low, 7); }
+void RegisterAF::setZeroFlag() { setBit(&data_.low, 7); }
+void RegisterAF::clearZeroFlag() { clearBit(&data_.low, 7); }
 
-uint8_t Registers::getF() { return F; }
-void Registers::setF(uint8_t data) { F = data; }
+uint8_t RegisterAF::getSubtractionFlag() { return getBit(data_.low, 6); }
+void RegisterAF::setSubtractionFlag() { setBit(&data_.low, 6); }
+void RegisterAF::clearSubtractionFlag() { clearBit(&data_.low, 6); }
 
-uint8_t Registers::getH() { return H; }
-void Registers::setH(uint8_t data) { H = data; }
+uint8_t RegisterAF::getHalfCarryFlag() { return getBit(data_.low, 5); }
+void RegisterAF::setHalfCarryFlag() { setBit(&data_.low, 5); }
+void RegisterAF::clearHalfCarryFlag() { clearBit(&data_.low, 5); }
 
-uint8_t Registers::getL() { return L; }
-void Registers::setL(uint8_t data) { L = data; }
+uint8_t RegisterAF::getCarryFlag() { return getBit(data_.low, 4); }
+void RegisterAF::setCarryFlag() { setBit(&data_.low, 4); }
+void RegisterAF::clearCarryFlag() { clearBit(&data_.low, 4); }
 
-uint16_t Registers::getAF() { return create16BitRegister(A, F); }
-void Registers::setAF(uint16_t data) { write16BitData(data, &A, &F); }
-
-uint16_t Registers::getBC() { return create16BitRegister(B, C); }
-void Registers::setBC(uint16_t data) { write16BitData(data, &B, &C); }
-
-uint16_t Registers::getDE() { return create16BitRegister(D, E); }
-void Registers::setDE(uint16_t data) { write16BitData(data, &D, &E); }
-
-uint16_t Registers::getHL() { return create16BitRegister(H, L); }
-void Registers::setHL(uint16_t data) { write16BitData(data, &H, &L); }
-
-uint8_t Registers::getZeroFlag() { return getBit(F, 7); }
-void Registers::setZeroFlag() { setBit(&F, 7); }
-void Registers::clearZeroFlag() { clearBit(&F, 7); }
-
-uint8_t Registers::getSubtractionFlag() { return getBit(F, 6); }
-void Registers::setSubtractionFlag() { setBit(&F, 6); }
-void Registers::clearSubtractionFlag() { clearBit(&F, 6); }
-
-uint8_t Registers::getHalfCarryFlag() { return getBit(F, 5); }
-void Registers::setHalfCarryFlag() { setBit(&F, 5); }
-void Registers::clearHalfCarryFlag() { clearBit(&F, 5); }
-
-uint8_t Registers::getCarryFlag() { return getBit(F, 4); }
-void Registers::setCarryFlag() { setBit(&F, 4); }
-void Registers::clearCarryFlag() { clearBit(&F, 4); }
-
-void Registers::incrementPC(uint16_t amount) { PC += amount; }
-void Registers::decrementPC(uint16_t amount) { PC -= amount; }
-void Registers::setPC(uint16_t data) { PC = data; }
-uint16_t Registers::getPC() { return PC; }
-
-void Registers::incrementSP(uint16_t amount) { SP += amount; }
-void Registers::decrementSP(uint16_t amount) { SP -= amount; }
-void Registers::setSP(uint16_t data) { SP = data; }
-uint16_t Registers::getSP() { return SP; }
-
-uint16_t Registers::create16BitRegister(uint8_t high, uint8_t low) {
-  uint16_t high_byte = (high << 8) & 0xFF00;
-  uint16_t low_byte = low & 0x00FF;
-  return high_byte | low_byte;
-}
-
-void Registers::write16BitData(uint16_t data, uint8_t *high, uint8_t *low) {
-  uint8_t high_data = data >> 8;
-  uint8_t low_data = data & 0x00FF;
-  *high = high_data;
-  *low = low_data;
-}
-
-uint8_t Registers::getBit(uint8_t reg, uint8_t position) {
+uint8_t RegisterAF::getBit(uint8_t reg, uint8_t position) {
   return (reg >> position) & 0x1;
 }
 
-void Registers::setBit(uint8_t *reg, uint8_t position) {
+void RegisterAF::setBit(uint8_t *reg, uint8_t position) {
   *reg = *reg | (1 << position);
 }
-void Registers::clearBit(uint8_t *reg, uint8_t position) {
+void RegisterAF::clearBit(uint8_t *reg, uint8_t position) {
   *reg = *reg & ~(1 << position);
 }
+
+void ProgramCounter::incrementPC(uint16_t amount) { PC += amount; }
+void ProgramCounter::decrementPC(uint16_t amount) { PC -= amount; }
+void ProgramCounter::setPC(uint16_t data) { PC = data; }
+uint16_t ProgramCounter::getPCValue() { return PC; }
+uint16_t *ProgramCounter::getPC() { return &PC; }
+
+void StackPointer::incrementSP(uint16_t amount) { SP += amount; }
+void StackPointer::decrementSP(uint16_t amount) { SP -= amount; }
+void StackPointer::setSP(uint16_t data) { SP = data; }
+uint16_t StackPointer::getSPValue() { return SP; }
+uint16_t *StackPointer::getSP() { return &SP; }
 }  // namespace GB
