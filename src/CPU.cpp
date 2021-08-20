@@ -1,27 +1,75 @@
 #include "GB/CPU.hpp"
 
-namespace GB {
-CPU::CPU() {
-  opcode_table = {
-      {[this]() { OP_0x00(); }, 1, 4},  {[this]() { OP_0x01(); }, 3, 12},
-      {[this]() { OP_0x02(); }, 1, 8},  {[this]() { OP_0x03(); }, 1, 8},
-      {[this]() { OP_0x04(); }, 1, 4},  {[this]() { OP_0x05(); }, 1, 4},
-      {[this]() { OP_0x06(); }, 2, 8},  {[this]() { OP_0x07(); }, 1, 4},
-      {[this]() { OP_0x08(); }, 3, 20}, {[this]() { OP_0x09(); }, 1, 8},
-      {[this]() { OP_0x0A(); }, 1, 8},  {[this]() { OP_0x0B(); }, 1, 8},
-      {[this]() { OP_0x0C(); }, 1, 4},  {[this]() { OP_0x0C(); }, 1, 4},
-      {[this]() { OP_0x0D(); }, 1, 4},  {[this]() { OP_0x0E(); }, 2, 8},
-      {[this]() { OP_0x0F(); }, 1, 4},  {[this]() { OP_0x10(); }, 2, 4},
-      {[this]() { OP_0x11(); }, 3, 12}, {[this]() { OP_0x12(); }, 1, 8},
-      {[this]() { OP_0x13(); }, 1, 8},  {[this]() { OP_0x14(); }, 1, 4},
-      {[this]() { OP_0x15(); }, 1, 4},  {[this]() { OP_0x16(); }, 2, 8},
-      {[this]() { OP_0x17(); }, 1, 4},  {[this]() { OP_0x18(); }, 2, 12},
-      {[this]() { OP_0x19(); }, 1, 8},  {[this]() { OP_0x1A(); }, 1, 8},
-      {[this]() { OP_0x1B(); }, 1, 8},  {[this]() { OP_0x1C(); }, 1, 4},
-      {[this]() { OP_0x1D(); }, 1, 4},  {[this]() { OP_0x1E(); }, 2, 8},
-      {[this]() { OP_0x1F(); }, 1, 4},  {[this]() { OP_0x20(); }, 2, 12},
-  };
+#include "GB/MMU.hpp"
+
+namespace {
+void LD_ValueIntoRegister_8bit(uint8_t *r, uint8_t const *n) { *r = *n; }
+
+void LD_MemoryLocationIntoRegister_8bit(uint8_t *r, uint16_t const *addr,
+                                        GB::MMU *mmu) {
+  *r = mmu->read(*addr);
 }
 
-void CPU::OP_0x00() { return; }
+void LD_RegisterIntoMemoryLocation_8bit(uint16_t const *addr, uint8_t const *r,
+                                        GB::MMU *mmu) {
+  mmu->write(*addr, *r);
+}
+
+void LDI_RegisterIntoMemoryLocation_8bit(uint16_t *addr, uint8_t const *r,
+                                         GB::MMU *mmu) {
+  mmu->write(*addr, *r);
+  *addr = *addr + 1;
+}
+
+void LDI_MemoryLocationIntoRegister_8bit(uint8_t *r, uint16_t *addr,
+                                         GB::MMU *mmu) {
+  *r = mmu->read(*addr);
+  *addr = *addr + 1;
+}
+
+void LDD_RegisterIntoMemoryLocation_8bit(uint16_t *addr, uint8_t const *r,
+                                         GB::MMU *mmu) {
+  mmu->write(*addr, *r);
+  *addr = *addr - 1;
+}
+
+void LDD_MemoryLocationIntoRegister_8bit(uint8_t *r, uint16_t *addr,
+                                         GB::MMU *mmu) {
+  *r = mmu->read(*addr);
+  *addr = *addr - 1;
+}
+
+void LD_ValueIntoRegister_16bit(uint16_t *rr, uint16_t const *nn) { *rr = *nn; }
+void LD_RegisterIntoMemoryLocation_16bit(uint16_t const *addr,
+                                         uint16_t const *rr, GB::MMU *mmu) {
+  uint8_t high_addr = (*addr) >> 8;
+  uint8_t low_addr = (*addr) & 0x00FF;
+
+  uint8_t high_reg = (*rr) >> 8;
+  uint8_t low_reg = (*rr) & 0x00FF;
+
+  mmu->write(high_addr, high_reg);
+  mmu->write(low_addr, low_reg);
+}
+
+void Push_Register_16bit(uint16_t *SP, uint16_t *rr, GB::MMU *mmu) {
+  uint8_t high_reg = (*rr) >> 8;
+  uint8_t low_reg = (*rr) & 0x00FF;
+  mmu->write(*SP - 1, high_reg);
+  mmu->write(*SP - 2, low_reg);
+  *SP = *SP - 2;
+}
+
+void Pop_Register_16bit(uint16_t *SP, uint16_t *rr, GB::MMU *mmu) {
+  uint8_t low_reg = mmu->read(*SP);
+  uint8_t high_reg = mmu->read(*SP + 1);
+  *SP = *SP + 2;
+  *rr = high_reg << 8 | low_reg;
+}
+
+}  // namespace
+
+namespace GB {
+CPU::CPU() {}
+
 }  // namespace GB
