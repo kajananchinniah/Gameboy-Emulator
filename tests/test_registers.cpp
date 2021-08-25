@@ -4,15 +4,9 @@
 #include <random>
 
 #include "GB/Registers.hpp"
+#include "test_base.hpp"
 
 namespace GB {
-template <typename T>
-T generateRandomTestNumber(T min, T max) {
-  std::random_device rd;
-  std::mt19937 mt(rd());
-  std::uniform_int_distribution<T> dist(min, max);
-  return dist(mt);
-}
 
 TEST(Register, RandomNumberHighSetter) {
   Register random_register;

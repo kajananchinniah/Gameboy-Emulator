@@ -1,11 +1,11 @@
-#ifndef INCLUDE_GB_OPCODES_BASE_HPP_
-#define INCLUDE_GB_OPCODES_BASE_HPP_
+#ifndef INCLUDE_GB_OPCODES_LOAD_BASE_HPP_
+#define INCLUDE_GB_OPCODES_LOAD_BASE_HPP_
 
-#include <cstdint>
 #include <GB/MMU.hpp>
+#include <cstdint>
 
 namespace GB {
-namespace OpcodesBase {
+namespace OpcodesLoadBase {
 
 void LD_ValueIntoRegister_8bit(uint8_t *r, uint8_t const *n) { *r = *n; }
 
@@ -71,8 +71,7 @@ void Pop_Register_16bit(uint16_t *SP, uint16_t *rr, GB::MMU *mmu) {
   *rr = high_reg << 8 | low_reg;
 }
 
-
-}  // namespace OpcodesBase
+}  // namespace OpcodesLoadBase
 }  // namespace GB
 
-#endif  // INCLUDE_GB_OPCODES_BASE_HPP_
+#endif  // INCLUDE_GB_OPCODES_LOAD_BASE_HPP_
