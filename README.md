@@ -10,5 +10,3 @@
   - Manual on the gameboy CPU
 - Gameboy Complete Technical Reference: https://gekkio.fi/files/gb-docs/gbctr.pdf
   - In progress (as of Aug 21st 2021) technical reference that I used
-- Codeslinger: http://www.codeslinger.co.uk/pages/projects/gameboy/hardware.html
-  - Tutorial on how to write a gameboy emulator. I took the initialization of the CPU from here.
