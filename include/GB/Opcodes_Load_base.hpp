@@ -59,15 +59,17 @@ void LD_RegisterIntoMemoryLocation_16bit(uint16_t const *addr,
 void Push_Register_16bit(uint16_t *SP, uint16_t *rr, GB::MMU *mmu) {
   uint8_t high_reg = (*rr) >> 8;
   uint8_t low_reg = (*rr) & 0x00FF;
-  mmu->write(*SP - 1, high_reg);
-  mmu->write(*SP - 2, low_reg);
-  *SP = *SP - 2;
+  *SP = *SP - 1;
+  mmu->write(*SP, high_reg);
+  *SP = *SP - 1;
+  mmu->write(*SP, low_reg);
 }
 
 void Pop_Register_16bit(uint16_t *SP, uint16_t *rr, GB::MMU *mmu) {
   uint8_t low_reg = mmu->read(*SP);
-  uint8_t high_reg = mmu->read(*SP + 1);
-  *SP = *SP + 2;
+  *SP = *SP + 1;
+  uint8_t high_reg = mmu->read(*SP);
+  *SP = *SP + 1;
   *rr = high_reg << 8 | low_reg;
 }
 
