@@ -3,6 +3,7 @@
 
 #include <array>
 #include <cstdint>
+#include <vector>
 
 namespace GB {
 class MMU {
@@ -16,6 +17,7 @@ class MMU {
  private:
   static const int address_space = 0x10000;
   std::array<uint8_t, address_space> memory;
+  std::vector<uint8_t> read_only_memory;
 };
 
 }  // namespace GB
