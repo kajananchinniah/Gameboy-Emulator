@@ -51,36 +51,185 @@ CPU::CPU() {
 
 void CPU::loadROM(const char *rom_path) { mmu.loadROM(rom_path); }
 
-void CPU::update() {
-  while (true) {
-    cycle();
-  }
-}
-unsigned int CPU::cycle() {
-  if (mmu.read(0xff02) == 0x81) {
-    char c = mmu.read(0xff01);
-    std::cout << c;
-    mmu.write(0xff02, 0x0);
-  }
+// Opcodes
 
-  uint8_t opcode = mmu.read(PC.getPCValue());
-  switch (opcode) {
-    case 0x00:
-      // std::cout << "Executed ! " << static_cast<int>(opcode) << "\n";
-      // std::cout << std::hex << PC.getPCValue() << "\n";
-      PC.incrementPC(1);
-      return 1;
-      break;
-    case 0x48:
-      PC.incrementPC(1);
-      return 0;
-      break;
-    default:
-      PC.incrementPC(1);
-      std::cout << std::hex << PC.getPCValue() << "\n";
-      std::cout << "Unsupported: " << std::hex << (int)opcode
-                << "\n";
-      exit(-1);
-  }
+// 8 bit load instructions
+int CPU::ld_r_r(uint8_t *r1, uint8_t const *r2) {
+  *r1 = *r2;
+  return 4;
 }
+
+int CPU::ld_r_n(uint8_t *r) {
+  *r = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  return 8;
+}
+
+int CPU::ld_r_HL(uint8_t *r) {
+  *r = mmu.read(HL.getFullValue());
+  return 8;
+}
+
+int CPU::ld_HL_r(uint8_t const *r) {
+  mmu.write(HL.getFullValue(), *r);
+  return 8;
+}
+
+int CPU::ld_HL_n() {
+  uint8_t n = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  mmu.write(HL.getFullValue(), n);
+  return 12;
+}
+
+int CPU::ld_A_BC() {
+  AF.setHighValue(mmu.read(BC.getFullValue()));
+  return 8;
+}
+
+int CPU::ld_A_DE() {
+  AF.setHighValue(mmu.read(DE.getFullValue()));
+  return 8;
+}
+
+int CPU::ld_BC_A() {
+  mmu.write(BC.getFullValue(), AF.getHighValue());
+  return 8;
+}
+
+int CPU::ld_DE_A() {
+  mmu.write(DE.getFullValue(), AF.getHighValue());
+  return 8;
+}
+
+int CPU::ld_A_nn() {
+  uint8_t low = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint8_t high = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint16_t nn = high << 8 | low;
+  AF.setHighValue(mmu.read(nn));
+  return 16;
+}
+
+int CPU::ld_nn_A() {
+  uint8_t low = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint8_t high = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint16_t nn = high << 8 | low;
+  mmu.write(nn, AF.getHighValue());
+  return 16;
+}
+
+int CPU::ld_A_C() {
+  uint8_t low = BC.getLowValue();
+  uint8_t high = 0xFF;
+  uint16_t addr = high << 8 | low;
+  AF.setHighValue(mmu.read(addr));
+  return 8;
+}
+
+int CPU::ld_C_A() {
+  uint8_t low = BC.getLowValue();
+  uint8_t high = 0xFF;
+  uint16_t addr = high << 8 | low;
+  mmu.write(addr, AF.getHighValue());
+  return 8;
+}
+
+int CPU::ld_A_n() {
+  uint8_t low = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint8_t high = 0xFF;
+  uint16_t addr = high << 8 | low;
+  AF.setHighValue(mmu.read(addr));
+  return 12;
+}
+
+int CPU::ld_n_A() {
+  uint8_t low = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint8_t high = 0xFF;
+  uint16_t addr = high << 8 | low;
+  mmu.write(addr, AF.getHighValue());
+  return 12;
+}
+
+int CPU::ldd_A_HL() {
+  AF.setHighValue(mmu.read(HL.getFullValue()));
+  HL.setFullValue(HL.getFullValue() - 1);
+  return 8;
+}
+
+int CPU::ldd_HL_A() {
+  mmu.write(HL.getFullValue(), AF.getHighValue());
+  HL.setFullValue(HL.getFullValue() - 1);
+  return 8;
+}
+
+int CPU::ldi_A_HL() {
+  AF.setHighValue(mmu.read(HL.getFullValue()));
+  HL.setFullValue(HL.getFullValue() + 1);
+  return 8;
+}
+
+int CPU::ldi_HL_A() {
+  mmu.write(HL.getFullValue(), AF.getHighValue());
+  HL.setFullValue(HL.getFullValue() + 1);
+  return 8;
+}
+
+// 16 bit load instructions
+int CPU::ld_rr_nn(uint16_t *rr) {
+  uint8_t low = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint8_t high = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint16_t nn = high << 8 | low;
+  *rr = nn;
+  return 12;
+}
+
+int CPU::ld_nn_SP() {
+  uint8_t low = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint8_t high = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint16_t nn = high << 8 | low;
+
+  uint16_t SP_value = SP.getSPValue();
+  uint8_t SP_low = SP_value & 0x00FF;
+  uint8_t SP_high = SP_value >> 8;
+
+  mmu.write(nn, SP_low);
+  mmu.write(nn + 1, SP_high);
+  return 20;
+}
+
+int CPU::ld_SP_HL() {
+  SP.setSP(HL.getFullValue());
+  return 8;
+}
+
+int CPU::push_rr(uint16_t *rr) {
+  uint8_t low = *rr & 0x00FF;
+  uint8_t high = *rr >> 8;
+
+  SP.decrementSP(1);
+  mmu.write(SP.getSPValue(), high);
+  SP.decrementSP(1);
+  mmu.write(SP.getSPValue(), low);
+  return 16;
+}
+
+int CPU::pop_rr(uint16_t *rr) {
+  uint8_t low = mmu.read(SP.getSPValue());
+  SP.incrementSP(1);
+  uint8_t high = mmu.read(SP.getSPValue());
+  SP.incrementSP(1);
+  *rr = high << 8 | low;
+  return 12;
+}
+
 }  // namespace GB

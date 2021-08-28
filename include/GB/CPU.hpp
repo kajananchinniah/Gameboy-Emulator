@@ -28,19 +28,32 @@ class CPU {
   void executeNextOpcode();
 
   // 8 bit load instructions
-  /* void LD_r_n(uint8_t *r, const uint8_t n);
-    void LD_r_addr(uint8_t *r, const uint16_t addr);
-    void LD_addr_r(const uint16_t addr, const uint8_t r);
-    void LDI_addr_r(uint16_t *addr, const uint8_t r);
-    void LDI_r_addr(uint8_t *r, uint16_t *addr);
-    void LDD_addr_r(uint16_t *addr, const uint8_t r);
-    void LDD_r_addr(uint8_t *r, uint16_t *addr);
+  int ld_r_r(uint8_t *r1, uint8_t const *r2);
+  int ld_r_n(uint8_t *r);
+  int ld_r_HL(uint8_t *r);
+  int ld_HL_r(uint8_t const *r);
+  int ld_HL_n();
+  int ld_A_BC();
+  int ld_A_DE();
+  int ld_BC_A();
+  int ld_DE_A();
+  int ld_A_nn();
+  int ld_nn_A();
+  int ld_A_C();
+  int ld_C_A();
+  int ld_A_n();
+  int ld_n_A();
+  int ldd_A_HL();
+  int ldd_HL_A();
+  int ldi_A_HL();
+  int ldi_HL_A();
 
-    // 16 bit load instructions
-    void LD_rr_nn(uint16_t *rr, const uint16_t nn);
-    void LD_addr_rr(const uint16_t addr, const uint16_t rr);
-    void push_rr(const uint16_t rr);
-    void pop_rr(const uint16_t rr); */
+  // 16 bit load instructions
+  int ld_rr_nn(uint16_t *rr);
+  int ld_nn_SP();
+  int ld_SP_HL();
+  int push_rr(uint16_t *rr);
+  int pop_rr(uint16_t *rr);
 };
 }  // namespace GB
 
