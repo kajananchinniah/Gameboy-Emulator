@@ -1,5 +1,9 @@
 # Gameboy Emulator
 
+## Note on Tests:
+Originally I had planned on unit testing every function I wrote via GTest. While this approach is fine, I realized that
+it was simpler to just rely on tools that were specifically created for testing gameboys (e.g. test ROMs). Due to this,
+the testing part of this project was abandoned.
 
 ## References
 - Pandocs: https://gbdev.io/pandocs/
