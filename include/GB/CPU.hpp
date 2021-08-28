@@ -54,6 +54,20 @@ class CPU {
   int ld_SP_HL();
   int push_rr(uint16_t *rr);
   int pop_rr(uint16_t *rr);
+
+  // 8 bit arthimetic instructions
+  int add_A_r(uint8_t const *r);
+  int add_A_n();
+  int add_A_HL();
+  int adc_A_r(uint8_t const *r);
+  int adc_A_n();
+  int adc_A_HL();
+  int sub_A_r(uint8_t const *r);
+  int sub_A_n();
+  int sub_A_HL();
+  int sbc_A_r(uint8_t const *r);
+  int sbc_A_n();
+  int sbc_A_HL();
 };
 }  // namespace GB
 
