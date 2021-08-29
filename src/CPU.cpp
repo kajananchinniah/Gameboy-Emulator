@@ -4,7 +4,6 @@
 #include <iostream>
 
 #include "GB/MMU.hpp"
-#include "GB/Opcodes_Load_base.hpp"
 namespace {}
 
 namespace GB {
