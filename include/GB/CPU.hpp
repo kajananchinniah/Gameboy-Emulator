@@ -24,8 +24,47 @@ class CPU {
   ProgramCounter PC;
   StackPointer SP;
 
-  unsigned int cycle();
-  void executeNextOpcode();
+  int executeOpcode(uint8_t opcode);
+  // X = arbitrary number (0 - F)
+  int execute0x0XTable(uint8_t opcode);
+  int execute0x1XTable(uint8_t opcode);
+  int execute0x2XTable(uint8_t opcode);
+  int execute0x3XTable(uint8_t opcode);
+  int execute0x4XTable(uint8_t opcode);
+  int execute0x5XTable(uint8_t opcode);
+  int execute0x6XTable(uint8_t opcode);
+  int execute0x7XTable(uint8_t opcode);
+  int execute0x8XTable(uint8_t opcode);
+  int execute0x9XTable(uint8_t opcode);
+  int execute0xAXTable(uint8_t opcode);
+  int execute0xBXTable(uint8_t opcode);
+  int execute0xCXTable(uint8_t opcode);
+  int execute0xDXTable(uint8_t opcode);
+  int execute0xEXTable(uint8_t opcode);
+  int execute0xFXTable(uint8_t opcode);
+
+  int execute0xCBOpcode(uint8_t opcode);
+  int execute0xCB0XTable(uint8_t opcode);
+  int execute0xCB1XTable(uint8_t opcode);
+  int execute0xCB2XTable(uint8_t opcode);
+  int execute0xCB3XTable(uint8_t opcode);
+  int execute0xCB4XTable(uint8_t opcode);
+  int execute0xCB5XTable(uint8_t opcode);
+  int execute0xCB6XTable(uint8_t opcode);
+  int execute0xCB7XTable(uint8_t opcode);
+  int execute0xCB8XTable(uint8_t opcode);
+  int execute0xCB9XTable(uint8_t opcode);
+  int execute0xCBAXTable(uint8_t opcode);
+  int execute0xCBBXTable(uint8_t opcode);
+  int execute0xCBCXTable(uint8_t opcode);
+  int execute0xCBDXTable(uint8_t opcode);
+  int execute0xCBEXTable(uint8_t opcode);
+  int execute0xCBFXTable(uint8_t opcode);
+
+  int unsupportedOpcode(uint8_t opcode);
+
+  // Special instructions
+  int NOP();
 
   // 8 bit load instructions
   int ld_r_r(uint8_t *r1, uint8_t const *r2);
@@ -68,6 +107,10 @@ class CPU {
   int sbc_A_r(uint8_t const *r);
   int sbc_A_n();
   int sbc_A_HL();
+
+  // Jump instructions
+  int jp_nn();
+  int jp_HL();
 };
 }  // namespace GB
 

@@ -1,5 +1,6 @@
 #include "GB/CPU.hpp"
 
+#include <iomanip>
 #include <iostream>
 
 #include "GB/MMU.hpp"
@@ -51,7 +52,117 @@ CPU::CPU() {
 
 void CPU::loadROM(const char *rom_path) { mmu.loadROM(rom_path); }
 
+void CPU::update() {
+  while (true) {
+    uint8_t opcode = mmu.read(PC.getPCValue());
+    PC.incrementPC(1);
+    executeOpcode(opcode);
+  }
+}
+
+int CPU::unsupportedOpcode(uint8_t opcode) {
+  std::stringstream error_stream;
+  error_stream << "Unknown opcode: 0x" << std::hex << (int)opcode << " at 0x"
+               << std::hex << (int)PC.getPCValue();
+  throw std::runtime_error(error_stream.str());
+  return -1;
+}
+
+int CPU::executeOpcode(uint8_t opcode) {
+  switch (opcode & 0xF0) {
+    case 0x00:
+      return execute0x0XTable(opcode);
+      break;
+    case 0x10:
+      return execute0x1XTable(opcode);
+      break;
+    case 0x20:
+      return execute0x2XTable(opcode);
+      break;
+    case 0x30:
+      return execute0x3XTable(opcode);
+      break;
+    case 0x40:
+      return execute0x4XTable(opcode);
+      break;
+    case 0x50:
+      return execute0x5XTable(opcode);
+      break;
+    case 0x60:
+      return execute0x6XTable(opcode);
+      break;
+    case 0x70:
+      return execute0x7XTable(opcode);
+      break;
+    case 0x80:
+      return execute0x8XTable(opcode);
+      break;
+    case 0x90:
+      return execute0x9XTable(opcode);
+      break;
+    case 0xA0:
+      return execute0xAXTable(opcode);
+      break;
+    case 0xB0:
+      return execute0xBXTable(opcode);
+      break;
+    case 0xC0:
+      return execute0xCXTable(opcode);
+      break;
+    case 0xD0:
+      return execute0xDXTable(opcode);
+      break;
+    case 0xE0:
+      return execute0xEXTable(opcode);
+      break;
+    case 0xF0:
+      return execute0xFXTable(opcode);
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
+
+int CPU::execute0x0XTable(uint8_t opcode) {
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return NOP();
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
+
+int CPU::execute0x1XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0x2XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0x3XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0x4XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0x5XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0x6XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0x7XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0x8XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0x9XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0xAXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0xBXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0xCXTable(uint8_t opcode) {
+  switch (opcode & 0x0F) {
+    case 0x03:
+      return jp_nn();
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
+int CPU::execute0xDXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0xEXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0xFXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
 // Opcodes
+
+// Special instructions
+int CPU::NOP() { return 1; }
 
 // 8 bit load instructions
 int CPU::ld_r_r(uint8_t *r1, uint8_t const *r2) {
@@ -232,4 +343,20 @@ int CPU::pop_rr(uint16_t *rr) {
   return 12;
 }
 
+// Jump instructions
+int CPU::jp_nn() {
+  uint8_t low = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint8_t high = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  uint16_t nn = high << 8 | low;
+
+  PC.setPC(nn);
+  return 16;
+}
+
+int CPU::jp_HL() {
+  PC.setPC(HL.getFullValue());
+  return 4;
+}
 }  // namespace GB
