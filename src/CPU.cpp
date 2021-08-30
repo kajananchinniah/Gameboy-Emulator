@@ -147,7 +147,7 @@ int CPU::executeOpcode(uint8_t opcode) {
 int CPU::execute0x0XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
     case 0x00:
-      return NOP();
+      return nop();
       break;
     case 0x01:
       return ld_rr_nn(BC.getFullRegister());
@@ -249,7 +249,6 @@ int CPU::execute0xFXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
 // Opcodes
 
 // Special instructions
-int CPU::NOP() { return 1; }
 
 // 8 bit load instructions
 int CPU::ld_r_r(uint8_t *r1, uint8_t const *r2) {
@@ -300,22 +299,22 @@ int CPU::ld_DE_A() {
   return 8;
 }
 
+uint16_t get_nn(MMU *mmu, ProgramCounter *PC) {
+  uint8_t low = mmu->read(PC->getPCValue());
+  PC->incrementPC(1);
+  uint8_t high = mmu->read(PC->getPCValue());
+  PC->incrementPC(1);
+  return high << 8 | low;
+}
+
 int CPU::ld_A_nn() {
-  uint8_t low = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-  uint8_t high = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-  uint16_t nn = high << 8 | low;
+  uint16_t nn = get_nn(&mmu, &PC);
   AF.setHighValue(mmu.read(nn));
   return 16;
 }
 
 int CPU::ld_nn_A() {
-  uint8_t low = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-  uint8_t high = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-  uint16_t nn = high << 8 | low;
+  uint16_t nn = get_nn(&mmu, &PC);
   mmu.write(nn, AF.getHighValue());
   return 16;
 }
@@ -380,21 +379,13 @@ int CPU::ldi_HL_A() {
 
 // 16 bit load instructions
 int CPU::ld_rr_nn(uint16_t *rr) {
-  uint8_t low = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-  uint8_t high = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-  uint16_t nn = high << 8 | low;
+  uint16_t nn = get_nn(&mmu, &PC);
   *rr = nn;
   return 12;
 }
 
 int CPU::ld_nn_SP() {
-  uint8_t low = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-  uint8_t high = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-  uint16_t nn = high << 8 | low;
+  uint16_t nn = get_nn(&mmu, &PC);
 
   uint16_t SP_value = SP.getSPValue();
   uint8_t SP_low = SP_value & 0x00FF;
@@ -430,45 +421,92 @@ int CPU::pop_rr(uint16_t *rr) {
   return 12;
 }
 
+uint8_t add_8bit(uint8_t operand1, uint8_t operand2, RegisterAF *AF,
+                 bool modify_carry = true) {
+  uint8_t result = operand1 + operand2;
+  if (result == 0) {
+    AF->setZeroFlag();
+  } else {
+    AF->clearZeroFlag();
+  }
+
+  AF->clearSubtractionFlag();
+
+  if (((operand1 & 0x0F) + (operand2 & 0x0F)) > 0x0F) {
+    AF->setHalfCarryFlag();
+  } else {
+    AF->clearHalfCarryFlag();
+  }
+
+  if (!modify_carry) {
+    return result;
+  }
+
+  if ((operand1 + operand2) > 0xFF) {
+    AF->setCarryFlag();
+  } else {
+    AF->clearCarryFlag();
+  }
+  return result;
+}
+
+uint8_t sub_8bit(uint8_t operand1, uint8_t operand2, RegisterAF *AF,
+                 bool modify_carry = true) {
+  uint8_t result = operand1 - operand2;
+  if (result == 0) {
+    AF->setZeroFlag();
+  } else {
+    AF->clearZeroFlag();
+  }
+
+  AF->setSubtractionFlag();
+
+  if ((operand1 & 0x0F) < (operand2 & 0x0F)) {
+    AF->setHalfCarryFlag();
+  } else {
+    AF->clearHalfCarryFlag();
+  }
+
+  if (!modify_carry) {
+    return result;
+  }
+
+  if (operand1 < operand2) {
+    AF->setCarryFlag();
+  } else {
+    AF->clearCarryFlag();
+  }
+  return result;
+}
+
 // 8 bit arthimetic operations
+int CPU::add_A_r(uint8_t const *r) {
+  uint8_t result = add_8bit(AF.getHighValue(), *r, &AF);
+  AF.setHighValue(result);
+  return 4;
+}
+
+int CPU::add_A_n() {
+  uint8_t n = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+
+  uint8_t result = add_8bit(AF.getHighValue(), n, &AF);
+  AF.setHighValue(result);
+  return 8;
+}
+
 int CPU::inc_r(uint8_t *r) {
-  uint8_t tmp = *r + 1;
-  if (tmp == 0) {
-    AF.setZeroFlag();
-  } else {
-    AF.clearZeroFlag();
-  }
-
-  AF.clearSubtractionFlag();
-
-  if ((*r & 0x0F) + (1 & 0x0F) > 0x0F) {
-    AF.setHalfCarryFlag();
-  } else {
-    AF.clearHalfCarryFlag();
-  }
-
-  *r = tmp;
+  *r = add_8bit(*r, 1, &AF, false);
   return 4;
 }
 
 int CPU::dec_r(uint8_t *r) {
-  uint8_t tmp = *r - 1;
-  if (tmp == 0) {
-    AF.setZeroFlag();
-  } else {
-    AF.clearZeroFlag();
-  }
-
-  AF.setSubtractionFlag();
-  if ((*r & 0x0F) < (1 & 0x0F)) {
-    AF.setHalfCarryFlag();
-  } else {
-    AF.clearHalfCarryFlag();
-  }
-
-  *r = tmp;
+  *r = sub_8bit(*r, 1, &AF, false);
   return 4;
 }
+
+// CPU control instructions
+int CPU::nop() { return 1; }
 
 // Jump instructions
 int CPU::jp_nn() {
