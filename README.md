@@ -3,7 +3,13 @@
 ## Note on Tests:
 Originally I had planned on unit testing every function I wrote via GTest. While this approach is fine, I realized that
 it was simpler to just rely on tools that were specifically created for testing gameboys (e.g. test ROMs). Due to this,
-the testing part of this project was abandoned.
+the testing part of this project was mostly abandoned.
+
+## Testing ROMs Acknowledgements
+For CPU instructions, I used blargg's tests. This can be found at: https://gbdev.gg8.se/wiki/articles/Test_ROMs or https://github.com/retrio/gb-test-roms
+
+## Debugging Acknowledgements
+To debug my opcodes, I used BGB (https://bgb.bircd.org/) as a dissassembler on blargg's tests. Then I compared the output of the disassembler with my program (by printing out the status of my registers). This helped me find minor bugs that really messed up everyhing. (For a while my program was stuck on an infinite loop due to a bug :))
 
 ## References
 - Pandocs: https://gbdev.io/pandocs/
