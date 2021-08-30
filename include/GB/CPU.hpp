@@ -82,8 +82,8 @@ class CPU {
   int ld_nn_A();
   int ld_A_FFC();
   int ld_FFC_A();
-  int ld_A_n();
-  int ld_n_A();
+  int ld_A_FFn();
+  int ld_FFn_A();
   int ldd_A_HL();
   int ldd_HL_A();
   int ldi_A_HL();

@@ -336,7 +336,7 @@ int CPU::ld_FFC_A() {
   return 8;
 }
 
-int CPU::ld_A_n() {
+int CPU::ld_A_FFn() {
   uint8_t low = mmu.read(PC.getPCValue());
   PC.incrementPC(1);
   uint8_t high = 0xFF;
@@ -345,7 +345,7 @@ int CPU::ld_A_n() {
   return 12;
 }
 
-int CPU::ld_n_A() {
+int CPU::ld_FFn_A() {
   uint8_t low = mmu.read(PC.getPCValue());
   PC.incrementPC(1);
   uint8_t high = 0xFF;
