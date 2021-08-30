@@ -124,6 +124,7 @@ class CPU {
   int inc_r(uint8_t *r);
   int inc_HL();
   int dec_r(uint8_t *r);
+  int dec_HL();
   int daa_A();
   int cpl_A();
 
@@ -157,6 +158,12 @@ class CPU {
   int srl_HL();
 
   // Single bit operation instructions
+  int bit_n_r(uint8_t *r);
+  int bit_n_HL();
+  int set_n_r(uint8_t *r);
+  int set_n_HL();
+  int res_n_r(uint8_t *r);
+  int res_n_HL();
 
   // CPU control instructions
   int ccf();
