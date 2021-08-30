@@ -320,7 +320,7 @@ int CPU::ld_nn_A() {
   return 16;
 }
 
-int CPU::ld_A_C() {
+int CPU::ld_A_FFC() {
   uint8_t low = BC.getLowValue();
   uint8_t high = 0xFF;
   uint16_t addr = high << 8 | low;
@@ -328,7 +328,7 @@ int CPU::ld_A_C() {
   return 8;
 }
 
-int CPU::ld_C_A() {
+int CPU::ld_FFC_A() {
   uint8_t low = BC.getLowValue();
   uint8_t high = 0xFF;
   uint16_t addr = high << 8 | low;
