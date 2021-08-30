@@ -30,3 +30,8 @@ add_test(NAME TestRegisters COMMAND test_registers)
 add_executable(test_mmu tests/test_mmu.cpp)
 target_link_libraries(test_mmu mmu ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
 add_test(NAME TestMMU COMMAND test_mmu)
+
+# CPU test
+add_executable(test_cpu tests/test_cpu.cpp)
+target_link_libraries(test_cpu cpu ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
+add_test(NAME TestCPU COMMAND test_cpu)

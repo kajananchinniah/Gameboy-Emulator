@@ -15,6 +15,8 @@ class CPU {
   void update();
 
  private:
+  void printStatus();
+
   MMU mmu;
   RegisterAF AF;
   Register BC;
@@ -107,10 +109,76 @@ class CPU {
   int sbc_A_r(uint8_t const *r);
   int sbc_A_n();
   int sbc_A_HL();
+  int and_A_r(uint8_t const *r);
+  int and_A_n();
+  int and_A_HL();
+  int xor_A_r(uint8_t const *r);
+  int xor_A_n();
+  int xor_A_HL();
+  int or_A_r(uint8_t const *r);
+  int or_A_n();
+  int or_A_HL();
+  int cp_A_r(uint8_t const *r);
+  int cp_A_n();
+  int cp_A_HL();
+  int inc_r(uint8_t *r);
+  int inc_HL();
+  int dec_r(uint8_t *r);
+  int daa_A();
+  int cpl_A();
+
+  // 16 bit arthimetic instructions
+  int add_HL_rr(uint16_t const *rr);
+  int inc_rr(uint16_t *rr);
+  int dec_rr(uint16_t *rr);
+  int add_SP_dd_relative();
+  int ld_HL_SP_dd_relative();
+
+  // Rotate and shift instructions
+  int rlca_A();
+  int rla_A();
+  int rrca_A();
+  int rra_A();
+  int rlc_r(uint8_t *r);
+  int rlc_HL();
+  int rl_r(uint8_t *r);
+  int rl_HL();
+  int rrc_r(uint8_t *r);
+  int rrc_HL();
+  int rr_r(uint8_t *r);
+  int rr_HL();
+  int sla_r(uint8_t *r);
+  int sla_HL();
+  int swap_r(uint8_t *r);
+  int swap_HL();
+  int sra_r(uint8_t *r);
+  int sra_HL();
+  int srl_r(uint8_t *r);
+  int srl_HL();
+
+  // Single bit operation instructions
+
+  // CPU control instructions
+  int ccf();
+  int scf();
+  int nop();
+  int halt();
+  int stop();
+  int di();
+  int ei();
 
   // Jump instructions
   int jp_nn();
   int jp_HL();
+  int jp_f_nn(uint8_t f, uint8_t condition);
+  int jr_PC_dd();
+  int jr_f_PC_dd(uint8_t f, uint8_t condition);
+  int call_nn();
+  int call_f_nn(uint8_t f, uint8_t condition);
+  int ret();
+  int ret_f(uint8_t f, uint8_t condition);
+  int reti();
+  int rst_n();
 };
 }  // namespace GB
 
