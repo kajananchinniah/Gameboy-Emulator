@@ -441,7 +441,7 @@ int CPU::inc_r(uint8_t *r) {
 
   AF.clearSubtractionFlag();
 
-  if ((*r & 0x0F) == 0x0F) {
+  if ((*r & 0x0F) + (1 & 0x0F) > 0x0F) {
     AF.setHalfCarryFlag();
   } else {
     AF.clearHalfCarryFlag();
@@ -460,7 +460,7 @@ int CPU::dec_r(uint8_t *r) {
   }
 
   AF.setSubtractionFlag();
-  if ((*r & 0x0F) == 0x00) {
+  if ((*r & 0x0F) < (1 & 0x0F)) {
     AF.setHalfCarryFlag();
   } else {
     AF.clearHalfCarryFlag();
