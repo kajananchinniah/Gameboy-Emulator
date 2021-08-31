@@ -25,6 +25,7 @@ class CPU {
 
   ProgramCounter PC;
   StackPointer SP;
+  bool interrupts_enabled;
 
   int executeOpcode(uint8_t opcode);
   // X = arbitrary number (0 - F)

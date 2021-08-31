@@ -181,6 +181,12 @@ int CPU::execute0x1XTable(uint8_t opcode) {
     case 0x04:
       return inc_r(DE.getHighRegister());
       break;
+    case 0x08:
+      return jr_PC_dd();
+      break;
+    case 0x0A:
+      return ld_A_DE();
+      break;
     case 0x0c:
       return inc_r(DE.getLowRegister());
       break;
@@ -205,7 +211,19 @@ int CPU::execute0x2XTable(uint8_t opcode) {
       break;
   }
 }
-int CPU::execute0x3XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0x3XTable(uint8_t opcode) {
+  switch (opcode & 0x0F) {
+    case 0x01:
+      return ld_rr_nn(SP.getSP());
+      break;
+    case 0x0E:
+      return ld_r_n(AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
 int CPU::execute0x4XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
     case 0x07:
@@ -221,8 +239,32 @@ int CPU::execute0x5XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
 int CPU::execute0x6XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
 int CPU::execute0x7XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
+    case 0x07:
+      return ld_HL_r(AF.getHighRegister());
+      break;
     case 0x08:
       return ld_r_r(AF.getHighRegister(), BC.getHighRegister());
+      break;
+    case 0x09:
+      return ld_r_r(AF.getHighRegister(), BC.getLowRegister());
+      break;
+    case 0x0A:
+      return ld_r_r(AF.getHighRegister(), DE.getHighRegister());
+      break;
+    case 0x0B:
+      return ld_r_r(AF.getHighRegister(), DE.getLowRegister());
+      break;
+    case 0x0C:
+      return ld_r_r(AF.getHighRegister(), HL.getHighRegister());
+      break;
+    case 0x0D:
+      return ld_r_r(AF.getHighRegister(), HL.getLowRegister());
+      break;
+    case 0x0E:
+      return ld_r_HL(AF.getHighRegister());
+      break;
+    case 0x0F:
+      return ld_r_r(AF.getHighRegister(), AF.getHighRegister());
       break;
     default:
       return unsupportedOpcode(opcode);
@@ -238,14 +280,53 @@ int CPU::execute0xCXTable(uint8_t opcode) {
     case 0x03:
       return jp_nn();
       break;
+    case 0x09:
+      return ret();
+      break;
+    case 0x0D:
+      return call_nn();
+      break;
     default:
       return unsupportedOpcode(opcode);
       break;
   }
 }
 int CPU::execute0xDXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
-int CPU::execute0xEXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
-int CPU::execute0xFXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0xEXTable(uint8_t opcode) {
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return ld_FFn_A();
+      break;
+    case 0x01:
+      return pop_rr(HL.getFullRegister());
+      break;
+    case 0x05:
+      return push_rr(HL.getFullRegister());
+      break;
+    case 0x0A:
+      return ld_nn_A();
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
+int CPU::execute0xFXTable(uint8_t opcode) {
+  switch (opcode & 0x0F) {
+    case 0x01:
+      return pop_rr(AF.getFullRegister());
+      break;
+    case 0x03:
+      return di();
+      break;
+    case 0x05:
+      return push_rr(AF.getFullRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
 // Opcodes
 
 // Special instructions
@@ -593,9 +674,152 @@ int CPU::dec_HL() {
   return 12;
 }
 
-// CPU control instructions
-int CPU::nop() { return 1; }
+uint8_t and_8bit(uint8_t operand1, uint8_t operand2, RegisterAF *AF) {
+  uint8_t result = operand1 & operand2;
+  if (result == 0) {
+    AF->setZeroFlag();
+  } else {
+    AF->clearZeroFlag();
+  }
 
+  AF->clearSubtractionFlag();
+  AF->setHalfCarryFlag();
+  AF->clearCarryFlag();
+  return result;
+}
+
+int CPU::and_A_r(uint8_t const *r) {
+  uint8_t result = and_8bit(AF.getHighValue(), *r, &AF);
+  AF.setHighValue(result);
+  return 4;
+}
+
+int CPU::and_A_n() {
+  uint8_t n = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+
+  uint8_t result = and_8bit(AF.getHighValue(), n, &AF);
+  AF.setHighValue(result);
+  return 8;
+}
+
+int CPU::and_A_HL() {
+  uint8_t value = mmu.read(HL.getFullValue());
+  uint8_t result = and_8bit(AF.getHighValue(), value, &AF);
+  AF.setHighValue(result);
+  return 8;
+}
+
+uint8_t xor_8bit(uint8_t operand1, uint8_t operand2, RegisterAF *AF) {
+  uint8_t result = operand1 ^ operand2;
+  if (result == 0) {
+    AF->setZeroFlag();
+  } else {
+    AF->clearZeroFlag();
+  }
+
+  AF->clearSubtractionFlag();
+  AF->clearHalfCarryFlag();
+  AF->clearCarryFlag();
+  return result;
+}
+
+int CPU::xor_A_r(uint8_t const *r) {
+  uint8_t result = xor_8bit(AF.getHighValue(), *r, &AF);
+  AF.setHighValue(result);
+  return 4;
+}
+
+int CPU::xor_A_n() {
+  uint8_t n = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+
+  uint8_t result = xor_8bit(AF.getHighValue(), n, &AF);
+  AF.setHighValue(result);
+  return 8;
+}
+
+int CPU::xor_A_HL() {
+  uint8_t value = mmu.read(HL.getFullValue());
+  uint8_t result = xor_8bit(AF.getHighValue(), value, &AF);
+  AF.setHighValue(result);
+  return 8;
+}
+
+uint8_t or_8bit(uint8_t operand1, uint8_t operand2, RegisterAF *AF) {
+  uint8_t result = operand1 | operand2;
+  if (result == 0) {
+    AF->setZeroFlag();
+  } else {
+    AF->clearZeroFlag();
+  }
+
+  AF->clearSubtractionFlag();
+  AF->clearHalfCarryFlag();
+  AF->clearCarryFlag();
+  return result;
+}
+
+int CPU::or_A_r(uint8_t const *r) {
+  uint8_t result = or_8bit(AF.getHighValue(), *r, &AF);
+  AF.setHighValue(result);
+  return 4;
+}
+
+int CPU::or_A_n() {
+  uint8_t n = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+
+  uint8_t result = or_8bit(AF.getHighValue(), n, &AF);
+  AF.setHighValue(result);
+  return 8;
+}
+
+int CPU::or_A_HL() {
+  uint8_t value = mmu.read(HL.getFullValue());
+  uint8_t result = or_8bit(AF.getHighValue(), value, &AF);
+  AF.setHighValue(result);
+  return 8;
+}
+
+int CPU::cp_A_r(uint8_t const *r) {
+  sub_8bit(AF.getHighValue(), *r, &AF, 0, true);
+  return 4;
+}
+
+int CPU::cp_A_n() {
+  uint8_t n = mmu.read(PC.getPCValue());
+  PC.incrementPC(1);
+  sub_8bit(AF.getHighValue(), n, &AF, 0, true);
+  return 8;
+}
+
+int CPU::cp_A_HL() {
+  uint8_t value = mmu.read(HL.getFullValue());
+  sub_8bit(AF.getHighValue(), value, &AF, 0, true);
+  return 8;
+}
+
+int CPU::daa_A() {
+  throw std::runtime_error("Error: did not implement DAA");
+  return 4;
+}
+
+int CPU::cpl_A() {
+  AF.setHighValue(AF.getHighValue() ^ 0xFF);
+  AF.setSubtractionFlag();
+  AF.setHalfCarryFlag();
+  return 4;
+}
+
+// 16 bit arthimetic instructions
+
+// CPU control instructions
+int CPU::nop() { return 4; }
+int CPU::di() {
+  interrupts_enabled = false;
+  return 4;
+}
 // Jump instructions
 int CPU::jp_nn() {
   uint8_t low = mmu.read(PC.getPCValue());
@@ -612,6 +836,12 @@ int CPU::jp_HL() {
   return 4;
 }
 
+int CPU::jr_PC_dd() {
+  int8_t dd = static_cast<int8_t>(mmu.read(PC.getPCValue()));
+  PC.incrementPC(1 + dd);
+  return 12;
+}
+
 int CPU::jr_f_PC_dd(uint8_t f, uint8_t condition) {
   int8_t dd = static_cast<int8_t>(mmu.read(PC.getPCValue()));
   PC.incrementPC(1);
@@ -620,5 +850,24 @@ int CPU::jr_f_PC_dd(uint8_t f, uint8_t condition) {
     return 12;
   }
   return 8;
+}
+
+int CPU::call_nn() {
+  uint16_t nn = get_nn(&mmu, &PC);
+  SP.decrementSP(1);
+  mmu.write(SP.getSPValue(), PC.getPCValue() >> 8);
+  SP.decrementSP(1);
+  mmu.write(SP.getSPValue(), PC.getPCValue() & 0x00FF);
+  PC.setPC(nn);
+  return 24;
+}
+
+int CPU::ret() {
+  uint8_t low = mmu.read(SP.getSPValue());
+  SP.incrementSP(1);
+  uint8_t high = mmu.read(SP.getSPValue());
+  SP.incrementSP(1);
+  PC.setPC(high << 8 | low);
+  return 16;
 }
 }  // namespace GB
