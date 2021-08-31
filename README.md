@@ -1,5 +1,16 @@
 # Gameboy Emulator
 
+## Note on implementation:
+Originally, the plan was to write this in modern C++. That clearly did not pan out. The gameboy instruction set is quite
+large so I ended up implementing it a pretty messy way. In hindsight, with better plan, there are lots of chunks that I
+could have reused (e.g. some opcodes do basically the same thing but slightly differently). I did do some code reuse
+(which is why my raw opcode count is much less than 512), in hindsight, I should have reused a lot more things.
+
+Suggested CPU implementations:
+- Hashmap that maps opcode -> a struct consisting of instruction. This struct would contain a field the "type of access" (e.g.
+  use a register as an address vs read from memory vs just use a register directly), as well as a generic implementation
+  for the instruction itself. I'm in too deep to do this though.
+
 ## Note on Tests:
 Originally I had planned on unit testing every function I wrote via GTest. While this approach is fine, I realized that
 it was simpler to just rely on tools that were specifically created for testing gameboys (e.g. test ROMs). Due to this,
