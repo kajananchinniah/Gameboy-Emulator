@@ -25,7 +25,7 @@ class CPU {
 
   ProgramCounter PC;
   StackPointer SP;
-  bool interrupts_enabled;
+  bool IME{false};
 
   int executeOpcode(uint8_t opcode);
   // X = arbitrary number (0 - F)
@@ -159,7 +159,7 @@ class CPU {
   int srl_HL();
 
   // Single bit operation instructions
-  int bit_n_r(uint8_t *r);
+  int bit_n_r(uint8_t const *r);
   int bit_n_HL();
   int set_n_r(uint8_t *r);
   int set_n_HL();
@@ -186,7 +186,7 @@ class CPU {
   int ret();
   int ret_f(uint8_t f, uint8_t condition);
   int reti();
-  int rst_n();
+  int rst_n(uint8_t reset_value);
 };
 }  // namespace GB
 
