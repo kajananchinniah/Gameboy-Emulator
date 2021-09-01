@@ -29,6 +29,15 @@ void RegisterAF::clearHalfCarryFlag() { clearBit(&data_.low, 5); }
 uint8_t RegisterAF::getCarryFlag() { return getBit(data_.low, 4); }
 void RegisterAF::setCarryFlag() { setBit(&data_.low, 4); }
 void RegisterAF::clearCarryFlag() { clearBit(&data_.low, 4); }
+void RegisterAF::xorCarryFlag() {
+  uint8_t carry = getCarryFlag();
+  carry = carry ^ 1;
+  if (carry == 1) {
+    setCarryFlag();
+  } else {
+    clearCarryFlag();
+  }
+}
 
 uint8_t RegisterAF::getBit(uint8_t reg, uint8_t position) {
   return (reg >> position) & 0x1;

@@ -46,6 +46,7 @@ class RegisterAF : public Register {
   uint8_t getCarryFlag();
   void setCarryFlag();
   void clearCarryFlag();
+  void xorCarryFlag();
 
  private:
   uint8_t getBit(uint8_t reg, uint8_t position);
