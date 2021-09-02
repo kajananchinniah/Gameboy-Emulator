@@ -166,11 +166,32 @@ int CPU::execute0x0XTable(uint8_t opcode) {
       break;
     case 0x06:
       return ld_r_n(BC.getHighRegister());
+    case 0x07:
+      return rlca_A();
+      break;
+    case 0x08:
+      return ld_nn_SP();
+      break;
+    case 0x09:
+      return add_HL_rr(BC.getFullRegister());
+      break;
+    case 0x0A:
+      return ld_A_BC();
+      break;
+    case 0x0B:
+      return dec_rr(BC.getFullRegister());
+      break;
+    case 0x0C:
+      return inc_r(BC.getLowRegister());
+      break;
     case 0x0D:
       return dec_r(BC.getLowRegister());
       break;
     case 0x0E:
       return ld_r_n(BC.getLowRegister());
+      break;
+    case 0x0F:
+      return rrca_A();
       break;
     default:
       return unsupportedOpcode(opcode);
@@ -180,29 +201,60 @@ int CPU::execute0x0XTable(uint8_t opcode) {
 
 int CPU::execute0x1XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
+    case 0x00:
+      return stop();
+      break;
     case 0x01:
       return ld_rr_nn(DE.getFullRegister());
       break;
     case 0x02:
       return ld_DE_A();
       break;
+    case 0x03:
+      return inc_rr(DE.getFullRegister());
+      break;
     case 0x04:
       return inc_r(DE.getHighRegister());
+      break;
+    case 0x05:
+      return dec_r(DE.getHighRegister());
+      break;
+    case 0x06:
+      return ld_r_n(DE.getHighRegister());
+      break;
+    case 0x07:
+      return rla_A();
       break;
     case 0x08:
       return jr_PC_dd();
       break;
+    case 0x09:
+      return add_HL_rr(DE.getFullRegister());
+      break;
     case 0x0A:
       return ld_A_DE();
       break;
-    case 0x0c:
+    case 0x0B:
+      return dec_rr(DE.getFullRegister());
+      break;
+    case 0x0C:
       return inc_r(DE.getLowRegister());
+      break;
+    case 0x0D:
+      return dec_r(DE.getLowRegister());
+      break;
+    case 0x0E:
+      return ld_r_n(DE.getLowRegister());
+      break;
+    case 0x0F:
+      return rra_A();
       break;
     default:
       return unsupportedOpcode(opcode);
       break;
   }
 }
+
 int CPU::execute0x2XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
     case 0x00:
@@ -211,37 +263,143 @@ int CPU::execute0x2XTable(uint8_t opcode) {
     case 0x01:
       return ld_rr_nn(HL.getFullRegister());
       break;
+    case 0x02:
+      return ldi_HL_A();
+      break;
+    case 0x03:
+      return inc_rr(HL.getFullRegister());
+      break;
+    case 0x04:
+      return inc_r(HL.getHighRegister());
+      break;
+    case 0x05:
+      return dec_r(HL.getHighRegister());
+      break;
+    case 0x06:
+      return ld_r_n(HL.getHighRegister());
+      break;
+    case 0x07:
+      return daa_A();
+      break;
+    case 0x08:
+      return jr_f_PC_dd(AF.getZeroFlag(), 1);
+      break;
+    case 0x09:
+      return add_HL_rr(HL.getFullRegister());
+      break;
     case 0x0A:
       return ldi_A_HL();
+      break;
+    case 0x0B:
+      return dec_rr(HL.getFullRegister());
+      break;
+    case 0x0C:
+      return inc_r(HL.getLowRegister());
+      break;
+    case 0x0D:
+      return dec_r(HL.getLowRegister());
+      break;
+    case 0x0E:
+      return ld_r_n(HL.getLowRegister());
+      break;
+    case 0x0F:
+      return cpl_A();
       break;
     default:
       return unsupportedOpcode(opcode);
       break;
   }
 }
+
 int CPU::execute0x3XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
+    case 0x00:
+      return jr_f_PC_dd(AF.getCarryFlag(), 0);
+      break;
     case 0x01:
       return ld_rr_nn(SP.getSP());
+      break;
+    case 0x02:
+      return ldd_HL_A();
+      break;
+    case 0x03:
+      return inc_rr(SP.getSP());
+      break;
+    case 0x04:
+      return inc_HL();
+      break;
+    case 0x05:
+      return dec_HL();
+      break;
+    case 0x06:
+      return ld_HL_n();
+      break;
+    case 0x07:
+      return scf();
+      break;
+    case 0x08:
+      return jr_f_PC_dd(AF.getCarryFlag(), 1);
+      break;
+    case 0x09:
+      return add_HL_rr(SP.getSP());
+      break;
+    case 0x0A:
+      return ldd_A_HL();
+      break;
+    case 0x0B:
+      return dec_rr(SP.getSP());
+      break;
+    case 0x0C:
+      return inc_r(AF.getHighRegister());
+      break;
+    case 0x0D:
+      return dec_r(AF.getHighRegister());
       break;
     case 0x0E:
       return ld_r_n(AF.getHighRegister());
       break;
+    case 0x0F:
+      return ccf();
+      break;
     default:
       return unsupportedOpcode(opcode);
       break;
   }
 }
+
 int CPU::execute0x4XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
+    case 0x00:
+      return ld_r_r(BC.getHighRegister(), BC.getHighRegister());
+      break;
+    case 0x01:
+      return ld_r_r(BC.getHighRegister(), BC.getLowRegister());
+      break;
+    case 0x02:
+      return ld_r_r(BC.getHighRegister(), DE.getHighRegister());
+      break;
+    case 0x03:
+      return ld_r_r(BC.getHighRegister(), DE.getLowRegister());
+      break;
+    case 0x04:
+      return ld_r_r(BC.getHighRegister(), HL.getHighRegister());
+      break;
+    case 0x05:
+      return ld_r_r(BC.getHighRegister(), HL.getLowRegister());
+      break;
+    case 0x06:
+      return ld_r_HL(BC.getHighRegister());
+      break;
     case 0x07:
       return ld_r_r(BC.getHighRegister(), AF.getHighRegister());
+      break;
+    case 0x0E:
+      return ld_r_HL(BC.getHighRegister());
       break;
     default:
       return unsupportedOpcode(opcode);
       break;
   }
-  return 0;
 }
 int CPU::execute0x5XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
 int CPU::execute0x6XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
@@ -281,12 +439,46 @@ int CPU::execute0x7XTable(uint8_t opcode) {
 }
 int CPU::execute0x8XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
 int CPU::execute0x9XTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
-int CPU::execute0xAXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
-int CPU::execute0xBXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0xAXTable(uint8_t opcode) {
+  switch (opcode & 0x0F) {
+    case 0x09:
+      return xor_A_r(BC.getLowRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
+int CPU::execute0xBXTable(uint8_t opcode) {
+  switch (opcode & 0x0F) {
+    case 0x01:
+      return or_A_r(BC.getLowRegister());
+      break;
+    case 0x07:
+      return or_A_r(AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
+
 int CPU::execute0xCXTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
+    case 0x01:
+      return pop_rr(BC.getFullRegister());
+      break;
     case 0x03:
       return jp_nn();
+      break;
+    case 0x04:
+      return call_f_nn(AF.getZeroFlag(), 0);
+      break;
+    case 0x05:
+      return push_rr(BC.getFullRegister());
+      break;
+    case 0x06:
+      return add_A_n();
       break;
     case 0x09:
       return ret();
@@ -299,7 +491,19 @@ int CPU::execute0xCXTable(uint8_t opcode) {
       break;
   }
 }
-int CPU::execute0xDXTable(uint8_t opcode) { return unsupportedOpcode(opcode); }
+int CPU::execute0xDXTable(uint8_t opcode) {
+  switch (opcode & 0x0F) {
+    case 0x05:
+      return push_rr(DE.getFullRegister());
+      break;
+    case 0x06:
+      return sub_A_n();
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
 int CPU::execute0xEXTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
     case 0x00:
@@ -311,6 +515,9 @@ int CPU::execute0xEXTable(uint8_t opcode) {
     case 0x05:
       return push_rr(HL.getFullRegister());
       break;
+    case 0x06:
+      return and_A_n();
+      break;
     case 0x0A:
       return ld_nn_A();
       break;
@@ -321,6 +528,9 @@ int CPU::execute0xEXTable(uint8_t opcode) {
 }
 int CPU::execute0xFXTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
+    case 0x00:
+      return ld_A_FFn();
+      break;
     case 0x01:
       return pop_rr(AF.getFullRegister());
       break;
@@ -329,6 +539,15 @@ int CPU::execute0xFXTable(uint8_t opcode) {
       break;
     case 0x05:
       return push_rr(AF.getFullRegister());
+      break;
+    case 0x0A:
+      return ld_A_nn();
+      break;
+    case 0x0E:
+      return cp_A_n();
+      break;
+    case 0x0F:
+      return rst_n(0x38);
       break;
     default:
       return unsupportedOpcode(opcode);
@@ -907,7 +1126,77 @@ int CPU::ld_HL_SP_dd_relative() {
 }
 
 // Rotate and shift instructions
-int CPU::rlca_A() { return 4; }
+int CPU::rlca_A() {
+  uint8_t A = AF.getHighValue();
+  uint8_t A_bit7 = A & 0x80;
+  AF.setHighValue(A << 1 | A_bit7);
+
+  if (A_bit7 == 1) {
+    AF.setCarryFlag();
+  } else {
+    AF.clearCarryFlag();
+  }
+
+  AF.clearZeroFlag();
+  AF.clearSubtractionFlag();
+  AF.clearHalfCarryFlag();
+  return 4;
+}
+
+int CPU::rla_A() {
+  uint8_t A = AF.getHighValue();
+  uint8_t A_bit7 = A & 0x80;
+  uint8_t carry = AF.getCarryFlag();
+
+  AF.setHighValue(A << 1 | carry);
+
+  if (A_bit7 == 1) {
+    AF.setCarryFlag();
+  } else {
+    AF.clearCarryFlag();
+  }
+
+  AF.clearZeroFlag();
+  AF.clearSubtractionFlag();
+  AF.clearHalfCarryFlag();
+  return 4;
+}
+
+int CPU::rrca_A() {
+  uint8_t A = AF.getHighValue();
+  uint8_t A_bit0 = A & 0x01;
+  AF.setHighValue(A >> 1 | A_bit0);
+
+  if (A_bit0 == 1) {
+    AF.setCarryFlag();
+  } else {
+    AF.clearCarryFlag();
+  }
+
+  AF.clearZeroFlag();
+  AF.clearSubtractionFlag();
+  AF.clearHalfCarryFlag();
+  return 4;
+}
+
+int CPU::rra_A() {
+  uint8_t A = AF.getHighValue();
+  uint8_t A_bit0 = A & 0x01;
+  uint8_t carry = AF.getCarryFlag();
+
+  AF.setHighValue(A >> 1 | carry);
+
+  if (A_bit0 == 1) {
+    AF.setCarryFlag();
+  } else {
+    AF.clearCarryFlag();
+  }
+
+  AF.clearZeroFlag();
+  AF.clearSubtractionFlag();
+  AF.clearHalfCarryFlag();
+  return 4;
+}
 
 // Single bit operation instructions
 int CPU::bit_n_r(uint8_t const *r) {
@@ -993,11 +1282,12 @@ int CPU::scf() {
 
 int CPU::nop() { return 4; }
 
-int halt() {
+int CPU::halt() {
   throw std::runtime_error("Did not implement halt!");
   return -1;
 }
-int stop() {
+
+int CPU::stop() {
   throw std::runtime_error("Did not implement stop!");
   return -1;
 }
