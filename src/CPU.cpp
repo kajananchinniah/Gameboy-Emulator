@@ -77,15 +77,16 @@ void CPU::update() {
 
 int CPU::unsupportedOpcode(uint8_t opcode) {
   std::stringstream error_stream;
-  error_stream << "Unknown opcode: 0x" << std::hex << (int)opcode << " at 0x"
-               << std::hex << (int)PC.getPCValue();
+  error_stream << "Unknown opcode: 0x" << std::hex << static_cast<int>(opcode)
+               << " at 0x" << std::hex << static_cast<int>(PC.getPCValue());
   throw std::runtime_error(error_stream.str());
   return -1;
 }
 
 int CPU::executeOpcode(uint8_t opcode) {
-  std::cout << "Executing: 0x" << std::hex << (int)opcode << " at 0x"
-            << std::hex << (int)PC.getPCValue() - 1 << "\n";
+  std::cout << "Executing: 0x" << std::hex << static_cast<int>(opcode)
+            << " at 0x" << std::hex << static_cast<int>(PC.getPCValue()) - 1
+            << "\n";
   printStatus();
   std::cout << "\n\n";
 
@@ -443,6 +444,7 @@ int CPU::execute0x5XTable(uint8_t opcode) {
       break;
     case 0x06:
       return ld_r_HL(DE.getHighRegister());
+      break;
     case 0x07:
       return ld_r_r(DE.getHighRegister(), AF.getHighRegister());
       break;
@@ -634,6 +636,11 @@ int CPU::execute0xCXTable(uint8_t opcode) {
     case 0x09:
       return ret();
       break;
+    case 0x0B: {
+      uint8_t opcode = mmu.read(PC.getPCValue());
+      PC.incrementPC(1);
+      return execute0xCBOpcode(opcode);
+    } break;
     case 0x0D:
       return call_nn();
       break;
@@ -705,6 +712,144 @@ int CPU::execute0xFXTable(uint8_t opcode) {
       break;
   }
 }
+
+int CPU::execute0xCBOpcode(uint8_t opcode) {
+  std::cout << "Executing: 0xCB" << std::hex << static_cast<int>(opcode)
+            << " at 0x" << std::hex << static_cast<int>(PC.getPCValue()) - 1
+            << "\n";
+  printStatus();
+  std::cout << "\n\n";
+  switch (opcode & 0xF0) {
+    case 0x00:
+      return execute0xCB0XTable(opcode);
+      break;
+    case 0x10:
+      return execute0xCB1XTable(opcode);
+      break;
+    case 0x20:
+      return execute0xCB2XTable(opcode);
+      break;
+    case 0x30:
+      return execute0xCB3XTable(opcode);
+      break;
+    case 0x40:
+      return execute0xCB4XTable(opcode);
+      break;
+    case 0x50:
+      return execute0xCB5XTable(opcode);
+      break;
+    case 0x60:
+      return execute0xCB6XTable(opcode);
+      break;
+    case 0x70:
+      return execute0xCB7XTable(opcode);
+      break;
+    case 0x80:
+      return execute0xCB8XTable(opcode);
+      break;
+    case 0x90:
+      return execute0xCB9XTable(opcode);
+      break;
+    case 0xA0:
+      return execute0xCBAXTable(opcode);
+      break;
+    case 0xB0:
+      return execute0xCBBXTable(opcode);
+      break;
+    case 0xC0:
+      return execute0xCBCXTable(opcode);
+      break;
+    case 0xD0:
+      return execute0xCBDXTable(opcode);
+      break;
+    case 0xE0:
+      return execute0xCBEXTable(opcode);
+      break;
+    case 0xF0:
+      return execute0xCBFXTable(opcode);
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
+
+int CPU::execute0xCB0XTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+int CPU::execute0xCB1XTable(uint8_t opcode) {
+  switch (opcode & 0x0F) {
+    case 0x09:
+      return rr_r(BC.getLowRegister());
+      break;
+    case 0x0A:
+      return rr_r(DE.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
+int CPU::execute0xCB2XTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+
+int CPU::execute0xCB3XTable(uint8_t opcode) {
+  switch (opcode & 0x0F) {
+    case 0x08:
+      return srl_r(BC.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode);
+      break;
+  }
+}
+int CPU::execute0xCB4XTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+int CPU::execute0xCB5XTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+int CPU::execute0xCB6XTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+
+int CPU::execute0xCB7XTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+
+int CPU::execute0xCB8XTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+
+int CPU::execute0xCB9XTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+
+int CPU::execute0xCBAXTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+
+int CPU::execute0xCBBXTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+
+int CPU::execute0xCBCXTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+
+int CPU::execute0xCBDXTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+
+int CPU::execute0xCBEXTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+
+int CPU::execute0xCBFXTable(uint8_t opcode) {
+  return unsupportedOpcode(opcode);
+}
+
 // Opcodes
 
 // Special instructions
@@ -1316,7 +1461,7 @@ int CPU::rla_A() {
 int CPU::rrca_A() {
   uint8_t A = AF.getHighValue();
   uint8_t A_bit0 = A & 0x01;
-  AF.setHighValue(A >> 1 | A_bit0);
+  AF.setHighValue(A >> 1 | A_bit0 << 7);
 
   if (A_bit0 == 1) {
     AF.setCarryFlag();
@@ -1335,7 +1480,7 @@ int CPU::rra_A() {
   uint8_t A_bit0 = A & 0x01;
   uint8_t carry = AF.getCarryFlag();
 
-  AF.setHighValue(A >> 1 | carry);
+  AF.setHighValue(A >> 1 | carry << 7);
 
   if (A_bit0 == 1) {
     AF.setCarryFlag();
@@ -1403,7 +1548,7 @@ int CPU::rl_HL() {
 
 uint8_t rr_base(uint8_t value, uint8_t value_bit0, uint8_t or_operand,
                 RegisterAF *AF) {
-  uint8_t result = value >> 1 | or_operand;
+  uint8_t result = value >> 1 | (or_operand << 7);
   if (value_bit0 == 1) {
     AF->setCarryFlag();
   } else {
