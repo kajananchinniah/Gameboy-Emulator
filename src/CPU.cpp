@@ -18,7 +18,6 @@ void CPU::printStatus() {
 }
 
 CPU::CPU() {
-  // See: http://www.codeslinger.co.uk/pages/projects/gameboy/hardware.html
   AF.setFullValue(0x01B0);
   BC.setFullValue(0x0013);
   DE.setFullValue(0x00D8);

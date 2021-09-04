@@ -31,7 +31,7 @@ To debug my opcodes, I used BGB (https://bgb.bircd.org/) as a dissassembler on b
   - Manual on the gameboy CPU
 - Gameboy Complete Technical Reference: https://gekkio.fi/files/gb-docs/gbctr.pdf
   - In progress (as of Aug 21st 2021) technical reference that I used
-- Codeslinger: http://www.codeslinger.co.uk/pages/projects/gameboy/hardware.html
-  - Took the gameboy initialization from this
+- Took the Gameboy power up sequence from: https://gbdev.gg8.se/wiki/articles/Power_Up_Sequence
+  - Note: this may affect compatability with all games
 - Stackoverflow for half carry: https://stackoverflow.com/questions/57958631/game-boy-half-carry-flag-and-16-bit-instructions-especially-opcode-0xe8
   - I had trouble understanding how the half carry flag worked so I read this to understand
