@@ -1064,6 +1064,54 @@ int CPU::execute0xCBOpcode(uint8_t opcode) {
 
 int CPU::execute0xCB0XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
+    case 0x00:
+      return rlc_r(BC.getHighRegister());
+      break;
+    case 0x01:
+      return rlc_r(BC.getLowRegister());
+      break;
+    case 0x02:
+      return rlc_r(DE.getHighRegister());
+      break;
+    case 0x03:
+      return rlc_r(DE.getLowRegister());
+      break;
+    case 0x04:
+      return rlc_r(HL.getHighRegister());
+      break;
+    case 0x05:
+      return rlc_r(HL.getLowRegister());
+      break;
+    case 0x06:
+      return rlc_HL();
+      break;
+    case 0x07:
+      return rlc_r(AF.getHighRegister());
+      break;
+    case 0x08:
+      return rrc_r(BC.getHighRegister());
+      break;
+    case 0x09:
+      return rrc_r(BC.getLowRegister());
+      break;
+    case 0x0A:
+      return rrc_r(DE.getHighRegister());
+      break;
+    case 0x0B:
+      return rrc_r(DE.getLowRegister());
+      break;
+    case 0x0C:
+      return rrc_r(HL.getHighRegister());
+      break;
+    case 0x0D:
+      return rrc_r(HL.getLowRegister());
+      break;
+    case 0x0E:
+      return rrc_HL();
+      break;
+    case 0x0F:
+      return rrc_r(AF.getHighRegister());
+      break;
     default:
       return unsupportedOpcode(opcode, "cb");
       break;
@@ -1071,6 +1119,33 @@ int CPU::execute0xCB0XTable(uint8_t opcode) {
 }
 int CPU::execute0xCB1XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
+    case 0x00:
+      return rl_r(BC.getHighRegister());
+      break;
+    case 0x01:
+      return rl_r(BC.getLowRegister());
+      break;
+    case 0x02:
+      return rl_r(DE.getHighRegister());
+      break;
+    case 0x03:
+      return rl_r(DE.getLowRegister());
+      break;
+    case 0x04:
+      return rl_r(HL.getHighRegister());
+      break;
+    case 0x05:
+      return rl_r(HL.getLowRegister());
+      break;
+    case 0x06:
+      return rl_HL();
+      break;
+    case 0x07:
+      return rl_r(AF.getHighRegister());
+      break;
+    case 0x08:
+      return rr_r(BC.getHighRegister());
+      break;
     case 0x09:
       return rr_r(BC.getLowRegister());
       break;
@@ -1080,22 +1155,128 @@ int CPU::execute0xCB1XTable(uint8_t opcode) {
     case 0x0B:
       return rr_r(DE.getLowRegister());
       break;
+    case 0x0C:
+      return rr_r(HL.getHighRegister());
+      break;
+    case 0x0D:
+      return rr_r(HL.getLowRegister());
+      break;
+    case 0x0E:
+      return rr_HL();
+      break;
+    case 0x0F:
+      return rr_r(AF.getHighRegister());
+      break;
     default:
       return unsupportedOpcode(opcode, "cb");
       break;
   }
 }
 int CPU::execute0xCB2XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return sla_r(BC.getHighRegister());
+      break;
+    case 0x01:
+      return sla_r(BC.getLowRegister());
+      break;
+    case 0x02:
+      return sla_r(DE.getHighRegister());
+      break;
+    case 0x03:
+      return sla_r(DE.getLowRegister());
+      break;
+    case 0x04:
+      return sla_r(HL.getHighRegister());
+      break;
+    case 0x05:
+      return sla_r(HL.getLowRegister());
+      break;
+    case 0x06:
+      return sla_HL();
+      break;
+    case 0x07:
+      return sla_r(AF.getHighRegister());
+      break;
+    case 0x08:
+      return sra_r(BC.getHighRegister());
+      break;
+    case 0x09:
+      return sra_r(BC.getLowRegister());
+      break;
+    case 0x0A:
+      return sra_r(DE.getHighRegister());
+      break;
+    case 0x0B:
+      return sra_r(DE.getLowRegister());
+      break;
+    case 0x0C:
+      return sra_r(HL.getHighRegister());
+      break;
+    case 0x0D:
+      return sra_r(HL.getLowRegister());
+      break;
+    case 0x0E:
+      return sra_HL();
+      break;
+    case 0x0F:
+      return sra_r(AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 
 int CPU::execute0xCB3XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
+    case 0x00:
+      return swap_r(BC.getHighRegister());
+      break;
+    case 0x01:
+      return swap_r(BC.getLowRegister());
+      break;
+    case 0x02:
+      return swap_r(DE.getHighRegister());
+      break;
+    case 0x03:
+      return swap_r(DE.getLowRegister());
+      break;
+    case 0x04:
+      return swap_r(HL.getHighRegister());
+      break;
+    case 0x05:
+      return swap_r(HL.getLowRegister());
+      break;
+    case 0x06:
+      return swap_HL();
+      break;
     case 0x07:
       return swap_r(AF.getHighRegister());
       break;
     case 0x08:
       return srl_r(BC.getHighRegister());
+      break;
+    case 0x09:
+      return srl_r(BC.getLowRegister());
+      break;
+    case 0x0A:
+      return srl_r(DE.getHighRegister());
+      break;
+    case 0x0B:
+      return srl_r(DE.getLowRegister());
+      break;
+    case 0x0C:
+      return srl_r(HL.getHighRegister());
+      break;
+    case 0x0D:
+      return srl_r(HL.getLowRegister());
+      break;
+    case 0x0E:
+      return srl_HL();
+      break;
+    case 0x0F:
+      return srl_r(AF.getHighRegister());
       break;
     default:
       return unsupportedOpcode(opcode, "cb");
@@ -1103,17 +1284,225 @@ int CPU::execute0xCB3XTable(uint8_t opcode) {
   }
 }
 int CPU::execute0xCB4XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return bit_n_r(0, BC.getHighRegister());
+      break;
+    case 0x01:
+      return bit_n_r(0, BC.getLowRegister());
+      break;
+    case 0x02:
+      return bit_n_r(0, DE.getHighRegister());
+      break;
+    case 0x03:
+      return bit_n_r(0, DE.getLowRegister());
+      break;
+    case 0x04:
+      return bit_n_r(0, HL.getHighRegister());
+      break;
+    case 0x05:
+      return bit_n_r(0, HL.getLowRegister());
+      break;
+    case 0x06:
+      return bit_n_HL(0);
+      break;
+    case 0x07:
+      return bit_n_r(0, AF.getHighRegister());
+      break;
+    case 0x08:
+      return bit_n_r(1, BC.getHighRegister());
+      break;
+    case 0x09:
+      return bit_n_r(1, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return bit_n_r(1, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return bit_n_r(1, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return bit_n_r(1, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return bit_n_r(1, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return bit_n_HL(1);
+      break;
+    case 0x0F:
+      return bit_n_r(1, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 int CPU::execute0xCB5XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return bit_n_r(2, BC.getHighRegister());
+      break;
+    case 0x01:
+      return bit_n_r(2, BC.getLowRegister());
+      break;
+    case 0x02:
+      return bit_n_r(2, DE.getHighRegister());
+      break;
+    case 0x03:
+      return bit_n_r(2, DE.getLowRegister());
+      break;
+    case 0x04:
+      return bit_n_r(2, HL.getHighRegister());
+      break;
+    case 0x05:
+      return bit_n_r(2, HL.getLowRegister());
+      break;
+    case 0x06:
+      return bit_n_HL(2);
+      break;
+    case 0x07:
+      return bit_n_r(2, AF.getHighRegister());
+      break;
+    case 0x08:
+      return bit_n_r(3, BC.getHighRegister());
+      break;
+    case 0x09:
+      return bit_n_r(3, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return bit_n_r(3, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return bit_n_r(3, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return bit_n_r(3, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return bit_n_r(3, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return bit_n_HL(3);
+      break;
+    case 0x0F:
+      return bit_n_r(3, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 int CPU::execute0xCB6XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return bit_n_r(4, BC.getHighRegister());
+      break;
+    case 0x01:
+      return bit_n_r(4, BC.getLowRegister());
+      break;
+    case 0x02:
+      return bit_n_r(4, DE.getHighRegister());
+      break;
+    case 0x03:
+      return bit_n_r(4, DE.getLowRegister());
+      break;
+    case 0x04:
+      return bit_n_r(4, HL.getHighRegister());
+      break;
+    case 0x05:
+      return bit_n_r(4, HL.getLowRegister());
+      break;
+    case 0x06:
+      return bit_n_HL(4);
+      break;
+    case 0x07:
+      return bit_n_r(4, AF.getHighRegister());
+      break;
+    case 0x08:
+      return bit_n_r(5, BC.getHighRegister());
+      break;
+    case 0x09:
+      return bit_n_r(5, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return bit_n_r(5, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return bit_n_r(5, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return bit_n_r(5, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return bit_n_r(5, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return bit_n_HL(5);
+      break;
+    case 0x0F:
+      return bit_n_r(5, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 
 int CPU::execute0xCB7XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return bit_n_r(6, BC.getHighRegister());
+      break;
+    case 0x01:
+      return bit_n_r(6, BC.getLowRegister());
+      break;
+    case 0x02:
+      return bit_n_r(6, DE.getHighRegister());
+      break;
+    case 0x03:
+      return bit_n_r(6, DE.getLowRegister());
+      break;
+    case 0x04:
+      return bit_n_r(6, HL.getHighRegister());
+      break;
+    case 0x05:
+      return bit_n_r(6, HL.getLowRegister());
+      break;
+    case 0x06:
+      return bit_n_HL(6);
+      break;
+    case 0x07:
+      return bit_n_r(6, AF.getHighRegister());
+      break;
+    case 0x08:
+      return bit_n_r(7, BC.getHighRegister());
+      break;
+    case 0x09:
+      return bit_n_r(7, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return bit_n_r(7, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return bit_n_r(7, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return bit_n_r(7, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return bit_n_r(7, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return bit_n_HL(7);
+      break;
+    case 0x0F:
+      return bit_n_r(7, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 
 int CPU::execute0xCB8XTable(uint8_t opcode) {
@@ -2034,11 +2423,7 @@ int CPU::srl_HL() {
 }
 
 // Single bit operation instructions
-// TODO: double check & fix all bit/set/rst instr
-int CPU::bit_n_r(uint8_t const *r) {
-  uint8_t n = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-
+int CPU::bit_n_r(uint8_t n, uint8_t const *r) {
   if (((*r) >> n) & 0x1) {
     AF.clearZeroFlag();
   } else {
@@ -2051,10 +2436,7 @@ int CPU::bit_n_r(uint8_t const *r) {
   return 8;
 }
 
-int CPU::bit_n_HL() {
-  uint8_t n = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-
+int CPU::bit_n_HL(uint8_t n) {
   uint8_t value = mmu.read(HL.getFullValue());
   if ((value >> n) & 0x1) {
     AF.clearZeroFlag();
@@ -2068,34 +2450,24 @@ int CPU::bit_n_HL() {
   return 12;
 }
 
-int CPU::set_n_r(uint8_t *r) {
-  uint8_t n = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
+int CPU::set_n_r(uint8_t n, uint8_t *r) {
   *r = *r | (1 << n);
   return 8;
 }
 
-int CPU::set_n_HL() {
-  uint8_t n = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-
+int CPU::set_n_HL(uint8_t n) {
   uint8_t value = mmu.read(HL.getFullValue());
   value = value | (1 << n);
   mmu.write(HL.getFullValue(), value);
   return 16;
 }
 
-int CPU::res_n_r(uint8_t *r) {
-  uint8_t n = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
+int CPU::res_n_r(uint8_t n, uint8_t *r) {
   *r = *r & ~(1 << n);
   return 8;
 }
 
-int CPU::res_n_HL() {
-  uint8_t n = mmu.read(PC.getPCValue());
-  PC.incrementPC(1);
-
+int CPU::res_n_HL(uint8_t n) {
   uint8_t value = mmu.read(HL.getFullValue());
   value = value & ~(1 << n);
   return 16;
