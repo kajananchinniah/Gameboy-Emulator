@@ -841,16 +841,25 @@ int CPU::execute0xCXTable(uint8_t opcode) {
     case 0x09:
       return ret();
       break;
+    case 0x0A:
+      return jp_f_nn(AF.getZeroFlag(), 1);
+      break;
     case 0x0B: {
       uint8_t opcode = mmu.read(PC.getPCValue());
       PC.incrementPC(1);
       return execute0xCBOpcode(opcode);
     } break;
+    case 0x0C:
+      return call_f_nn(AF.getZeroFlag(), 1);
+      break;
     case 0x0D:
       return call_nn();
       break;
     case 0x0E:
       return adc_A_n();
+      break;
+    case 0x0F:
+      return rst_n(0x08);
       break;
     default:
       return unsupportedOpcode(opcode);
@@ -865,14 +874,38 @@ int CPU::execute0xDXTable(uint8_t opcode) {
     case 0x01:
       return pop_rr(DE.getFullRegister());
       break;
+    case 0x02:
+      return jp_f_nn(AF.getCarryFlag(), 0);
+      break;
+    case 0x04:
+      return call_f_nn(AF.getCarryFlag(), 0);
+      break;
     case 0x05:
       return push_rr(DE.getFullRegister());
       break;
     case 0x06:
       return sub_A_n();
       break;
+    case 0x07:
+      return rst_n(0x10);
+      break;
     case 0x08:
       return ret_f(AF.getCarryFlag(), 1);
+      break;
+    case 0x09:
+      return reti();
+      break;
+    case 0x0A:
+      return jp_f_nn(AF.getCarryFlag(), 1);
+      break;
+    case 0x0C:
+      return call_f_nn(AF.getCarryFlag(), 1);
+      break;
+    case 0x0E:
+      return sbc_A_n();
+      break;
+    case 0x0F:
+      return rst_n(0x18);
       break;
     default:
       return unsupportedOpcode(opcode);
@@ -887,11 +920,20 @@ int CPU::execute0xEXTable(uint8_t opcode) {
     case 0x01:
       return pop_rr(HL.getFullRegister());
       break;
+    case 0x02:
+      return ld_FFC_A();
+      break;
     case 0x05:
       return push_rr(HL.getFullRegister());
       break;
     case 0x06:
       return and_A_n();
+      break;
+    case 0x07:
+      return rst_n(0x20);
+      break;
+    case 0x08:
+      return add_SP_dd_relative();
       break;
     case 0x09:
       return jp_HL();
@@ -901,6 +943,9 @@ int CPU::execute0xEXTable(uint8_t opcode) {
       break;
     case 0x0E:
       return xor_A_n();
+      break;
+    case 0x0F:
+      return rst_n(0x28);
       break;
     default:
       return unsupportedOpcode(opcode);
@@ -913,7 +958,10 @@ int CPU::execute0xFXTable(uint8_t opcode) {
       return ld_A_FFn();
       break;
     case 0x01:
-      return pop_rr(AF.getFullRegister());
+      return pop_rr(AF.getFullRegister(), true);
+      break;
+    case 0x02:
+      return ld_A_FFC();
       break;
     case 0x03:
       return di();
@@ -921,8 +969,23 @@ int CPU::execute0xFXTable(uint8_t opcode) {
     case 0x05:
       return push_rr(AF.getFullRegister());
       break;
+    case 0x06:
+      return or_A_n();
+      break;
+    case 0x07:
+      return rst_n(0x30);
+      break;
+    case 0x08:
+      return ld_HL_SP_dd_relative();
+      break;
+    case 0x09:
+      return ld_SP_HL();
+      break;
     case 0x0A:
       return ld_A_nn();
+      break;
+    case 0x0B:
+      return ei();
       break;
     case 0x0E:
       return cp_A_n();
@@ -1249,12 +1312,16 @@ int CPU::push_rr(uint16_t *rr) {
   return 16;
 }
 
-int CPU::pop_rr(uint16_t *rr) {
+int CPU::pop_rr(uint16_t *rr, bool is_AF) {
   uint8_t low = mmu.read(SP.getSPValue());
   SP.incrementSP(1);
   uint8_t high = mmu.read(SP.getSPValue());
   SP.incrementSP(1);
-  *rr = high << 8 | low;
+  if (is_AF) {
+    *rr = high << 8 | (low & 0xF0);
+  } else {
+    *rr = high << 8 | low;
+  }
   return 12;
 }
 
