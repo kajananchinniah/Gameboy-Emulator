@@ -20,7 +20,7 @@ the testing part of this project was mostly abandoned.
 For CPU instructions, I used blargg's tests. This can be found at: https://gbdev.gg8.se/wiki/articles/Test_ROMs or https://github.com/retrio/gb-test-roms
 
 ## Debugging Acknowledgements
-To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a dissassembler on blargg's tests. Then I compared the output of the disassembler with my program (by printing out the status of my registers). This helped me find minor bugs that really messed up everyhing. (For a while my program was stuck on an infinite loop due to a bug :)). Once I got past the requirements for blargg's tests initialization, I shifted to using it exclusively.
+To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a dissassembler on blargg's tests. Then I compared the output of the disassembler with my program (by printing out the status of my registers). This helped me find minor bugs that really messed up everyhing such as accidental infinite loops due to writing to the wrong register. Once I got past the requirements for blargg's tests initialization, I shifted to using it exclusively.
 
 ## References
 - Pandocs: https://gbdev.io/pandocs/
