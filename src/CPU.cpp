@@ -2886,6 +2886,7 @@ int CPU::res_n_r(uint8_t n, uint8_t *r) {
 int CPU::res_n_HL(uint8_t n) {
   uint8_t value = mmu.read(HL.getFullValue());
   value = value & ~(1 << n);
+  mmu.write(HL.getFullValue(), value);
   return 16;
 }
 
