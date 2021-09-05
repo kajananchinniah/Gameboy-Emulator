@@ -9,7 +9,8 @@ could have reused (e.g. some opcodes do basically the same thing but slightly di
 Suggested CPU implementations:
 - Hashmap that maps opcode -> a struct consisting of instruction. This struct would contain a field the "type of access" (e.g.
   use a register as an address vs read from memory vs just use a register directly), as well as a generic implementation
-  for the instruction itself. I'm in too deep to do this though.
+  for the instruction itself. I'm in too deep to do this though. This would have also required explicit implementations
+    for every opcode. On the other hand, many of my opcodes take arguments to reuse some work.
 
 ## Note on Tests:
 Originally I had planned on unit testing every function I wrote via GTest. While this approach is fine, I realized that
