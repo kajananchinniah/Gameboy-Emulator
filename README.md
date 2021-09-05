@@ -9,8 +9,7 @@ could have reused (e.g. some opcodes do basically the same thing but slightly di
 Suggested CPU implementations:
 - Hashmap that maps opcode -> a struct consisting of instruction. This struct would contain a field the "type of access" (e.g.
   use a register as an address vs read from memory vs just use a register directly), as well as a generic implementation
-  for the instruction itself. I'm in too deep to do this though. This would have also required explicit implementations
-    for every opcode. On the other hand, many of my opcodes take arguments to reuse some work.
+  for the instruction itself. I'm in too deep to do this though.
 
 ## Note on Tests:
 Originally I had planned on unit testing every function I wrote via GTest. While this approach is fine, I realized that
@@ -21,7 +20,7 @@ the testing part of this project was mostly abandoned.
 For CPU instructions, I used blargg's tests. This can be found at: https://gbdev.gg8.se/wiki/articles/Test_ROMs or https://github.com/retrio/gb-test-roms
 
 ## Debugging Acknowledgements
-To debug my opcodes, I used BGB (https://bgb.bircd.org/) as a dissassembler on blargg's tests. Then I compared the output of the disassembler with my program (by printing out the status of my registers). This helped me find minor bugs that really messed up everyhing. (For a while my program was stuck on an infinite loop due to a bug :))
+To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a dissassembler on blargg's tests. Then I compared the output of the disassembler with my program (by printing out the status of my registers). This helped me find minor bugs that really messed up everyhing. (For a while my program was stuck on an infinite loop due to a bug :)). Once I got past the requirements for blargg's tests initialization, I shifted to using it exclusively.
 
 ## References
 - Pandocs: https://gbdev.io/pandocs/
