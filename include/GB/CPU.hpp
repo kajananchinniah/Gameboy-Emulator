@@ -2,6 +2,7 @@
 #define INCLUDE_GB_CPU_HPP_
 
 #include <functional>
+#include <string>
 #include <vector>
 
 #include "GB/MMU.hpp"
@@ -26,6 +27,7 @@ class CPU {
   ProgramCounter PC;
   StackPointer SP;
   bool IME{false};
+  bool ran_instr{false};
 
   int executeOpcode(uint8_t opcode);
   // X = arbitrary number (0 - F)
@@ -64,7 +66,7 @@ class CPU {
   int execute0xCBEXTable(uint8_t opcode);
   int execute0xCBFXTable(uint8_t opcode);
 
-  int unsupportedOpcode(uint8_t opcode);
+  int unsupportedOpcode(uint8_t opcode, std::string prefix = "");
 
   // Special instructions
   int NOP();
@@ -95,7 +97,7 @@ class CPU {
   int ld_nn_SP();
   int ld_SP_HL();
   int push_rr(uint16_t *rr);
-  int pop_rr(uint16_t *rr);
+  int pop_rr(uint16_t *rr, bool is_AF = false);
 
   // 8 bit arthimetic instructions
   int add_A_r(uint8_t const *r);
@@ -159,12 +161,12 @@ class CPU {
   int srl_HL();
 
   // Single bit operation instructions
-  int bit_n_r(uint8_t const *r);
-  int bit_n_HL();
-  int set_n_r(uint8_t *r);
-  int set_n_HL();
-  int res_n_r(uint8_t *r);
-  int res_n_HL();
+  int bit_n_r(uint8_t n, uint8_t const *r);
+  int bit_n_HL(uint8_t n);
+  int set_n_r(uint8_t n, uint8_t *r);
+  int set_n_HL(uint8_t n);
+  int res_n_r(uint8_t n, uint8_t *r);
+  int res_n_HL(uint8_t n);
 
   // CPU control instructions
   int ccf();
