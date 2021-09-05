@@ -75,9 +75,11 @@ void CPU::update() {
   }
 }
 
-int CPU::unsupportedOpcode(uint8_t opcode) {
+int CPU::unsupportedOpcode(uint8_t opcode, std::string prefix) {
   std::stringstream error_stream;
-  error_stream << "Unknown opcode: 0x" << std::hex << static_cast<int>(opcode)
+
+  error_stream << "Unknown opcode: 0x" << prefix << std::setfill('0')
+               << std::setw(2) << std::hex << static_cast<int>(opcode)
                << " at 0x" << std::hex << static_cast<int>(PC.getPCValue());
   throw std::runtime_error(error_stream.str());
   return -1;
@@ -1055,7 +1057,7 @@ int CPU::execute0xCBOpcode(uint8_t opcode) {
       return execute0xCBFXTable(opcode);
       break;
     default:
-      return unsupportedOpcode(opcode);
+      return unsupportedOpcode(opcode, "cb");
       break;
   }
 }
@@ -1063,7 +1065,7 @@ int CPU::execute0xCBOpcode(uint8_t opcode) {
 int CPU::execute0xCB0XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
     default:
-      return unsupportedOpcode(opcode);
+      return unsupportedOpcode(opcode, "cb");
       break;
   }
 }
@@ -1079,71 +1081,71 @@ int CPU::execute0xCB1XTable(uint8_t opcode) {
       return rr_r(DE.getLowRegister());
       break;
     default:
-      return unsupportedOpcode(opcode);
+      return unsupportedOpcode(opcode, "cb");
       break;
   }
 }
 int CPU::execute0xCB2XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 
 int CPU::execute0xCB3XTable(uint8_t opcode) {
   switch (opcode & 0x0F) {
-    case 0x07:  // ERROR
+    case 0x07:
       return swap_r(AF.getHighRegister());
       break;
     case 0x08:
       return srl_r(BC.getHighRegister());
       break;
     default:
-      return unsupportedOpcode(opcode);
+      return unsupportedOpcode(opcode, "cb");
       break;
   }
 }
 int CPU::execute0xCB4XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 int CPU::execute0xCB5XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 int CPU::execute0xCB6XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 
 int CPU::execute0xCB7XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 
 int CPU::execute0xCB8XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 
 int CPU::execute0xCB9XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 
 int CPU::execute0xCBAXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 
 int CPU::execute0xCBBXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 
 int CPU::execute0xCBCXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 
 int CPU::execute0xCBDXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 
 int CPU::execute0xCBEXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 
 int CPU::execute0xCBFXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode);
+  return unsupportedOpcode(opcode, "cb");
 }
 
 // Opcodes
