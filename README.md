@@ -38,4 +38,5 @@ To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a
 - Cinoop: https://cturt.github.io/cinoop.html
   - Used it for reference to inspire implementation (specifically registers)
 - Codeslinger: http://www.codeslinger.co.uk/pages/projects/gameboy/beginning.html
-  - High level tutorial for writing a gameboy emulator that I used when I was stuck
+  - High level tutorial for writing a gameboy emulator that I used when I was stuck (mainly for interrupts and I plan on
+    using it for the mmu + ppu)
