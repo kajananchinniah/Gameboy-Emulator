@@ -1700,7 +1700,7 @@ int CPU::add_SP_dd_relative() {
 int CPU::ld_HL_SP_dd_relative() {
   int8_t dd = static_cast<int8_t>(mmu.read(PC.getPCValue()));
   PC.incrementPC(1);
-  uint8_t SP_value = SP.getSPValue();
+  uint16_t SP_value = SP.getSPValue();
   uint16_t result = dd + SP_value;
   AF.clearZeroFlag();
   AF.clearSubtractionFlag();
