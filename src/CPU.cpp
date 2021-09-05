@@ -1506,35 +1506,451 @@ int CPU::execute0xCB7XTable(uint8_t opcode) {
 }
 
 int CPU::execute0xCB8XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return res_n_r(0, BC.getHighRegister());
+      break;
+    case 0x01:
+      return res_n_r(0, BC.getLowRegister());
+      break;
+    case 0x02:
+      return res_n_r(0, DE.getHighRegister());
+      break;
+    case 0x03:
+      return res_n_r(0, DE.getLowRegister());
+      break;
+    case 0x04:
+      return res_n_r(0, HL.getHighRegister());
+      break;
+    case 0x05:
+      return res_n_r(0, HL.getLowRegister());
+      break;
+    case 0x06:
+      return res_n_HL(0);
+      break;
+    case 0x07:
+      return res_n_r(0, AF.getHighRegister());
+      break;
+    case 0x08:
+      return res_n_r(1, BC.getHighRegister());
+      break;
+    case 0x09:
+      return res_n_r(1, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return res_n_r(1, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return res_n_r(1, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return res_n_r(1, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return res_n_r(1, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return res_n_HL(1);
+      break;
+    case 0x0F:
+      return res_n_r(1, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 
 int CPU::execute0xCB9XTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return res_n_r(2, BC.getHighRegister());
+      break;
+    case 0x01:
+      return res_n_r(2, BC.getLowRegister());
+      break;
+    case 0x02:
+      return res_n_r(2, DE.getHighRegister());
+      break;
+    case 0x03:
+      return res_n_r(2, DE.getLowRegister());
+      break;
+    case 0x04:
+      return res_n_r(2, HL.getHighRegister());
+      break;
+    case 0x05:
+      return res_n_r(2, HL.getLowRegister());
+      break;
+    case 0x06:
+      return res_n_HL(2);
+      break;
+    case 0x07:
+      return res_n_r(2, AF.getHighRegister());
+      break;
+    case 0x08:
+      return res_n_r(3, BC.getHighRegister());
+      break;
+    case 0x09:
+      return res_n_r(3, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return res_n_r(3, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return res_n_r(3, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return res_n_r(3, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return res_n_r(3, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return res_n_HL(3);
+      break;
+    case 0x0F:
+      return res_n_r(3, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 
 int CPU::execute0xCBAXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return res_n_r(4, BC.getHighRegister());
+      break;
+    case 0x01:
+      return res_n_r(4, BC.getLowRegister());
+      break;
+    case 0x02:
+      return res_n_r(4, DE.getHighRegister());
+      break;
+    case 0x03:
+      return res_n_r(4, DE.getLowRegister());
+      break;
+    case 0x04:
+      return res_n_r(4, HL.getHighRegister());
+      break;
+    case 0x05:
+      return res_n_r(4, HL.getLowRegister());
+      break;
+    case 0x06:
+      return res_n_HL(4);
+      break;
+    case 0x07:
+      return res_n_r(4, AF.getHighRegister());
+      break;
+    case 0x08:
+      return res_n_r(5, BC.getHighRegister());
+      break;
+    case 0x09:
+      return res_n_r(5, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return res_n_r(5, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return res_n_r(5, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return res_n_r(5, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return res_n_r(5, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return res_n_HL(5);
+      break;
+    case 0x0F:
+      return res_n_r(5, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 
 int CPU::execute0xCBBXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return res_n_r(6, BC.getHighRegister());
+      break;
+    case 0x01:
+      return res_n_r(6, BC.getLowRegister());
+      break;
+    case 0x02:
+      return res_n_r(6, DE.getHighRegister());
+      break;
+    case 0x03:
+      return res_n_r(6, DE.getLowRegister());
+      break;
+    case 0x04:
+      return res_n_r(6, HL.getHighRegister());
+      break;
+    case 0x05:
+      return res_n_r(6, HL.getLowRegister());
+      break;
+    case 0x06:
+      return res_n_HL(6);
+      break;
+    case 0x07:
+      return res_n_r(6, AF.getHighRegister());
+      break;
+    case 0x08:
+      return res_n_r(7, BC.getHighRegister());
+      break;
+    case 0x09:
+      return res_n_r(7, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return res_n_r(7, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return res_n_r(7, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return res_n_r(7, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return res_n_r(7, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return res_n_HL(7);
+      break;
+    case 0x0F:
+      return res_n_r(7, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 
 int CPU::execute0xCBCXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return set_n_r(0, BC.getHighRegister());
+      break;
+    case 0x01:
+      return set_n_r(0, BC.getLowRegister());
+      break;
+    case 0x02:
+      return set_n_r(0, DE.getHighRegister());
+      break;
+    case 0x03:
+      return set_n_r(0, DE.getLowRegister());
+      break;
+    case 0x04:
+      return set_n_r(0, HL.getHighRegister());
+      break;
+    case 0x05:
+      return set_n_r(0, HL.getLowRegister());
+      break;
+    case 0x06:
+      return set_n_HL(0);
+      break;
+    case 0x07:
+      return set_n_r(0, AF.getHighRegister());
+      break;
+    case 0x08:
+      return set_n_r(1, BC.getHighRegister());
+      break;
+    case 0x09:
+      return set_n_r(1, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return set_n_r(1, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return set_n_r(1, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return set_n_r(1, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return set_n_r(1, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return set_n_HL(1);
+      break;
+    case 0x0F:
+      return set_n_r(1, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 
 int CPU::execute0xCBDXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return set_n_r(2, BC.getHighRegister());
+      break;
+    case 0x01:
+      return set_n_r(2, BC.getLowRegister());
+      break;
+    case 0x02:
+      return set_n_r(2, DE.getHighRegister());
+      break;
+    case 0x03:
+      return set_n_r(2, DE.getLowRegister());
+      break;
+    case 0x04:
+      return set_n_r(2, HL.getHighRegister());
+      break;
+    case 0x05:
+      return set_n_r(2, HL.getLowRegister());
+      break;
+    case 0x06:
+      return set_n_HL(2);
+      break;
+    case 0x07:
+      return set_n_r(2, AF.getHighRegister());
+      break;
+    case 0x08:
+      return set_n_r(3, BC.getHighRegister());
+      break;
+    case 0x09:
+      return set_n_r(3, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return set_n_r(3, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return set_n_r(3, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return set_n_r(3, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return set_n_r(3, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return set_n_HL(3);
+      break;
+    case 0x0F:
+      return set_n_r(3, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 
 int CPU::execute0xCBEXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return set_n_r(4, BC.getHighRegister());
+      break;
+    case 0x01:
+      return set_n_r(4, BC.getLowRegister());
+      break;
+    case 0x02:
+      return set_n_r(4, DE.getHighRegister());
+      break;
+    case 0x03:
+      return set_n_r(4, DE.getLowRegister());
+      break;
+    case 0x04:
+      return set_n_r(4, HL.getHighRegister());
+      break;
+    case 0x05:
+      return set_n_r(4, HL.getLowRegister());
+      break;
+    case 0x06:
+      return set_n_HL(4);
+      break;
+    case 0x07:
+      return set_n_r(4, AF.getHighRegister());
+      break;
+    case 0x08:
+      return set_n_r(5, BC.getHighRegister());
+      break;
+    case 0x09:
+      return set_n_r(5, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return set_n_r(5, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return set_n_r(5, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return set_n_r(5, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return set_n_r(5, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return set_n_HL(5);
+      break;
+    case 0x0F:
+      return set_n_r(5, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 
 int CPU::execute0xCBFXTable(uint8_t opcode) {
-  return unsupportedOpcode(opcode, "cb");
+  switch (opcode & 0x0F) {
+    case 0x00:
+      return set_n_r(6, BC.getHighRegister());
+      break;
+    case 0x01:
+      return set_n_r(6, BC.getLowRegister());
+      break;
+    case 0x02:
+      return set_n_r(6, DE.getHighRegister());
+      break;
+    case 0x03:
+      return set_n_r(6, DE.getLowRegister());
+      break;
+    case 0x04:
+      return set_n_r(6, HL.getHighRegister());
+      break;
+    case 0x05:
+      return set_n_r(6, HL.getLowRegister());
+      break;
+    case 0x06:
+      return set_n_HL(6);
+      break;
+    case 0x07:
+      return set_n_r(6, AF.getHighRegister());
+      break;
+    case 0x08:
+      return set_n_r(7, BC.getHighRegister());
+      break;
+    case 0x09:
+      return set_n_r(7, BC.getLowRegister());
+      break;
+    case 0x0A:
+      return set_n_r(7, DE.getHighRegister());
+      break;
+    case 0x0B:
+      return set_n_r(7, DE.getLowRegister());
+      break;
+    case 0x0C:
+      return set_n_r(7, HL.getHighRegister());
+      break;
+    case 0x0D:
+      return set_n_r(7, HL.getLowRegister());
+      break;
+    case 0x0E:
+      return set_n_HL(7);
+      break;
+    case 0x0F:
+      return set_n_r(7, AF.getHighRegister());
+      break;
+    default:
+      return unsupportedOpcode(opcode, "cb");
+      break;
+  }
 }
 
 // Opcodes
