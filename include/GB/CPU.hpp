@@ -68,9 +68,6 @@ class CPU {
 
   int unsupportedOpcode(uint8_t opcode, std::string prefix = "");
 
-  // Special instructions
-  int NOP();
-
   // 8 bit load instructions
   int ld_r_r(uint8_t *r1, uint8_t const *r2);
   int ld_r_n(uint8_t *r);
@@ -189,7 +186,17 @@ class CPU {
   int ret_f(uint8_t f, uint8_t condition);
   int reti();
   int rst_n(uint8_t reset_value);
+
+  // Helper function for getting 16 bit value from memory
+  uint16_t get_nn(MMU *mmu, ProgramCounter *PC) {
+    uint8_t low = mmu->read(PC->getPCValue());
+    PC->incrementPC(1);
+    uint8_t high = mmu->read(PC->getPCValue());
+    PC->incrementPC(1);
+    return high << 8 | low;
+  }
 };
+
 }  // namespace GB
 
 #endif  // INCLUDE_GB_CPU_HPP_
