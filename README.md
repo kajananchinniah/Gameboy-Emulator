@@ -40,3 +40,7 @@ To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a
 - Codeslinger: http://www.codeslinger.co.uk/pages/projects/gameboy/beginning.html
   - High level tutorial for writing a gameboy emulator that I used when I was stuck (mainly for interrupts and I plan on
     using it for the mmu + ppu)
+- Random NES website: http://archive.nes.science/nesdev-forums/f20/t15944.xhtmlhttp://archive.nes.science/nesdev-forums/f20/t15944.xhtml
+  - Contains an explanation + implementation of DAA instruction that I used
+- Eric's blog: https://ehaskins.com/2018-01-30%20Z80%20DAA/
+  - Contains an explanation (more detailed) + implementation of DAA instruction

@@ -2431,7 +2431,32 @@ int CPU::cp_A_HL() {
 }
 
 int CPU::daa_A() {
-  throw std::runtime_error("Error: did not implement DAA");
+  // See: http://archive.nes.science/nesdev-forums/f20/t15944.xhtml
+  if (AF.getSubtractionFlag()) {
+    if (AF.getCarryFlag()) {
+      AF.setHighValue(AF.getHighValue() - 0x60);
+    }
+    if (AF.getHalfCarryFlag()) {
+      AF.setHighValue(AF.getHighValue() - 0x06);
+    }
+  } else {
+    if (AF.getCarryFlag() || AF.getHighValue() > 0x99) {
+      AF.setHighValue(AF.getHighValue() + 0x60);
+      AF.setCarryFlag();
+    }
+
+    if (AF.getHalfCarryFlag() || (AF.getHighValue() & 0x0F) > 0x09) {
+      AF.setHighValue(AF.getHighValue() + 0x06);
+    }
+  }
+
+  if (AF.getHighValue() == 0) {
+    AF.setZeroFlag();
+  } else {
+    AF.clearZeroFlag();
+  }
+
+  AF.clearHalfCarryFlag();
   return 4;
 }
 
