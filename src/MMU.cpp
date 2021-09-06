@@ -5,7 +5,14 @@
 
 namespace GB {
 
-void MMU::write(uint16_t address, uint8_t data) { memory[address] = data; }
+void MMU::write(uint16_t address, uint8_t data) {
+  if (address == DIV_addr) {
+    memory[address] = 0x00;
+  } else {
+    memory[address] = data;
+  }
+}
+
 uint8_t MMU::read(uint16_t address) { return memory[address]; }
 void MMU::clearMemory() {
   for (size_t i = 0; i < memory.size(); i++) {
@@ -17,7 +24,7 @@ void MMU::loadROM(const char* rom_path) {
   if (!rom_file.is_open()) {
     throw std::runtime_error("Cannot read ROM: " + std::string(rom_path));
   }
-  while (rom_file) { 
+  while (rom_file) {
     read_only_memory.push_back(rom_file.get());
   }
 
@@ -25,4 +32,28 @@ void MMU::loadROM(const char* rom_path) {
     memory[i] = read_only_memory[i];
   }
 }
+
+void MMU::incrementDividerRegister(uint8_t amount) {
+  memory[DIV_addr] += amount;
+}
+
+void MMU::setDividerRegister(uint8_t data) { memory[DIV_addr] = data; }
+
+uint8_t MMU::getDividerRegister() { return memory[DIV_addr]; }
+
+bool MMU::isTimerEnabled() {
+  uint8_t TAC = memory[TAC_addr];
+  uint8_t enable_bit = (TAC >> 2) & 0x1;
+  if (enable_bit == 1) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+uint8_t getInputClockSelect() {
+  uint8_t TAC = memory[TAC_addr];
+  return TAC & 0x03;
+}
+
 }  // namespace GB

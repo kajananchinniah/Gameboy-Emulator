@@ -28,6 +28,14 @@ class CPU {
   StackPointer SP;
   bool IME{false};
   bool ran_instr{false};
+  int div_timer_count{0};
+  const int CPU_FREQUENCY{4194304};       // In Hz
+  const int DIV_UPDATE_FREQUENCY{16384};  // In Hz
+
+  void updateTimers(int clock_cycles);
+  void updateDivTimer(int clock_cycles);
+  void updateOtherTimers(int clock_cycles);
+  int getClockFrequency();
 
   int executeOpcode(uint8_t opcode);
   // X = arbitrary number (0 - F)

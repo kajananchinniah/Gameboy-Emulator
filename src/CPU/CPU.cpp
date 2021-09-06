@@ -7,6 +7,7 @@
 
 namespace GB {
 
+// Unused function; was used to debug
 void CPU::printStatus() {
   std::cout << "AF = 0x" << std::hex << AF.getFullValue() << "\n";
   std::cout << "BC = 0x" << std::hex << BC.getFullValue() << "\n";
@@ -64,13 +65,56 @@ void CPU::update() {
   while (true) {
     uint8_t opcode = mmu.read(PC.getPCValue());
     PC.incrementPC(1);
-    executeOpcode(opcode);
+    int clock_cycles = executeOpcode(opcode);
+    updateTimers(clock_cycles);
     if (mmu.read(0xff02) == 0x81) {
       char c = mmu.read(0xff01);
       printf("%c\n", c);
       mmu.write(0xff02, 0x00);
     }
   }
+}
+
+void CPU::updateTimers(int clock_cycles) {
+  updateDivTimer(clock_cycles);
+  if (mmu.isTimerEnabled()) {
+    updateOtherTimers(clock_cycles);
+  }
+}
+
+void CPU::updateDivTimer(int clock_cycles) {
+  div_timer_count += clock_cycles;
+  if (div_timer_count >= CPU_FREQUENCY / DIV_UPDATE_FREQUENCY) {
+    div_timer_count = 0;
+    mmu.incrementDividerRegister(1);
+  }
+}
+
+void CPU::updateOtherTimers(int clock_cycleS) {
+  int frequency = getClockFrequency();
+}
+
+int CPU::getClockFrequency() {
+  int frequency = 0;
+  uint8_t clock_select = mmu.getInputClockSelect();
+  switch (clock_select) {
+    case 0x00:
+      frequency = 4096;
+      break;
+    case 0x01:
+      frequency = 262144;
+      break;
+    case 0x02:
+      frequency = 65536;
+      break;
+    case 0x03:
+      frequency = 16384;
+      break;
+    default:
+      throw std::runtime_error("Error: unknown frequency returned!");
+      break;
+  }
+  return frequency;
 }
 
 int CPU::unsupportedOpcode(uint8_t opcode, std::string prefix) {
