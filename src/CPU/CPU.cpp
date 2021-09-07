@@ -92,6 +92,15 @@ void CPU::updateDivTimer(int clock_cycles) {
 
 void CPU::updateOtherTimers(int clock_cycleS) {
   int frequency = getClockFrequency();
+  if (timer_count >= CPU_FREQUENCY / frequency) {
+    timer_count = 0;
+    if (mmu.willTimerCounterRegisterOverflow()) {
+      mmu.resetTimerCounterRegister();
+      mmu.setTimerInterrupt();
+    } else {
+      mmu.incrementTimerCounterRegister(1);
+    }
+  }
 }
 
 int CPU::getClockFrequency() {

@@ -51,9 +51,27 @@ bool MMU::isTimerEnabled() {
   }
 }
 
-uint8_t getInputClockSelect() {
+uint8_t MMU::getInputClockSelect() {
   uint8_t TAC = memory[TAC_addr];
   return TAC & 0x03;
 }
+
+void MMU::incrementTimerCounterRegister(uint8_t amount) {
+  memory[TIMA_addr] += amount;
+}
+
+void MMU::resetTimerCounterRegister() { memory[TIMA_addr] = memory[TMA_addr]; }
+
+uint8_t MMU::getTimerCounterRegister() { return memory[TIMA_addr]; }
+
+bool MMU::willTimerCounterRegisterOverflow() {
+  if ((memory[TIMA_addr] + 1) >= 256) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+void MMU::setTimerInterrupt() { memory[IF_addr] = memory[IF_addr] | (1 << 2); }
 
 }  // namespace GB

@@ -21,6 +21,12 @@ class MMU {
   bool isTimerEnabled();
   uint8_t getInputClockSelect();
 
+  void incrementTimerCounterRegister(uint8_t amount);
+  void resetTimerCounterRegister();
+  uint8_t getTimerCounterRegister();
+  bool willTimerCounterRegisterOverflow();
+  void setTimerInterrupt();
+
  private:
   static const int address_space = 0x10000;
   std::array<uint8_t, address_space> memory;

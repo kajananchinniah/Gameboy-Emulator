@@ -31,6 +31,7 @@ class CPU {
   int div_timer_count{0};
   const int CPU_FREQUENCY{4194304};       // In Hz
   const int DIV_UPDATE_FREQUENCY{16384};  // In Hz
+  int timer_count{0};
 
   void updateTimers(int clock_cycles);
   void updateDivTimer(int clock_cycles);
