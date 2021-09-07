@@ -1,6 +1,7 @@
 # Gameboy Emulator
+This is my messy implementation of a gameboy emulator using C++.
 
-## Note on implementation:
+## Note on implementation
 Originally, the plan was to write this in modern C++. That clearly did not pan out. The gameboy instruction set is quite
 large so I ended up implementing it a pretty messy way. In hindsight, with better plan, there are lots of chunks that I
 could have reused (e.g. some opcodes do basically the same thing but slightly differently). I did do some code reuse
@@ -11,7 +12,7 @@ Suggested CPU implementations:
   use a register as an address vs read from memory vs just use a register directly), as well as a generic implementation
   for the instruction itself. I'm in too deep to do this though.
 
-## Note on Tests:
+## Note on Tests
 Originally I had planned on unit testing every function I wrote via GTest. While this approach is fine, I realized that
 it was simpler to just rely on tools that were specifically created for testing gameboys (e.g. test ROMs). Due to this,
 the testing part of this project was mostly abandoned.
@@ -20,7 +21,7 @@ the testing part of this project was mostly abandoned.
 For CPU instructions, I used blargg's tests. This can be found at: https://gbdev.gg8.se/wiki/articles/Test_ROMs or https://github.com/retrio/gb-test-roms
 
 ## Debugging Acknowledgements
-To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a dissassembler on blargg's tests. Then I compared the output of the disassembler with my program (by printing out the status of my registers). This helped me find minor bugs that really messed up everyhing such as accidental infinite loops due to writing to the wrong register. Once I got past the requirements for blargg's tests initialization, I shifted to using it exclusively.
+To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a dissassembler on blargg's tests. Then I compared the output of the disassembler with my program (by printing out the status of my registers). This helped me find minor bugs that really messed up everyhing such as accidental infinite loops due to mixing up the order of registers in some instructions. Once I got past the requirements for blargg's tests initialization, I shifted to using it exclusively.
 
 ## References
 - Pandocs: https://gbdev.io/pandocs/
@@ -41,6 +42,6 @@ To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a
   - High level tutorial for writing a gameboy emulator that I used when I was stuck and wanted another perspective on
     details of things
 - Random NES website: http://archive.nes.science/nesdev-forums/f20/t15944.xhtmlhttp://archive.nes.science/nesdev-forums/f20/t15944.xhtml
-  - Contains an explanation + implementation of DAA instruction that I used
+  - Contains an explanation of DAA + implementation of DAA instruction that I copied for my DAA instruction
 - Eric's blog: https://ehaskins.com/2018-01-30%20Z80%20DAA/
-  - Contains an explanation (more detailed) + implementation of DAA instruction
+  - Contains an explanation of both what BCD is & what DAA is (more detailed) + implementation of DAA instruction
