@@ -3,6 +3,18 @@
 #include <fstream>
 #include <iostream>
 
+namespace {
+bool checkBit(uint8_t n, uint8_t value) {
+  if ((value >> n) & 0x01) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+uint8_t resetBit(uint8_t n, uint8_t value) { return value & ~(1 << n); }
+}  // namespace
+
 namespace GB {
 
 void MMU::write(uint16_t address, uint8_t data) {
@@ -43,12 +55,7 @@ uint8_t MMU::getDividerRegister() { return memory[DIV_addr]; }
 
 bool MMU::isTimerEnabled() {
   uint8_t TAC = memory[TAC_addr];
-  uint8_t enable_bit = (TAC >> 2) & 0x1;
-  if (enable_bit == 1) {
-    return true;
-  } else {
-    return false;
-  }
+  return checkBit(2, TAC);
 }
 
 uint8_t MMU::getInputClockSelect() {
@@ -73,5 +80,75 @@ bool MMU::willTimerCounterRegisterOverflow() {
 }
 
 void MMU::setTimerInterrupt() { memory[IF_addr] = memory[IF_addr] | (1 << 2); }
+
+bool MMU::isVBlankInterruptEnabled() {
+  uint8_t interrupt_bit = memory[IE_addr];
+  return checkBit(0, interrupt_bit);
+}
+
+bool MMU::isVBlankInterruptRequested() {
+  uint8_t interrupt_bit = memory[IF_addr];
+  return checkBit(0, interrupt_bit);
+}
+
+bool MMU::isLCDStatInterruptEnabled() {
+  uint8_t interrupt_bit = memory[IE_addr];
+  return checkBit(1, interrupt_bit);
+}
+
+bool MMU::isLCDStatInterruptRequested() {
+  uint8_t interrupt_bit = memory[IF_addr];
+  return checkBit(1, interrupt_bit);
+}
+
+bool MMU::isTimerInterruptEnabled() {
+  uint8_t interrupt_bit = memory[IE_addr];
+  return checkBit(2, interrupt_bit);
+}
+
+bool MMU::isTimerInterruptRequested() {
+  uint8_t interrupt_bit = memory[IF_addr];
+  return checkBit(2, interrupt_bit);
+}
+
+bool MMU::isSerialInterruptEnabled() {
+  uint8_t interrupt_bit = memory[IE_addr];
+  return checkBit(3, interrupt_bit);
+}
+
+bool MMU::isSerialInterruptRequested() {
+  uint8_t interrupt_bit = memory[IF_addr];
+  return checkBit(3, interrupt_bit);
+}
+
+bool MMU::isJoypadInterruptEnabled() {
+  uint8_t interrupt_bit = memory[IE_addr];
+  return checkBit(4, interrupt_bit);
+}
+
+bool MMU::isJoypadInterruptRequested() {
+  uint8_t interrupt_bit = memory[IF_addr];
+  return checkBit(4, interrupt_bit);
+}
+
+void MMU::resetVBlankInterruptRequest() {
+  memory[IF_addr] = resetBit(0, memory[IF_addr]);
+}
+
+void MMU::resetLCDStatInterruptRequest() {
+  memory[IF_addr] = resetBit(1, memory[IF_addr]);
+}
+
+void MMU::resetTimerInterruptRequest() {
+  memory[IF_addr] = resetBit(2, memory[IF_addr]);
+}
+
+void MMU::resetSerialInterruptRequest() {
+  memory[IF_addr] = resetBit(3, memory[IF_addr]);
+}
+
+void MMU::resetJoypadInterruptRequest() {
+  memory[IF_addr] = resetBit(4, memory[IF_addr]);
+}
 
 }  // namespace GB

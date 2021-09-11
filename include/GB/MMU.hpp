@@ -27,6 +27,23 @@ class MMU {
   bool willTimerCounterRegisterOverflow();
   void setTimerInterrupt();
 
+  bool isVBlankInterruptEnabled();
+  bool isVBlankInterruptRequested();
+  bool isLCDStatInterruptEnabled();
+  bool isLCDStatInterruptRequested();
+  bool isTimerInterruptEnabled();
+  bool isTimerInterruptRequested();
+  bool isSerialInterruptEnabled();
+  bool isSerialInterruptRequested();
+  bool isJoypadInterruptEnabled();
+  bool isJoypadInterruptRequested();
+
+  void resetVBlankInterruptRequest();
+  void resetLCDStatInterruptRequest();
+  void resetTimerInterruptRequest();
+  void resetSerialInterruptRequest();
+  void resetJoypadInterruptRequest();
+
  private:
   static const int address_space = 0x10000;
   std::array<uint8_t, address_space> memory;

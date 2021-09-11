@@ -67,12 +67,70 @@ void CPU::update() {
     PC.incrementPC(1);
     int clock_cycles = executeOpcode(opcode);
     updateTimers(clock_cycles);
+    checkInterrupts();
     if (mmu.read(0xff02) == 0x81) {
       char c = mmu.read(0xff01);
       printf("%c\n", c);
       mmu.write(0xff02, 0x00);
     }
   }
+}
+
+void CPU::checkInterrupts() {
+  if (!IME) {
+    return;
+  }
+
+  if (mmu.isVBlankInterruptEnabled() && mmu.isVBlankInterruptRequested()) {
+    handleVBlankInterrupt();
+  }
+
+  if (mmu.isLCDStatInterruptEnabled() && mmu.isLCDStatInterruptRequested()) {
+    handleLCDStatInterrupt();
+  }
+
+  if (mmu.isTimerInterruptEnabled() && mmu.isTimerInterruptRequested()) {
+    handleTimerInterrupt();
+  }
+
+  if (mmu.isSerialInterruptEnabled() && mmu.isSerialInterruptRequested()) {
+    handleSerialInterrupt();
+  }
+
+  if (mmu.isJoypadInterruptEnabled() && mmu.isJoypadInterruptRequested()) {
+    handleJoypadInterrupt();
+  }
+  IME = false;
+}
+
+void CPU::handleVBlankInterrupt() {
+  mmu.resetVBlankInterruptRequest();
+  push_rr(PC.getPC());
+  PC.setPC(0x40);
+}
+
+void CPU::handleLCDStatInterrupt() {
+  mmu.resetLCDStatInterruptRequest();
+  push_rr(PC.getPC());
+  PC.setPC(0x48);
+}
+
+void CPU::handleTimerInterrupt() {
+  mmu.resetTimerInterruptRequest();
+  push_rr(PC.getPC());
+  PC.setPC(0x50);
+}
+
+void CPU::handleSerialInterrupt() {
+  mmu.resetSerialInterruptRequest();
+  push_rr(PC.getPC());
+  PC.setPC(0x58);
+}
+
+void CPU::handleJoypadInterrupt() {
+  mmu.resetJoypadInterruptRequest();
+  push_rr(PC.getPC());
+  PC.setPC(0x60);
 }
 
 void CPU::updateTimers(int clock_cycles) {
