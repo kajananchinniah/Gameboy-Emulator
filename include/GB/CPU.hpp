@@ -28,6 +28,7 @@ class CPU {
   StackPointer SP;
   bool IME{false};
   bool ran_instr{false};
+  bool is_halted{false};
   int div_timer_count{0};
   const int CPU_FREQUENCY{4194304};       // In Hz
   const int DIV_UPDATE_FREQUENCY{16384};  // In Hz

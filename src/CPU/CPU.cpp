@@ -65,7 +65,13 @@ void CPU::update() {
   while (true) {
     uint8_t opcode = mmu.read(PC.getPCValue());
     PC.incrementPC(1);
-    int clock_cycles = executeOpcode(opcode);
+    int clock_cycles;
+    if (is_halted) {
+      clock_cycles = 4;
+    } else {
+      clock_cycles = executeOpcode(opcode);
+    }
+
     updateTimers(clock_cycles);
     checkInterrupts();
     if (mmu.read(0xff02) == 0x81) {
@@ -77,6 +83,11 @@ void CPU::update() {
 }
 
 void CPU::checkInterrupts() {
+  // Necessary check due to halt bug
+  if (mmu.isAnyInterruptEnabled() && mmu.isAnyInterruptRequested()) {
+    is_halted = false;
+  }
+
   if (!IME) {
     return;
   }
@@ -91,6 +102,8 @@ void CPU::checkInterrupts() {
 
   if (mmu.isTimerInterruptEnabled() && mmu.isTimerInterruptRequested()) {
     handleTimerInterrupt();
+    printStatus();
+    throw std::runtime_error("error");
   }
 
   if (mmu.isSerialInterruptEnabled() && mmu.isSerialInterruptRequested()) {
@@ -100,34 +113,38 @@ void CPU::checkInterrupts() {
   if (mmu.isJoypadInterruptEnabled() && mmu.isJoypadInterruptRequested()) {
     handleJoypadInterrupt();
   }
-  IME = false;
 }
 
 void CPU::handleVBlankInterrupt() {
+  IME = false;
   mmu.resetVBlankInterruptRequest();
   push_rr(PC.getPC());
   PC.setPC(0x40);
 }
 
 void CPU::handleLCDStatInterrupt() {
+  IME = false;
   mmu.resetLCDStatInterruptRequest();
   push_rr(PC.getPC());
   PC.setPC(0x48);
 }
 
 void CPU::handleTimerInterrupt() {
+  IME = false;
   mmu.resetTimerInterruptRequest();
   push_rr(PC.getPC());
   PC.setPC(0x50);
 }
 
 void CPU::handleSerialInterrupt() {
+  IME = false;
   mmu.resetSerialInterruptRequest();
   push_rr(PC.getPC());
   PC.setPC(0x58);
 }
 
 void CPU::handleJoypadInterrupt() {
+  IME = false;
   mmu.resetJoypadInterruptRequest();
   push_rr(PC.getPC());
   PC.setPC(0x60);
@@ -142,8 +159,8 @@ void CPU::updateTimers(int clock_cycles) {
 
 void CPU::updateDivTimer(int clock_cycles) {
   div_timer_count += clock_cycles;
-  if (div_timer_count >= CPU_FREQUENCY / DIV_UPDATE_FREQUENCY) {
-    div_timer_count = 0;
+  while (div_timer_count >= CPU_FREQUENCY / DIV_UPDATE_FREQUENCY) {
+    div_timer_count = div_timer_count - CPU_FREQUENCY / DIV_UPDATE_FREQUENCY;
     mmu.incrementDividerRegister(1);
   }
 }
@@ -151,8 +168,8 @@ void CPU::updateDivTimer(int clock_cycles) {
 void CPU::updateOtherTimers(int clock_cycles) {
   int frequency = getClockFrequency();
   timer_count += clock_cycles;
-  if (timer_count >= CPU_FREQUENCY / frequency) {
-    timer_count = 0;
+  while (timer_count >= CPU_FREQUENCY / frequency) {
+    timer_count = timer_count - CPU_FREQUENCY / frequency;
     if (mmu.willTimerCounterRegisterOverflow()) {
       mmu.resetTimerCounterRegister();
       mmu.setTimerInterrupt();

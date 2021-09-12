@@ -72,7 +72,8 @@ void MMU::resetTimerCounterRegister() { memory[TIMA_addr] = memory[TMA_addr]; }
 uint8_t MMU::getTimerCounterRegister() { return memory[TIMA_addr]; }
 
 bool MMU::willTimerCounterRegisterOverflow() {
-  if ((memory[TIMA_addr] + 1) >= 256) {
+  // 8 bit value so 255 is the max it can hold
+  if (memory[TIMA_addr] == 255) {
     return true;
   } else {
     return false;
@@ -80,6 +81,16 @@ bool MMU::willTimerCounterRegisterOverflow() {
 }
 
 void MMU::setTimerInterrupt() { memory[IF_addr] = memory[IF_addr] | (1 << 2); }
+
+bool MMU::isAnyInterruptEnabled() {
+  uint8_t interrupt_bit = memory[IE_addr];
+  return (interrupt_bit & 0x1F) > 0;
+}
+
+bool MMU::isAnyInterruptRequested() {
+  uint8_t interrupt_bit = memory[IF_addr];
+  return (interrupt_bit & 0x1F) > 0;
+}
 
 bool MMU::isVBlankInterruptEnabled() {
   uint8_t interrupt_bit = memory[IE_addr];

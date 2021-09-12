@@ -27,6 +27,8 @@ class MMU {
   bool willTimerCounterRegisterOverflow();
   void setTimerInterrupt();
 
+  bool isAnyInterruptEnabled();
+  bool isAnyInterruptRequested();
   bool isVBlankInterruptEnabled();
   bool isVBlankInterruptRequested();
   bool isLCDStatInterruptEnabled();

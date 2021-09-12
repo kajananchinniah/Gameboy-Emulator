@@ -20,8 +20,8 @@ int CPU::scf() {
 int CPU::nop() { return 4; }
 
 int CPU::halt() {
-  throw std::runtime_error("Did not implement halt!");
-  return -1;
+  is_halted = true;
+  return 4;
 }
 
 int CPU::stop() {
