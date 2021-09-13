@@ -8,6 +8,8 @@
 namespace GB {
 class MMU {
  public:
+  MMU();
+
   void initialize();
   void loadROM(const char* file_path);
   void write(uint16_t address, uint8_t data);
@@ -51,12 +53,12 @@ class MMU {
   std::array<uint8_t, address_space> memory;
   std::vector<uint8_t> read_only_memory;
 
-  const uint16_t DIV_addr = 0xFF04;
-  const uint16_t TIMA_addr = 0xFF05;
-  const uint16_t TMA_addr = 0xFF06;
-  const uint16_t TAC_addr = 0xFF07;
-  const uint16_t IE_addr = 0xFFFF;
-  const uint16_t IF_addr = 0xFF0F;
+  static const uint16_t DIV_addr = 0xFF04;
+  static const uint16_t TIMA_addr = 0xFF05;
+  static const uint16_t TMA_addr = 0xFF06;
+  static const uint16_t TAC_addr = 0xFF07;
+  static const uint16_t IE_addr = 0xFFFF;
+  static const uint16_t IF_addr = 0xFF0F;
 };
 
 }  // namespace GB
