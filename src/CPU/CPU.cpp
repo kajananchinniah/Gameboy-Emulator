@@ -44,10 +44,6 @@ void CPU::update() {
 
     updateTimers(clock_cycles + interrupt_cycles);
     checkInterrupts();
-    if (mmu.read(0xFF02) == 0x81) {
-      printf("%c", (char)mmu.read(0xFF01));
-      mmu.write(0xFF01, 0x00);
-    }
   }
 }
 
