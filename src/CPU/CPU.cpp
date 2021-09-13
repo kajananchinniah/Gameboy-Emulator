@@ -86,6 +86,7 @@ CPU::CPU() {
 void CPU::loadROM(const char *rom_path) { mmu.loadROM(rom_path); }
 
 void CPU::update() {
+  int interrupt_cycles = 0;
   while (true) {
     int clock_cycles;
     if (is_halted) {
@@ -96,75 +97,82 @@ void CPU::update() {
       clock_cycles = executeOpcode(opcode);
     }
 
-    updateTimers(clock_cycles);
+    updateTimers(clock_cycles + interrupt_cycles);
     checkInterrupts();
   }
 }
 
-void CPU::checkInterrupts() {
+int CPU::checkInterrupts() {
   // Necessary check due to halt bug
   if (mmu.isAnyInterruptEnabled() && mmu.isAnyInterruptRequested()) {
     is_halted = false;
   }
 
   if (!IME) {
-    return;
+    return 0;
   }
 
+  int cycles = 0;
   if (mmu.isVBlankInterruptEnabled() && mmu.isVBlankInterruptRequested()) {
-    handleVBlankInterrupt();
+    cycles += handleVBlankInterrupt();
   }
 
   if (mmu.isLCDStatInterruptEnabled() && mmu.isLCDStatInterruptRequested()) {
-    handleLCDStatInterrupt();
+    cycles += handleLCDStatInterrupt();
   }
 
   if (mmu.isTimerInterruptEnabled() && mmu.isTimerInterruptRequested()) {
-    handleTimerInterrupt();
+    cycles += handleTimerInterrupt();
   }
 
   if (mmu.isSerialInterruptEnabled() && mmu.isSerialInterruptRequested()) {
-    handleSerialInterrupt();
+    cycles += handleSerialInterrupt();
   }
 
   if (mmu.isJoypadInterruptEnabled() && mmu.isJoypadInterruptRequested()) {
-    handleJoypadInterrupt();
+    cycles += handleJoypadInterrupt();
   }
+  return cycles;
 }
 
-void CPU::handleVBlankInterrupt() {
+int CPU::handleVBlankInterrupt() {
   IME = false;
   mmu.resetVBlankInterruptRequest();
   push_rr(PC.getPC());
   PC.setPC(0x40);
+  return 20;
 }
 
-void CPU::handleLCDStatInterrupt() {
+int CPU::handleLCDStatInterrupt() {
   IME = false;
   mmu.resetLCDStatInterruptRequest();
   push_rr(PC.getPC());
   PC.setPC(0x48);
+  return 20;
 }
 
-void CPU::handleTimerInterrupt() {
+int CPU::handleTimerInterrupt() {
   IME = false;
   mmu.resetTimerInterruptRequest();
   push_rr(PC.getPC());
   PC.setPC(0x50);
+  return 20;
 }
 
-void CPU::handleSerialInterrupt() {
+int CPU::handleSerialInterrupt() {
   IME = false;
   mmu.resetSerialInterruptRequest();
   push_rr(PC.getPC());
   PC.setPC(0x58);
+  return 20;
 }
 
-void CPU::handleJoypadInterrupt() {
+int CPU::handleJoypadInterrupt() {
   IME = false;
   mmu.resetJoypadInterruptRequest();
   push_rr(PC.getPC());
   PC.setPC(0x60);
+  return 20;
 }
 
 void CPU::updateTimers(int clock_cycles) {

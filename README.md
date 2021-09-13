@@ -1,7 +1,7 @@
 # Gameboy Emulator
 This is my messy implementation of a gameboy emulator using C++.
 
-## Note on implementation
+## Notes on implementation
 Originally, the plan was to write this in modern C++. That clearly did not pan out. The gameboy instruction set is quite
 large so I ended up implementing it a pretty messy way. In hindsight, with better plan, there are lots of chunks that I
 could have reused (e.g. some opcodes do basically the same thing but slightly differently). I did do some code reuse
@@ -12,6 +12,12 @@ Suggested CPU implementations:
   use a register as an address vs read from memory vs just use a register directly), as well as a generic implementation
   for the instruction itself. I'm in too deep to do this though.
 
+My emulator is clock accurate on the opcode level but isn't clock accurate in terms of memory accesses or interrupts.
+Doing it at the whole interrupt level might be something I explore if it's necessary (I have it implemented but it's
+unused because I can't run the interrupt timing test for some reason), but doing it at the memory access
+/ actual subopcode level is a bit inconvenient since I didn't realize this was necessary. In hindsight, I should have
+read the entire pandoc instead of just reading as I implemented.
+
 ## Note on Tests
 Originally I had planned on unit testing every function I wrote via GTest. While this approach is fine, I realized that
 it was simpler to just rely on tools that were specifically created for testing gameboys (e.g. test ROMs). Due to this,
@@ -19,6 +25,8 @@ the testing part of this project was mostly abandoned.
 
 ## Testing ROMs Acknowledgements
 For CPU instructions, I used blargg's tests. This can be found at: https://gbdev.gg8.se/wiki/articles/Test_ROMs or https://github.com/retrio/gb-test-roms
+
+I currently pass the individual CPU instruction tests and the instruction timing test.
 
 ## Debugging Acknowledgements
 To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a dissassembler on blargg's tests. Then I compared the output of the disassembler with my program (by printing out the status of my registers). This helped me find minor bugs that really messed up everyhing such as accidental infinite loops due to mixing up the order of registers in some instructions. Once I got past the requirements for blargg's tests initialization, I shifted to using it exclusively.

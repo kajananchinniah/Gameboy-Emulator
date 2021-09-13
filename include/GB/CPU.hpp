@@ -39,12 +39,12 @@ class CPU {
   void updateOtherTimers(int clock_cycles);
   int getClockFrequency();
 
-  void checkInterrupts();
-  void handleVBlankInterrupt();
-  void handleLCDStatInterrupt();
-  void handleTimerInterrupt();
-  void handleSerialInterrupt();
-  void handleJoypadInterrupt();
+  int checkInterrupts();
+  int handleVBlankInterrupt();
+  int handleLCDStatInterrupt();
+  int handleTimerInterrupt();
+  int handleSerialInterrupt();
+  int handleJoypadInterrupt();
 
   int executeOpcode(uint8_t opcode);
   // X = arbitrary number (0 - F)
