@@ -17,15 +17,10 @@ uint8_t resetBit(uint8_t n, uint8_t value) { return value & ~(1 << n); }
 
 namespace GB {
 
-void MMU::write(uint16_t address, uint8_t data) {
-  if (address == DIV_addr) {
-    memory[address] = 0x00;
-  } else {
-    memory[address] = data;
-  }
-}
+void MMU::write(uint16_t address, uint8_t data) { memory[address] = data; }
 
 uint8_t MMU::read(uint16_t address) { return memory[address]; }
+
 void MMU::clearMemory() {
   for (size_t i = 0; i < memory.size(); i++) {
     memory[i] = 0x00;
@@ -40,7 +35,7 @@ void MMU::loadROM(const char* rom_path) {
     read_only_memory.push_back(rom_file.get());
   }
 
-  for (size_t i = 0; i < memory.size(); i++) {
+  for (size_t i = 0; i < read_only_memory.size(); i++) {
     memory[i] = read_only_memory[i];
   }
 }
