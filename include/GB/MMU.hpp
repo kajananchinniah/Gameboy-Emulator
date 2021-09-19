@@ -48,6 +48,11 @@ class MMU {
   void resetSerialInterruptRequest();
   void resetJoypadInterruptRequest();
 
+  void setWindowXRegister(uint8_t data);
+  uint8_t getWindowXRegister();
+  void setWindowYRegister(uint8_t data);
+  uint8_t getWindowYRegister();
+
  private:
   static const int address_space = 0x10000;
   std::array<uint8_t, address_space> memory;
@@ -59,6 +64,18 @@ class MMU {
   static const uint16_t TAC_addr = 0xFF07;
   static const uint16_t IE_addr = 0xFFFF;
   static const uint16_t IF_addr = 0xFF0F;
+  static const uint16_t WX_addr = 0xFF4B;
+  static const uint16_t WY_addr = 0xFF4A;
+
+  bool checkBit(uint8_t n, uint8_t value) {
+    if ((value >> n) & 0x01) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  uint8_t resetBit(uint8_t n, uint8_t value) { return value & ~(1 << n); }
 };
 
 }  // namespace GB

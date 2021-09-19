@@ -13,7 +13,9 @@ include_directories(include)
 
 ## Create libraries ##
 add_library(registers src/Registers.cpp)
-add_library(mmu src/MMU.cpp)
+
+AUX_SOURCE_DIRECTORY(src/MMU mmu_sources)
+add_library(mmu ${mmu_sources})
 
 AUX_SOURCE_DIRECTORY(src/CPU cpu_sources)
 add_library(cpu ${cpu_sources})
