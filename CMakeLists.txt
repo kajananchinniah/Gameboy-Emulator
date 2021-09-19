@@ -12,7 +12,8 @@ include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(include)
 
 ## Create libraries ##
-add_library(registers src/Registers.cpp)
+AUX_SOURCE_DIRECTORY(src/Registers register_sources)
+add_library(registers ${register_sources})
 
 AUX_SOURCE_DIRECTORY(src/MMU mmu_sources)
 add_library(mmu ${mmu_sources})
