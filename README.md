@@ -53,3 +53,7 @@ To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a
   - Contains an explanation of DAA + implementation of DAA instruction that I copied for my DAA instruction
 - Eric's blog: https://ehaskins.com/2018-01-30%20Z80%20DAA/
   - Contains an explanation of both what BCD is & what DAA is (more detailed) + implementation of DAA instruction
+- The Gameboy Emulator Development Guide: https://hacktixme.ga/GBEDG/
+  - At the time of use, it's incomplete but contains a really good PPU reference that explains it with visuals, etc.
+    This helped me understand what to do (as I found it pretty confusing). (Link to PPU reference:
+    https://hacktixme.ga/GBEDG/ppu)
