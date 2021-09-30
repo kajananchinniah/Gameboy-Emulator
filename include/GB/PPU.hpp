@@ -6,7 +6,7 @@
 namespace GB {
 class PPU {
  public:
-  PPU(MMU *mmu);
+  explicit PPU(MMU *mmu);
   ~PPU();
 
  private:
@@ -16,7 +16,12 @@ class PPU {
   const unsigned int background_height{256};
   const unsigned int window_width{256};
   const unsigned int window_height{256};
-  const MMU *mmu;
+  MMU *mmu;
+
+  uint8_t getWindowHorizontalPosition();
+  uint8_t getWindowVerticalPosition();
+  uint8_t get2BPPPixel(uint8_t byte1, uint8_t byte2, int position);
+  uint16_t get2BPPPixelRow(uint8_t byte1, uint8_t byte2);
 };
 
 }  // namespace GB
