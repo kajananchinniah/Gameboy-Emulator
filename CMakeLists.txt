@@ -9,14 +9,7 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
-## Find packages ##
-find_package(GTest REQUIRED)
-
-## Include CTest ##
-include(CTest)
-
 ## Include directories ##
-include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(include)
 
 ## Add subdirectories ##
