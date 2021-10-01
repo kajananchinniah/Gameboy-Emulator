@@ -53,6 +53,9 @@ class MMU {
   void setWindowYRegister(uint8_t data);
   uint8_t getWindowYRegister();
 
+  uint16_t get8000MethodAddress(uint8_t tile_number);
+  uint16_t get8800MethodAddress(uint8_t tile_number);
+
  private:
   static const int address_space = 0x10000;
   std::array<uint8_t, address_space> memory;
