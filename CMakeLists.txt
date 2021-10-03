@@ -9,12 +9,37 @@ set(CMAKE_CXX_FLAGS "-Wall -Wextra")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
+## Find packages ##
+find_package(GTest REQUIRED)
+
+## Include CTest ##
+include(CTest)
+
 ## Include directories ##
+include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(include)
 
-## Add subdirectories ##
-add_subdirectory(src/Registers)
-add_subdirectory(src/MMU)
-add_subdirectory(src/CPU)
-add_subdirectory(src)
-add_subdirectory(tests)
+## Create libraries ##
+AUX_SOURCE_DIRECTORY(src/Registers register_sources)
+add_library(registers ${register_sources})
+
+AUX_SOURCE_DIRECTORY(src/MMU mmu_sources)
+add_library(mmu ${mmu_sources})
+
+AUX_SOURCE_DIRECTORY(src/CPU cpu_sources)
+add_library(cpu ${cpu_sources})
+target_link_libraries(cpu registers mmu)
+
+add_executable(main src/main.cpp)
+target_link_libraries(main cpu)
+
+## Testing ##
+# Registers test
+add_executable(test_registers tests/test_registers.cpp)
+target_link_libraries(test_registers registers ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
+add_test(NAME TestRegisters COMMAND test_registers)
+
+# MMU test
+add_executable(test_mmu tests/test_mmu.cpp)
+target_link_libraries(test_mmu mmu ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
+add_test(NAME TestMMU COMMAND test_mmu)
