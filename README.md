@@ -14,6 +14,8 @@ Suggested CPU implementations:
   use a register as an address vs read from memory vs just use a register directly), as well as a generic implementation
   for the instruction itself. I'm in too deep to do this though.
 
+I also realized that I rely on the MMU for handling interrupts, timers and PPU registers. This isn't necessarily a bad thing, since they are located on specific memory addresses, but in hindsight, I think it would have been cleaner to have separated out these functionalities into where they should go (e.g. have an interrupt manager, timer manager and put the relevant PPU functions into the PPU). I may refactor later to do this.
+
 My emulator is clock accurate on the opcode level but isn't clock accurate in terms of memory accesses or interrupts.
 Doing it at the whole interrupt level might be something I explore if it's necessary (I have it implemented but it's
 unused because I can't run the interrupt timing test for some reason), but doing it at the memory access
