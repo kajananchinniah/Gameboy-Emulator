@@ -86,16 +86,4 @@ void MMU::loadROM(const char* rom_path) {
   }
 }
 
-void MMU::setWindowXRegister(uint8_t data) { memory[WX_addr] = data; }
-uint8_t MMU::getWindowXRegister() { return memory[WX_addr]; }
-void MMU::setWindowYRegister(uint8_t data) { memory[WY_addr] = data; }
-uint8_t MMU::getWindowYRegister() { return memory[WY_addr]; }
-uint16_t MMU::get8000MethodAddress(uint8_t tile_number) {
-  return tile_number * 16 + 0x8000;
-}
-
-uint16_t MMU::get8800MethodAddress(uint8_t tile_number) {
-  return static_cast<int8_t>(tile_number) * 16 + 0x9000;
-}
-
 }  // namespace GB
