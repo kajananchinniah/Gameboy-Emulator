@@ -131,6 +131,10 @@ class MMU {
   static const uint16_t IF_addr = 0xFF0F;
 
   // PPU registers
+  static const uint16_t SCY_addr = 0xFF42;
+  static const uint16_t SCX_addr = 0xFF43;
+  static const uint16_t LY_addr = 0xFF44;
+  static const uint16_t LYC_addr = 0xFF45;
   static const uint16_t WX_addr = 0xFF4B;
   static const uint16_t WY_addr = 0xFF4A;
   static const uint16_t LCDC_addr = 0xFF40;
