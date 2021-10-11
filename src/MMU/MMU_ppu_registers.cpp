@@ -80,6 +80,8 @@ bool MMU::isLYCEqualLYSTATInterruptEnabled() {
   return checkBit(6, memory[STAT_addr]);
 }
 
+bool MMU::isLYEqualLYC() { return memory[LY_addr] == memory[LYC_addr]; }
+
 void MMU::setMode2STATInterruptEnable() {
   memory[STAT_addr] = setBit(5, memory[STAT_addr]);
 }

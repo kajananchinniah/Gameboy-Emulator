@@ -45,6 +45,9 @@ class MMU {
   bool isJoypadInterruptEnabled();
   bool isJoypadInterruptRequested();
 
+  void setVBlankInterruptRequest();
+  void setLCDStatInterruptRequest();
+
   void resetVBlankInterruptRequest();
   void resetLCDStatInterruptRequest();
   void resetTimerInterruptRequest();
@@ -92,6 +95,7 @@ class MMU {
   void setLYCEqualLYSTATInterruptEnable();
   void resetLYCEqualLYSTATInterruptEnable();
   bool isLYCEqualLYSTATInterruptEnabled();
+  bool isLYEqualLYC();
 
   void setMode2STATInterruptEnable();
   void resetMode2STATInterruptEnable();

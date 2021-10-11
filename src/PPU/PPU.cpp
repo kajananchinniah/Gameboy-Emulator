@@ -45,6 +45,15 @@ void PPU::updatePPULCD(int clock_cycles) {
       performVBlankMode(clock_cycles);
       break;
   }
+
+  if (mmu->isLYEqualLYC()) {
+    mmu->setCoincidenceFlag();
+    if (mmu->isLYCEqualLYSTATInterruptEnabled()) {
+      mmu->setLCDStatInterruptRequest();
+    }
+  } else {
+    mmu->resetCoincidenceFlag();
+  }
 }
 
 void PPU::performOAMScanMode(int clock_cycles) {
