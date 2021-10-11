@@ -129,4 +129,8 @@ uint16_t MMU::getPPU8800MethodAddress(uint8_t tile_number) {
   return static_cast<int8_t>(tile_number) * 16 + 0x9000;
 }
 
+void MMU::setCurrentScanLine(uint8_t data) { memory[LY_addr] = data; }
+uint8_t MMU::getCurrentScanLine() { return memory[LY_addr]; }
+void MMU::incrementCurrentScanLine() { memory[LY_addr]++; }
+
 }  // namespace GB

@@ -112,6 +112,10 @@ class MMU {
   void setPPUMode(uint8_t mode);
   uint8_t getPPUMode();
 
+  void setCurrentScanLine(uint8_t scanline);
+  uint8_t getCurrentScanLine();
+  void incrementCurrentScanLine();
+
   uint16_t getPPU8000MethodAddress(uint8_t tile_number);
   uint16_t getPPU8800MethodAddress(uint8_t tile_number);
 

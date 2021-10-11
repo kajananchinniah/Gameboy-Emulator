@@ -1,5 +1,11 @@
 #include "GB/PPU.hpp"
 
+namespace {
+
+enum PPUModes { OAM_SCAN = 2, DRAWING = 3, H_BLANK = 0, V_BLANK = 1 };
+
+}  // namespace
+
 namespace GB {
 PPU::PPU(MMU *mmu) { this->mmu = mmu; }
 PPU::~PPU() {}
@@ -12,6 +18,30 @@ uint8_t PPU::getWindowHorizontalPosition() {
 uint8_t PPU::getWindowVerticalPosition() {
   uint8_t WY = mmu->getWindowYRegister();
   return WY;
+}
+
+void PPU::updatePPU(int clock_cycles) {
+  if (!mmu->isLCDDisplayEnabled()) {
+    resetPPU();
+    return;
+  }
+
+  ppu_clock_cycles += clock_cycles;
+  updatePPULCD();
+  if (ppu_clock_cycles >= end_of_scanline_cycles) {
+    prepareForNextScanLine();
+  }
+}
+
+void PPU::resetPPU() {
+  ppu_clock_cycles = 0;
+  mmu->setCurrentScanLine(0);
+  mmu->setPPUMode(PPUModes::V_BLANK);
+}
+
+void PPU::updatePPULCD() {
+  uint8_t ppu_mode = mmu->getPPUMode();
+  switch (ppu_mode) {}
 }
 
 uint8_t PPU::get2BPPPixel(uint8_t byte1, uint8_t byte2, int position) {

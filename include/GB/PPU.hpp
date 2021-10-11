@@ -8,6 +8,7 @@ class PPU {
  public:
   explicit PPU(MMU *mmu);
   ~PPU();
+  void updatePPU(int clock_cycles);
 
  private:
   const unsigned int lcd_viewport_width{160};
@@ -16,7 +17,13 @@ class PPU {
   const unsigned int background_height{256};
   const unsigned int window_width{256};
   const unsigned int window_height{256};
+  const unsigned int end_of_scanline_cycles{456};
+  unsigned int ppu_clock_cycles;
   MMU *mmu;
+
+  void resetPPU();
+  void updatePPULCD();
+  void prepareForNextScanLine();
 
   uint8_t getWindowHorizontalPosition();
   uint8_t getWindowVerticalPosition();
