@@ -115,6 +115,10 @@ class MMU {
   uint16_t getPPU8000MethodAddress(uint8_t tile_number);
   uint16_t getPPU8800MethodAddress(uint8_t tile_number);
 
+  uint32_t getOAMSpriteEntry(uint16_t offset);
+  void setCurrentScanLine(uint8_t scanline);
+  uint8_t getCurrentScanLine();
+
  private:
   static const int address_space = 0x10000;
   std::array<uint8_t, address_space> memory;
@@ -139,6 +143,7 @@ class MMU {
   static const uint16_t WY_addr = 0xFF4A;
   static const uint16_t LCDC_addr = 0xFF40;
   static const uint16_t STAT_addr = 0xFF41;
+  static const uint16_t OAM_addr = 0xFE00;
 
   bool checkBit(uint8_t n, uint8_t value) {
     if ((value >> n) & 0x01) {
