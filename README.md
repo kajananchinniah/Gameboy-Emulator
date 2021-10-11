@@ -59,3 +59,7 @@ To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a
   - At the time of use, it's incomplete but contains a really good PPU reference that explains it with visuals, etc.
     This helped me understand what to do (as I found it pretty confusing). (Link to PPU reference:
     https://hacktixme.ga/GBEDG/ppu)
+- POKEGB: a gameboy emulator that only plays Pokemon blue: https://binji.github.io/posts/pokegb/
+  - This inspired me to do all my rendering at the end of a scanline, rather than doing pixel fifo. I found the pixel
+    fifo algorithm to be relatively complicated (and given how busy I've been, I didn't have enough time to understand
+    the algorithm details, although I have a high level understanding, so I may revisit it later)
