@@ -24,6 +24,10 @@ class PPU {
 
   void resetPPU();
   void updatePPULCD();
+  void doOAMScanMode();
+  void doDrawingMode();
+  void doHBlankMode();
+  void doVBlankMode();
   void updateCoincidenceFlag();
   void prepareForNextScanLine();
 
