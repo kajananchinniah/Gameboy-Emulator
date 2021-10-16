@@ -45,6 +45,12 @@ class MMU {
   bool isJoypadInterruptEnabled();
   bool isJoypadInterruptRequested();
 
+  void setVBlankInterruptRequest();
+  void setLCDStatInterruptRequest();
+  void setTimerInterruptRequest();
+  void setSerialInterruptRequest();
+  void setJoypadInterruptRequest();
+
   void resetVBlankInterruptRequest();
   void resetLCDStatInterruptRequest();
   void resetTimerInterruptRequest();

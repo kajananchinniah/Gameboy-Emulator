@@ -98,6 +98,26 @@ bool MMU::isJoypadInterruptRequested() {
   return checkBit(4, interrupt_bit);
 }
 
+void MMU::setVBlankInterruptRequest() {
+  memory[IF_addr] = setBit(0, memory[IF_addr]);
+}
+
+void MMU::setLCDStatInterruptRequest() {
+  memory[IF_addr] = setBit(1, memory[IF_addr]);
+}
+
+void MMU::setTimerInterruptRequest() {
+  memory[IF_addr] = setBit(2, memory[IF_addr]);
+}
+
+void MMU::setSerialInterruptRequest() {
+  memory[IF_addr] = setBit(3, memory[IF_addr]);
+}
+
+void MMU::setJoypadInterruptRequest() {
+  memory[IF_addr] = setBit(4, memory[IF_addr]);
+}
+
 void MMU::resetVBlankInterruptRequest() {
   memory[IF_addr] = resetBit(0, memory[IF_addr]);
 }
