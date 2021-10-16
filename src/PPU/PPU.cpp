@@ -81,13 +81,13 @@ void PPU::switchPPUMode(uint8_t new_mode) {
   switch (new_mode) {
     case DRAWING: {
       mmu->setPPUMode(DRAWING);
+      pixel_fifo->init();
       if (mmu->isMode2STATInterruptEnabled()) {
         mmu->setLCDStatInterruptRequest();
       }
     }
   }
 }
-}  // namespace GB
 
 uint8_t getYPositionFromOAM(uint32_t entry) { return (entry & 0xFF); }
 uint8_t getXPositionFromOAM(uint32_t entry) { return ((entry >> 8) & 0xFF); }

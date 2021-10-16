@@ -1,6 +1,7 @@
 #ifndef INCLUDE_GB_PPU_HPP_
 #define INCLUDE_GB_PPU_HPP_
 
+#include <queue>
 #include <vector>
 
 #include "MMU.hpp"
@@ -55,6 +56,11 @@ class PPU {
   void performDrawingMode(int clock_cycleS);
   void performHBlankMode(int clock_cycles);
   void requestPPUInterrupt();
+
+  std::queue<uint8_t> background_fifo;
+  std::queue<uint8_t> sprite_fifo;
+  void initPixelFIFO();
+  int background_fifo_x_count{0};
 };
 
 }  // namespace GB
