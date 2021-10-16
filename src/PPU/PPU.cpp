@@ -44,6 +44,20 @@ void PPU::updatePPULCD() {
   switch (ppu_mode) {}
 }
 
+void PPU::prepareForNextScanLine() {
+  mmu->incrementCurrentScanLine();
+  ppu_clock_cycles = 0;
+  if (mmu->getCurrentScanLine() == lcd_viewport_height) {
+    mmu->setVBlankInterruptRequest();
+    return;
+  }
+
+  if (mmu->getCurrentScanLine() > max_scanline) {
+    mmu->setCurrentScanLine(0);
+    return;
+  }
+}
+
 uint8_t PPU::get2BPPPixel(uint8_t byte1, uint8_t byte2, int position) {
   uint8_t low = (byte1 >> position) & 0x01;
   uint8_t high = (byte2 >> position) & 0x01;

@@ -18,6 +18,7 @@ class PPU {
   const unsigned int window_width{256};
   const unsigned int window_height{256};
   const unsigned int end_of_scanline_cycles{456};
+  const unsigned int max_scanline{153};
   unsigned int ppu_clock_cycles;
   MMU *mmu;
 
