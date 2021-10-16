@@ -125,6 +125,8 @@ class MMU {
   uint16_t getPPU8000MethodAddress(uint8_t tile_number);
   uint16_t getPPU8800MethodAddress(uint8_t tile_number);
 
+  bool isLYCEqualLY();
+
  private:
   static const int address_space = 0x10000;
   std::array<uint8_t, address_space> memory;

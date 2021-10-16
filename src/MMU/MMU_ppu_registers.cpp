@@ -133,4 +133,6 @@ void MMU::setCurrentScanLine(uint8_t data) { memory[LY_addr] = data; }
 uint8_t MMU::getCurrentScanLine() { return memory[LY_addr]; }
 void MMU::incrementCurrentScanLine() { memory[LY_addr]++; }
 
+bool MMU::isLYCEqualLY() { return memory[LY_addr] == memory[LYC_addr]; }
+
 }  // namespace GB

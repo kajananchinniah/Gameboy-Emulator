@@ -24,6 +24,7 @@ class PPU {
 
   void resetPPU();
   void updatePPULCD();
+  void updateCoincidenceFlag();
   void prepareForNextScanLine();
 
   uint8_t getWindowHorizontalPosition();

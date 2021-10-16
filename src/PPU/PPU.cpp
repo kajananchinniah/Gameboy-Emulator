@@ -41,7 +41,28 @@ void PPU::resetPPU() {
 
 void PPU::updatePPULCD() {
   uint8_t ppu_mode = mmu->getPPUMode();
-  switch (ppu_mode) {}
+  switch (ppu_mode) {
+    case PPUModes::OAM_SCAN:
+      break;
+    case PPUModes::DRAWING:
+      break;
+    case PPUModes::H_BLANK:
+      break;
+    case PPUModes::V_BLANK:
+      break;
+  }
+  updateCoincidenceFlag();
+}
+
+void PPU::updateCoincidenceFlag() {
+  if (mmu->isLYCEqualLY()) {
+    mmu->setCoincidenceFlag();
+    if (mmu->isLYCEqualLYSTATInterruptEnabled()) {
+      mmu->setLCDStatInterruptRequest();
+    }
+  } else {
+    mmu->resetCoincidenceFlag();
+  }
 }
 
 void PPU::prepareForNextScanLine() {
