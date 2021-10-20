@@ -151,6 +151,9 @@ class MMU {
   static const uint16_t WY_addr = 0xFF4A;
   static const uint16_t LCDC_addr = 0xFF40;
   static const uint16_t STAT_addr = 0xFF41;
+  static const uint16_t DMA_addr = 0xFF46;
+
+  void doDMATransferToOAM(uint8_t data);
 
   bool checkBit(uint8_t n, uint8_t value) {
     if ((value >> n) & 0x01) {

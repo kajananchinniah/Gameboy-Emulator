@@ -63,7 +63,25 @@ MMU::MMU() {
   memory[0xFFFF] = 0x00;
 }
 
-void MMU::write(uint16_t address, uint8_t data) { memory[address] = data; }
+void MMU::write(uint16_t address, uint8_t data) {
+  if (address == DIV_addr) {
+    memory[DIV_addr] = 0x00;
+  } else if (address == LY_addr) {
+    memory[LY_addr] = 0x00;
+  } else if (address == DMA_addr) {
+    doDMATransferToOAM(data);
+  } else {
+    memory[address] = data;
+  }
+}
+
+void MMU::doDMATransferToOAM(uint8_t data) {
+  uint16_t address = data << 8;
+  const int dma_byte_size = 160;
+  for (int i = 0; i < dma_byte_size; ++i) {
+    write(0xFE00 + i, read(address + i));
+  }
+}
 
 uint8_t MMU::read(uint16_t address) { return memory[address]; }
 
