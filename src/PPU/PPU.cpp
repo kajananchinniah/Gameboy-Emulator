@@ -104,15 +104,25 @@ void PPU::prepareForNextScanLine() {
   if (mmu->getCurrentScanLine() == lcd_viewport_height) {
     mmu->setPPUMode(PPUModes::V_BLANK);
     mmu->setVBlankInterruptRequest();
-    return;
-  }
-
-  if (mmu->getCurrentScanLine() > max_scanline) {
+  } else if (mmu->getCurrentScanLine() > max_scanline) {
     mmu->setPPUMode(PPUModes::OAM_SCAN);
     mmu->setCurrentScanLine(0);
-    return;
+  } else if (mmu->getCurrentScanLine() < lcd_viewport_height) {
+    renderScanLine();
   }
 }
+
+void PPU::renderScanLine() {
+  if (mmu->isBGAndWindowEnabled()) {
+    renderTiles();
+  }
+
+  if (mmu->isSpritesEnabled()) {
+    renderSprites();
+  }
+}
+
+void PPU::renderTiles() {}
 
 uint8_t PPU::get2BPPPixel(uint8_t byte1, uint8_t byte2, int position) {
   uint8_t low = (byte1 >> position) & 0x01;

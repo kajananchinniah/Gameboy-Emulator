@@ -30,6 +30,9 @@ class PPU {
   void doVBlankMode();
   void updateCoincidenceFlag();
   void prepareForNextScanLine();
+  void renderScanLine();
+  void renderTiles();
+  void renderSprites();
 
   uint8_t getWindowHorizontalPosition();
   uint8_t getWindowVerticalPosition();
