@@ -1,8 +1,22 @@
 #include "GB/PPU.hpp"
 
+#include <unordered_map>
+
 namespace {
 
 enum PPUModes { OAM_SCAN = 2, DRAWING = 3, H_BLANK = 0, V_BLANK = 1 };
+enum ColourCode { WHITE, LIGHT_GRAY, DARK_GRAY, BLACK };
+
+const std::unordered_map<int32_t, GB::Colour> colour_palette = {
+    {ColourCode::WHITE, GB::Colour{0xFF, 0xFF, 0xFF}},
+    {ColourCode::LIGHT_GRAY, GB::Colour{0xCC, 0xCC, 0xCC}},
+    {ColourCode::DARK_GRAY, GB::Colour{0x77, 0x77, 0x77}},
+    {ColourCode::BLACK, GB::Colour{0x00, 0x00, 0x00}}};
+
+constexpr int kRedIndex{0};
+constexpr int kGreenIndex{1};
+constexpr int kBlueIndex{2};
+
 }  // namespace
 
 namespace GB {
@@ -149,9 +163,9 @@ void PPU::renderTiles() {
       continue;
     }
 
-    display_buffer[pixel][scanline][0] = colour.red;
-    display_buffer[pixel][scanline][1] = colour.green;
-    display_buffer[pixel][scanline][2] = colour.blue;
+    display_buffer[pixel][scanline][kRedIndex] = colour.red;
+    display_buffer[pixel][scanline][kGreenIndex] = colour.green;
+    display_buffer[pixel][scanline][kBlueIndex] = colour.blue;
   }
 }
 
@@ -192,6 +206,26 @@ uint8_t PPU::getColourPosition(uint8_t x_position) {
   return colour_position;
 }
 
+Colour PPU::decodeColour(uint8_t colour_id, uint16_t palette_addr) {
+  uint8_t palette = mmu->read(palette_addr);
+  int decoded_colour{0};
+  switch (colour_id) {
+    case 0:
+      decoded_colour = getBit(1, palette) << 1 | getBit(0, palette);
+      break;
+    case 1:
+      decoded_colour = getBit(3, palette) << 1 | getBit(2, palette);
+      break;
+    case 2:
+      decoded_colour = getBit(5, palette) << 1 | getBit(4, palette);
+      break;
+    case 3:
+      decoded_colour = getBit(7, palette) << 1 | getBit(6, palette);
+      break;
+  }
+  return colour_palette.at(decoded_colour);
+}
+
 bool PPU::shouldUseWindow() {
   if (mmu->isWindowDisplayEnabled() &&
       getWindowVerticalPosition() <= mmu->getCurrentScanLine()) {
@@ -226,6 +260,8 @@ uint16_t PPU::getBackgroundMemoryAddress() {
 }
 
 void PPU::renderSprites() {
+  return;
+  /**
   for (int sprite = 0; sprite < 40; ++sprite) {
     uint32_t raw_oam_entry = mmu->getOAMSpriteEntry(sprite);
     uint8_t y_position = getYPositionFromOAM(raw_oam_entry);
@@ -240,6 +276,7 @@ void PPU::renderSprites() {
                                sprite_flags);
     }
   }
+  */
 }
 
 uint8_t PPU::get2BPPPixel(uint8_t byte1, uint8_t byte2, int position) {

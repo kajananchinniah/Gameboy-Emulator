@@ -4,6 +4,15 @@
 #include "MMU.hpp"
 
 namespace GB {
+
+struct Colour {
+  uint8_t red;
+  uint8_t green;
+  uint8_t blue;
+  Colour() : red{0}, green{0}, blue{0} {}
+  Colour(uint8_t r, uint8_t g, uint8_t b) : red{r}, green{g}, blue{b} {}
+};
+
 class PPU {
  public:
   explicit PPU(MMU *mmu);
@@ -11,12 +20,6 @@ class PPU {
   void updatePPU(int clock_cycles);
 
  private:
-  struct Colour {
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-  };
-
   static const unsigned int lcd_viewport_width{160};
   static const unsigned int lcd_viewport_height{144};
   static const unsigned int background_width{256};
@@ -66,6 +69,8 @@ class PPU {
   uint8_t getWindowVerticalPosition();
   uint8_t get2BPPPixel(uint8_t byte1, uint8_t byte2, int position);
   uint16_t get2BPPPixelRow(uint8_t byte1, uint8_t byte2);
+
+  uint8_t getBit(uint8_t n, uint8_t value) { return ((value >> n) & 0x01); }
 };
 
 }  // namespace GB
