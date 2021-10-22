@@ -6,6 +6,7 @@
 #include <vector>
 
 #include "GB/MMU.hpp"
+#include "GB/PPU.hpp"
 #include "GB/Registers.hpp"
 
 namespace GB {
@@ -19,6 +20,8 @@ class CPU {
   void printStatus();
 
   MMU mmu;
+  PPU ppu;
+
   RegisterAF AF;
   Register BC;
   Register DE;

@@ -130,6 +130,8 @@ class MMU {
 
   bool isLYCEqualLY();
 
+  uint32_t getOAMSpriteEntry(uint16_t offset);
+
  private:
   static const int address_space = 0x10000;
   std::array<uint8_t, address_space> memory;
@@ -155,6 +157,7 @@ class MMU {
   static const uint16_t LCDC_addr = 0xFF40;
   static const uint16_t STAT_addr = 0xFF41;
   static const uint16_t DMA_addr = 0xFF46;
+  static const uint16_t OAM_addr = 0xFE00;
 
   void doDMATransferToOAM(uint8_t data);
 

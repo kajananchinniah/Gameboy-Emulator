@@ -8,10 +8,15 @@ enum PPUModes { OAM_SCAN = 2, DRAWING = 3, H_BLANK = 0, V_BLANK = 1 };
 enum ColourCode { WHITE, LIGHT_GRAY, DARK_GRAY, BLACK };
 
 const std::unordered_map<int32_t, GB::Colour> colour_palette = {
-    {ColourCode::WHITE, GB::Colour{0xFF, 0xFF, 0xFF}},
-    {ColourCode::LIGHT_GRAY, GB::Colour{0xCC, 0xCC, 0xCC}},
-    {ColourCode::DARK_GRAY, GB::Colour{0x77, 0x77, 0x77}},
-    {ColourCode::BLACK, GB::Colour{0x00, 0x00, 0x00}}};
+    {ColourCode::WHITE, GB::Colour{0xFF, 0xFF, 0xFF, ColourCode::WHITE}},
+
+    {ColourCode::LIGHT_GRAY,
+     GB::Colour{0xCC, 0xCC, 0xCC, ColourCode::LIGHT_GRAY}},
+
+    {ColourCode::DARK_GRAY,
+     GB::Colour{0x77, 0x77, 0x77, ColourCode::DARK_GRAY}},
+
+    {ColourCode::BLACK, GB::Colour{0x00, 0x00, 0x00, ColourCode::BLACK}}};
 
 constexpr int kRedIndex{0};
 constexpr int kGreenIndex{1};
@@ -100,6 +105,8 @@ void PPU::doHBlankMode() {
   }
 }
 
+void PPU::doVBlankMode() { return; }
+
 void PPU::updateCoincidenceFlag() {
   if (mmu->isLYCEqualLY()) {
     mmu->setCoincidenceFlag();
@@ -154,12 +161,13 @@ void PPU::renderTiles() {
     uint8_t line = getCurrentVerticalBGAndVerticalLine(y_position);
     uint8_t byte1 = mmu->read(tile_address + line);
     uint8_t byte2 = mmu->read(tile_address + line + 1);
-    uint8_t colour_position = getColourPosition(x_position);
+    uint8_t colour_position = getBGAndWindowColourPosition(x_position);
     uint8_t colour_id = get2BPPPixel(byte1, byte2, colour_position);
     Colour colour = decodeColour(colour_id, 0xFF47);
 
     uint8_t scanline = mmu->getCurrentScanLine();
-    if (scanline < 0 || scanline >= lcd_viewport_height) {
+    // Note: pixel is guaranteed to lie within the viewable area
+    if (scanline >= lcd_viewport_height) {
       continue;
     }
 
@@ -197,7 +205,7 @@ uint8_t PPU::getCurrentVerticalBGAndVerticalLine(uint8_t y_position) {
   return 2 * (y_position % 8);
 }
 
-uint8_t PPU::getColourPosition(uint8_t x_position) {
+uint8_t PPU::getBGAndWindowColourPosition(uint8_t x_position) {
   uint8_t colour_position = x_position % 8;
 
   // Note: pixel 0 -> position 7, pixel 1 -> position 6, etc
@@ -260,23 +268,107 @@ uint16_t PPU::getBackgroundMemoryAddress() {
 }
 
 void PPU::renderSprites() {
-  return;
-  /**
-  for (int sprite = 0; sprite < 40; ++sprite) {
+  constexpr uint16_t max_sprites{40};
+  for (uint16_t sprite = 0; sprite < max_sprites; ++sprite) {
     uint32_t raw_oam_entry = mmu->getOAMSpriteEntry(sprite);
     uint8_t y_position = getYPositionFromOAM(raw_oam_entry);
     uint8_t x_position = getXPositionFromOAM(raw_oam_entry);
     uint8_t tile_number = getTileNumberFromOAM(raw_oam_entry);
     uint8_t sprite_flags = getSpriteFlagsFromOAM(raw_oam_entry);
 
-    uint8_t current_scanline = mmu->getCurrentScanLine();
     if (isValidSpriteOAMEntry(y_position, x_position, tile_number,
                               sprite_flags)) {
       addSpriteToDisplayBuffer(y_position, x_position, tile_number,
                                sprite_flags);
     }
   }
-  */
+}
+
+uint8_t PPU::getYPositionFromOAM(uint32_t entry) { return (entry & 0xFF) - 16; }
+uint8_t PPU::getXPositionFromOAM(uint32_t entry) {
+  return ((entry >> 8) & 0xFF) - 8;
+}
+uint8_t PPU::getTileNumberFromOAM(uint32_t entry) {
+  return (entry >> 16) & 0xFF;
+}
+uint8_t PPU::getSpriteFlagsFromOAM(uint32_t entry) {
+  return (entry >> 24) & 0xFF;
+}
+
+bool PPU::isValidSpriteOAMEntry(uint8_t y_position, uint8_t x_position,
+                                uint8_t tile_number, uint8_t sprite_flags) {
+  bool validity = (mmu->getCurrentScanLine()) >= y_position;
+  if (mmu->isTallSpriteSizeSet()) {
+    validity = validity && (mmu->getCurrentScanLine()) < y_position + 16;
+  } else {
+    validity = validity && (mmu->getCurrentScanLine()) < y_position + 8;
+  }
+  return validity;
+}
+
+void PPU::addSpriteToDisplayBuffer(uint8_t y_position, uint8_t x_position,
+                                   uint8_t tile_number, uint8_t sprite_flags) {
+  uint8_t line = getSpriteVerticalLine(y_position, sprite_flags);
+  uint16_t data_address = getSpriteDataAddress(tile_number, line);
+  uint8_t byte1 = mmu->read(data_address);
+  uint8_t byte2 = mmu->read(data_address + 1);
+  for (int8_t tile_pixel = 7; tile_pixel >= 0; tile_pixel--) {
+    uint8_t colour_position = getSpriteColourPosition(tile_pixel, sprite_flags);
+    uint16_t colour_id = get2BPPPixel(byte1, byte2, colour_position);
+    uint16_t colour_addr = getSpriteColourAddress(sprite_flags);
+    Colour colour = decodeColour(colour_id, colour_addr);
+    if (colour.colour == ColourCode::WHITE) {
+      continue;
+    }
+
+    int pixel = getSpritePixelLocation(x_position, tile_pixel);
+    uint8_t scanline = mmu->getCurrentScanLine();
+    // Note: we need to ensure that the pixel is in the viewable area
+    if (scanline >= lcd_viewport_height || pixel < 0 ||
+        pixel >= static_cast<int>(lcd_viewport_width)) {
+      continue;
+    }
+
+    display_buffer[pixel][scanline][kRedIndex] = colour.red;
+    display_buffer[pixel][scanline][kGreenIndex] = colour.green;
+    display_buffer[pixel][scanline][kBlueIndex] = colour.blue;
+  }
+}
+
+uint8_t PPU::getSpriteVerticalLine(uint8_t y_position, uint8_t sprite_flags) {
+  uint8_t line = mmu->getCurrentScanLine() - y_position;
+  if (checkBit(6, sprite_flags)) {
+    if (mmu->isTallSpriteSizeSet()) {
+      line = 16 - line;
+    } else {
+      line = 8 - line;
+    }
+  }
+  return 2 * line;
+}
+
+uint16_t PPU::getSpriteDataAddress(uint8_t tile_number, uint8_t line) {
+  return 0x8000 + (tile_number * 16) + line;
+}
+
+uint8_t PPU::getSpriteColourPosition(int8_t tile_pixel, uint8_t sprite_flags) {
+  uint8_t colour_position = tile_pixel;
+  if (checkBit(5, sprite_flags)) {
+    colour_position = 7 - colour_position;
+  }
+  return colour_position;
+}
+
+uint16_t PPU::getSpriteColourAddress(uint8_t sprite_flags) {
+  if (checkBit(4, sprite_flags)) {
+    return 0xFF49;
+  } else {
+    return 0xFF48;
+  }
+}
+
+int PPU::getSpritePixelLocation(uint8_t x_position, int8_t tile_pixel) {
+  return 7 - tile_pixel + x_position;
 }
 
 uint8_t PPU::get2BPPPixel(uint8_t byte1, uint8_t byte2, int position) {

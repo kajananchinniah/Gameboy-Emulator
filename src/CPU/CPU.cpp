@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "GB/MMU.hpp"
+#include "GB/ScreenDisplay.hpp"
 
 namespace GB {
 
@@ -17,7 +18,7 @@ void CPU::printStatus() {
   std::cout << "PC = 0x" << std::hex << PC.getPCValue() - 1 << "\n";
 }
 
-CPU::CPU() {
+CPU::CPU() : mmu{MMU()}, ppu{PPU(&mmu)} {
   // See: https://gbdev.io/pandocs/Power_Up_Sequence.html
   PC.setPC(0x0100);
   AF.setFullValue(0x01B0);
@@ -25,13 +26,16 @@ CPU::CPU() {
   DE.setFullValue(0x00D8);
   HL.setFullValue(0x014D);
   SP.setSP(0xFFFE);
-  mmu = MMU();
 }
 
 void CPU::loadROM(const char *rom_path) { mmu.loadROM(rom_path); }
 
 void CPU::update() {
   int interrupt_cycles = 0;
+  ScreenDisplay display = ScreenDisplay();
+  display.init(160, 144);
+
+  int total_cycles{0};
   while (true) {
     int clock_cycles;
     if (is_halted) {
@@ -42,8 +46,17 @@ void CPU::update() {
       clock_cycles = executeOpcode(opcode);
     }
 
+    total_cycles += clock_cycles + interrupt_cycles;
+    ppu.updatePPU(clock_cycles + interrupt_cycles);
     updateTimers(clock_cycles + interrupt_cycles);
     checkInterrupts();
+
+    std::cout << total_cycles << "\n";
+
+    if (total_cycles > 69905) {
+      total_cycles = 0;
+      display.update(ppu.display_buffer, 1);
+    }
   }
 }
 

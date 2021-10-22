@@ -137,4 +137,13 @@ void MMU::incrementCurrentScanLine() { memory[LY_addr]++; }
 
 bool MMU::isLYCEqualLY() { return memory[LY_addr] == memory[LYC_addr]; }
 
+uint32_t MMU::getOAMSpriteEntry(uint16_t offset) {
+  uint16_t index = 4 * offset;
+  uint8_t y = memory[index + OAM_addr];
+  uint8_t x = memory[index + OAM_addr + 1];
+  uint8_t tile = memory[index + OAM_addr + 2];
+  uint8_t flags = memory[index + OAM_addr + 3];
+  return (flags << 24) | (tile << 16) | (x << 8) | y;
+}
+
 }  // namespace GB
