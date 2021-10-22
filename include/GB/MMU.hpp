@@ -63,6 +63,9 @@ class MMU {
   void setWindowYRegister(uint8_t data);
   uint8_t getWindowYRegister();
 
+  uint8_t getScrollXRegister();
+  uint8_t getScrollYRegister();
+
   void setLCDDisplayEnable();
   void resetLCDDisplayEnable();
   bool isLCDDisplayEnabled();
