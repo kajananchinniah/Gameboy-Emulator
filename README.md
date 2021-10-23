@@ -1,7 +1,6 @@
 # Gameboy Emulator
 This is my messy implementation of a gameboy emulator using C++. I've been working on this on and off (whenever I had
-time, but sometimes I was too busy to work on it). This is why my coding style may seem different depending on which
-file you look at. I generally tried to refactor after finishing a subset of emulator though.
+time, but sometimes I was too busy to work on it). I generally tried to refactor after finishing a subset of emulator though.
 
 ## Notes on implementation
 Originally, the plan was to write this in modern C++. That clearly did not pan out. The gameboy instruction set is quite
@@ -21,6 +20,15 @@ Doing it at the whole interrupt level might be something I explore if it's neces
 unused because I can't run the interrupt timing test for some reason), but doing it at the memory access
 / actual subopcode level is a bit inconvenient since I didn't realize this was necessary. In hindsight, I should have
 read the entire pandoc instead of just reading as I implemented.
+
+Another thing I believe would have been cleaner is having a 'bus' where I connect the different components. For
+components that need direct access to particular parts, I would make a shared ptr and connect it directly. Additionally,
+I think that I might use completely public classes rather than classes with private and public members in the future. I
+somewhat badly planned parts of this due to it.
+
+I also copied over a lot of code in multiple files / components (e.g. getBit, setBit, etc). In the future, I think
+having a utils or common file that would contain code that I see being used often is a good idea just to increase code
+reuse.
 
 ## Note on Tests
 Originally I had planned on unit testing every function I wrote via GTest. While this approach is fine, I realized that
