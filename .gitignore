@@ -1,0 +1,5 @@
+# Ignore build folder
+build/
+
+# Ignore test roms
+tests/test_roms/
