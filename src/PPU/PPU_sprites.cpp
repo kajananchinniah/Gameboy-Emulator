@@ -79,7 +79,7 @@ void PPU::addSpriteToDisplayBuffer(uint8_t y_position, uint8_t x_position,
 
 uint8_t PPU::getSpriteVerticalLine(uint8_t y_position, uint8_t sprite_flags) {
   uint8_t line = mmu->getCurrentScanLine() - y_position;
-  if (checkBit(6, sprite_flags)) {
+  if (shouldSpriteYFlip(sprite_flags)) {
     if (mmu->isTallSpriteSizeSet()) {
       constexpr uint8_t sprite_size{16};
       line = sprite_size - line;
@@ -98,7 +98,7 @@ uint16_t PPU::getSpriteDataAddress(uint8_t tile_number, uint8_t line) {
 
 uint8_t PPU::getSpriteColourPosition(int8_t tile_pixel, uint8_t sprite_flags) {
   uint8_t colour_position = tile_pixel;
-  if (checkBit(5, sprite_flags)) {
+  if (shouldSpriteXFlip(sprite_flags)) {
     // 8 bits in one byte
     colour_position = 7 - colour_position;
   }
@@ -106,7 +106,7 @@ uint8_t PPU::getSpriteColourPosition(int8_t tile_pixel, uint8_t sprite_flags) {
 }
 
 uint16_t PPU::getSpriteColourAddress(uint8_t sprite_flags) {
-  if (checkBit(4, sprite_flags)) {
+  if (shouldUsePalette1(sprite_flags)) {
     return OBP1_addr;
   } else {
     return OBP0_addr;
@@ -115,6 +115,22 @@ uint16_t PPU::getSpriteColourAddress(uint8_t sprite_flags) {
 
 int PPU::getSpritePixelLocation(uint8_t x_position, int8_t tile_pixel) {
   return 7 - tile_pixel + x_position;
+}
+
+bool PPU::shouldUsePalette1(uint8_t sprite_flags) {
+  return checkBit(4, sprite_flags);
+}
+
+bool PPU::shouldSpriteXFlip(uint8_t sprite_flags) {
+  return checkBit(5, sprite_flags);
+}
+
+bool PPU::shouldSpriteYFlip(uint8_t sprite_flags) {
+  return checkBit(6, sprite_flags);
+}
+
+bool PPU::isBackgroundPrioritized(uint8_t sprite_flags) {
+  return checkBit(7, sprite_flags);
 }
 
 }  // namespace GB

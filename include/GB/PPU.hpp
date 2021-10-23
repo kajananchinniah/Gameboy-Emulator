@@ -83,6 +83,10 @@ class PPU {
   uint8_t getSpriteColourPosition(int8_t tile_pixel, uint8_t sprite_flags);
   uint16_t getSpriteColourAddress(uint8_t sprite_flags);
   int getSpritePixelLocation(uint8_t x_position, int8_t tile_pixel);
+  bool shouldUsePalette1(uint8_t sprite_flags);
+  bool shouldSpriteXFlip(uint8_t sprite_flags);
+  bool shouldSpriteYFlip(uint8_t sprite_flags);
+  bool isBackgroundPrioritized(uint8_t sprite_flags);
 
   uint8_t getWindowHorizontalPosition();
   uint8_t getWindowVerticalPosition();
