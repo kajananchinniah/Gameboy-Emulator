@@ -32,11 +32,16 @@ uint8_t PPU::getSpriteFlagsFromOAM(uint32_t entry) {
 
 bool PPU::isValidSpriteOAMEntry(uint8_t y_position, uint8_t x_position,
                                 uint8_t tile_number, uint8_t sprite_flags) {
-  bool validity = (mmu->getCurrentScanLine()) >= y_position;
+  bool validity = x_position > 0;
+  validity = validity && (mmu->getCurrentScanLine()) >= y_position;
   if (mmu->isTallSpriteSizeSet()) {
-    validity = validity && (mmu->getCurrentScanLine()) < y_position + 16;
+    constexpr uint8_t sprite_size{16};
+    validity =
+        validity && (mmu->getCurrentScanLine()) < y_position + sprite_size;
   } else {
-    validity = validity && (mmu->getCurrentScanLine()) < y_position + 8;
+    constexpr uint8_t sprite_size{8};
+    validity =
+        validity && (mmu->getCurrentScanLine()) < y_position + sprite_size;
   }
   return validity;
 }
@@ -47,6 +52,7 @@ void PPU::addSpriteToDisplayBuffer(uint8_t y_position, uint8_t x_position,
   uint16_t data_address = getSpriteDataAddress(tile_number, line);
   uint8_t byte1 = mmu->read(data_address);
   uint8_t byte2 = mmu->read(data_address + 1);
+  // 8 bits in 1 byte; go reverse order because bit 7 -> pixel 0
   for (int8_t tile_pixel = 7; tile_pixel >= 0; tile_pixel--) {
     uint8_t colour_position = getSpriteColourPosition(tile_pixel, sprite_flags);
     uint16_t colour_id = get2BPPPixel(byte1, byte2, colour_position);
@@ -74,12 +80,15 @@ uint8_t PPU::getSpriteVerticalLine(uint8_t y_position, uint8_t sprite_flags) {
   uint8_t line = mmu->getCurrentScanLine() - y_position;
   if (checkBit(6, sprite_flags)) {
     if (mmu->isTallSpriteSizeSet()) {
-      line = 16 - line;
+      constexpr uint8_t sprite_size{16};
+      line = sprite_size - line;
     } else {
-      line = 8 - line;
+      constexpr uint8_t sprite_size{8};
+      line = sprite_size - line;
     }
   }
-  return 2 * line;
+  constexpr uint8_t line_byte_size{2};
+  return line_byte_size * line;
 }
 
 uint16_t PPU::getSpriteDataAddress(uint8_t tile_number, uint8_t line) {
@@ -89,6 +98,7 @@ uint16_t PPU::getSpriteDataAddress(uint8_t tile_number, uint8_t line) {
 uint8_t PPU::getSpriteColourPosition(int8_t tile_pixel, uint8_t sprite_flags) {
   uint8_t colour_position = tile_pixel;
   if (checkBit(5, sprite_flags)) {
+    // 8 bits in one byte
     colour_position = 7 - colour_position;
   }
   return colour_position;
@@ -96,9 +106,9 @@ uint8_t PPU::getSpriteColourPosition(int8_t tile_pixel, uint8_t sprite_flags) {
 
 uint16_t PPU::getSpriteColourAddress(uint8_t sprite_flags) {
   if (checkBit(4, sprite_flags)) {
-    return 0xFF49;
+    return OBP1_addr;
   } else {
-    return 0xFF48;
+    return OBP0_addr;
   }
 }
 

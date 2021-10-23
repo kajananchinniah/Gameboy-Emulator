@@ -43,6 +43,9 @@ class PPU {
   const unsigned int kBlueDisplayBufferIndex{2};
 
   MMU *mmu;
+  static const uint16_t BGP_addr{0xFF47};
+  static const uint16_t OBP0_addr{0xFF48};
+  static const uint16_t OBP1_addr{0xFF49};
 
   void resetPPU();
   void updatePPULCD();

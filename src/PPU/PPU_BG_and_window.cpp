@@ -23,7 +23,7 @@ void PPU::renderTiles() {
     uint8_t byte2 = mmu->read(tile_address + line + 1);
     uint8_t colour_position = getBGAndWindowColourPosition(x_position);
     uint8_t colour_id = get2BPPPixel(byte1, byte2, colour_position);
-    Colour colour = decodeColour(colour_id, 0xFF47);
+    Colour colour = decodeColour(colour_id, BGP_addr);
 
     uint8_t scanline = mmu->getCurrentScanLine();
     // Note: pixel is guaranteed to lie within the viewable area
@@ -46,6 +46,7 @@ uint8_t PPU::getBGAndWindowYPosition() {
 }
 
 uint16_t PPU::getBGAndWindowTileRow(uint8_t y_position) {
+  //
   return 32 * (y_position / 8);
 }
 
@@ -58,6 +59,8 @@ uint8_t PPU::getBGAndWindowXPosition(uint8_t pixel) {
 }
 
 uint16_t PPU::getBGAndWindowTileColumn(uint8_t x_position) {
+  // Determine which tile it is; relies on rounding down behavior of int
+  // E.g. 255 / 8 = 31.875 = 31 (round down)
   return x_position / 8;
 }
 
@@ -69,9 +72,8 @@ uint8_t PPU::getBGAndWindowColourPosition(uint8_t x_position) {
   uint8_t colour_position = x_position % 8;
 
   // Note: pixel 0 -> position 7, pixel 1 -> position 6, etc
-  // Can be modeled using the eqn: f(x) = -x + 7
-  colour_position = -1 * colour_position + 7;
-  return colour_position;
+  // Can be modeled using the eqn: f(x) = 7 - x
+  return 7 - colour_position;
 }
 
 bool PPU::shouldUseWindow() {
