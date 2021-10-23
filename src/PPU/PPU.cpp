@@ -348,7 +348,7 @@ uint8_t PPU::getSpriteVerticalLine(uint8_t y_position, uint8_t sprite_flags) {
 }
 
 uint16_t PPU::getSpriteDataAddress(uint8_t tile_number, uint8_t line) {
-  return 0x8000 + (tile_number * 16) + line;
+  return mmu->getPPU8000MethodAddress(tile_number) + line;
 }
 
 uint8_t PPU::getSpriteColourPosition(int8_t tile_pixel, uint8_t sprite_flags) {
