@@ -71,9 +71,14 @@ void PPU::addSpriteToDisplayBuffer(uint8_t y_position, uint8_t x_position,
       continue;
     }
 
-    display_buffer[pixel][scanline][kRedDisplayBufferIndex] = colour.red;
-    display_buffer[pixel][scanline][kGreenDisplayBufferIndex] = colour.green;
-    display_buffer[pixel][scanline][kBlueDisplayBufferIndex] = colour.blue;
+    if (!isBackgroundPrioritized(sprite_flags) &&
+        display_buffer_colour[pixel][scanline].colour !=
+            Colour::ColourCode::WHITE) {
+      display_buffer[pixel][scanline][kRedDisplayBufferIndex] = colour.red;
+      display_buffer[pixel][scanline][kGreenDisplayBufferIndex] = colour.green;
+      display_buffer[pixel][scanline][kBlueDisplayBufferIndex] = colour.blue;
+      display_buffer_colour[pixel][scanline] = colour;
+    }
   }
 }
 

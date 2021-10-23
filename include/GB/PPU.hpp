@@ -29,6 +29,7 @@ class PPU {
   static const unsigned int lcd_viewport_width{160};
   static const unsigned int lcd_viewport_height{144};
   uint8_t display_buffer[lcd_viewport_width][lcd_viewport_height][3];
+  Colour display_buffer_colour[lcd_viewport_width][lcd_viewport_height];
 
  private:
   static const unsigned int background_width{256};
