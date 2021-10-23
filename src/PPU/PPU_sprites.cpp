@@ -11,8 +11,7 @@ void PPU::renderSprites() {
     uint8_t tile_number = getTileNumberFromOAM(raw_oam_entry);
     uint8_t sprite_flags = getSpriteFlagsFromOAM(raw_oam_entry);
 
-    if (isValidSpriteOAMEntry(y_position, x_position, tile_number,
-                              sprite_flags)) {
+    if (isValidSpriteOAMEntry(y_position, x_position)) {
       addSpriteToDisplayBuffer(y_position, x_position, tile_number,
                                sprite_flags);
     }
@@ -30,8 +29,10 @@ uint8_t PPU::getSpriteFlagsFromOAM(uint32_t entry) {
   return (entry >> 24) & 0xFF;
 }
 
-bool PPU::isValidSpriteOAMEntry(uint8_t y_position, uint8_t x_position,
-                                uint8_t tile_number, uint8_t sprite_flags) {
+bool PPU::isValidSpriteOAMEntry(uint8_t y_position, uint8_t x_position) {
+  // Logic combined these two sources:
+  // http://www.codeslinger.co.uk/pages/projects/gameboy/graphics.html +
+  // https://hacktixme.ga/GBEDG/ppu/
   bool validity = x_position > 0;
   validity = validity && (mmu->getCurrentScanLine()) >= y_position;
   if (mmu->isTallSpriteSizeSet()) {

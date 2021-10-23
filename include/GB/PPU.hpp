@@ -46,6 +46,8 @@ class PPU {
   static const uint16_t BGP_addr{0xFF47};
   static const uint16_t OBP0_addr{0xFF48};
   static const uint16_t OBP1_addr{0xFF49};
+  static const uint16_t background_map1_addr{0x9C00};
+  static const uint16_t background_map2_addr{0x9800};
 
   void resetPPU();
   void updatePPULCD();
@@ -73,8 +75,7 @@ class PPU {
   uint8_t getXPositionFromOAM(uint32_t entry);
   uint8_t getTileNumberFromOAM(uint32_t entry);
   uint8_t getSpriteFlagsFromOAM(uint32_t entry);
-  bool isValidSpriteOAMEntry(uint8_t y, uint8_t x, uint8_t tile_num,
-                             uint8_t sprite_flags);
+  bool isValidSpriteOAMEntry(uint8_t y, uint8_t x);
   void addSpriteToDisplayBuffer(uint8_t y, uint8_t x, uint8_t tile_num,
                                 uint8_t sprite_flags);
   uint8_t getSpriteVerticalLine(uint8_t y_position, uint8_t sprite_flags);

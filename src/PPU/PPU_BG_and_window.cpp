@@ -38,6 +38,9 @@ void PPU::renderTiles() {
 }
 
 uint8_t PPU::getBGAndWindowYPosition() {
+  // TODO: this should use the WINDOW_LINE_COUNTER
+  // Logic for window used from:
+  // http://www.codeslinger.co.uk/pages/projects/gameboy/graphics.html
   if (shouldUseWindow()) {
     return mmu->getCurrentScanLine() - getWindowVerticalPosition();
   } else {
@@ -46,7 +49,7 @@ uint8_t PPU::getBGAndWindowYPosition() {
 }
 
 uint16_t PPU::getBGAndWindowTileRow(uint8_t y_position) {
-  //
+  // See: background pixel fetching (https://hacktixme.ga/GBEDG/ppu/)
   return 32 * (y_position / 8);
 }
 
@@ -65,6 +68,7 @@ uint16_t PPU::getBGAndWindowTileColumn(uint8_t x_position) {
 }
 
 uint8_t PPU::getCurrentVerticalBGAndVerticalLine(uint8_t y_position) {
+  // See: background pixel fetching (https://hacktixme.ga/GBEDG/ppu/)
   return 2 * (y_position % 8);
 }
 
@@ -86,6 +90,7 @@ bool PPU::shouldUseWindow() {
 }
 
 bool PPU::shouldUse8000Mode() {
+  // See: PPU Registers (https://hacktixme.ga/GBEDG/ppu/)
   if (mmu->isTileDataSelectSet()) {
     return true;
   } else {
@@ -94,17 +99,18 @@ bool PPU::shouldUse8000Mode() {
 }
 
 uint16_t PPU::getBackgroundMemoryAddress() {
+  // See: PPU Registers (https://hacktixme.ga/GBEDG/ppu/)
   if (shouldUseWindow()) {
     if (mmu->isWindowTileMapSelectSet()) {
-      return 0x9C00;
+      return background_map1_addr;
     } else {
-      return 0x9800;
+      return background_map2_addr;
     }
   } else {
     if (mmu->isBGTileMapSelectSet()) {
-      return 0x9C00;
+      return background_map1_addr;
     } else {
-      return 0x9800;
+      return background_map2_addr;
     }
   }
 }
