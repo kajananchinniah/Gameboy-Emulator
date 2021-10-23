@@ -34,13 +34,13 @@ AUX_SOURCE_DIRECTORY(src/PPU ppu_sources)
 add_library(ppu ${ppu_sources})
 target_link_libraries(ppu mmu)
 
-AUX_SOURCE_DIRECTORY(src/SDL sdl_sources)
-add_library(display ${sdl_sources})
-target_link_libraries(display ${SDL2_LIBRARIES})
+AUX_SOURCE_DIRECTORY(src/SDL gui_sources)
+add_library(gui ${gui_sources})
+target_link_libraries(gui ${SDL2_LIBRARIES})
 
 AUX_SOURCE_DIRECTORY(src/CPU cpu_sources)
 add_library(cpu ${cpu_sources})
-target_link_libraries(cpu registers mmu ppu display)
+target_link_libraries(cpu registers mmu ppu gui)
 
 add_executable(main src/main.cpp)
 target_link_libraries(main cpu)

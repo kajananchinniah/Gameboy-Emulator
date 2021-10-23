@@ -1,6 +1,5 @@
-#include "GB/ScreenDisplay.hpp"
+#include "GB/GUI.hpp"
 
-#include <iostream>
 #include <memory>
 #include <stdexcept>
 #include <string>
@@ -33,32 +32,34 @@ inline void checkAlloc(void *ptr, int line_number, const char *file_name) {
 
 namespace GB {
 
-struct ScreenDisplay::ScreenDisplayImpl {
-  // std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> window_;
-  // std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> rend_;
-  SDL_Window *window_;
-  SDL_Renderer *rend_;
-
+struct GUI::GUIImpl {
+  std::unique_ptr<SDL_Window, decltype(&SDL_DestroyWindow)> window_;
+  std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> rend_;
+  std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> texture_;
   std::string window_title_{"Gameboy Emulator"};
 
-  ScreenDisplayImpl() {}
-  // : window_{nullptr, SDL_DestroyWindow},
-  // rend_{nullptr, SDL_DestroyRenderer} {}
+  GUIImpl()
+      : window_{nullptr, SDL_DestroyWindow},
+        rend_{nullptr, SDL_DestroyRenderer},
+        texture_{nullptr, SDL_DestroyTexture} {}
+
   void init(int window_width, int window_height) {
     CHECK_SDL(SDL_Init(SDL_INIT_VIDEO));
-    window_ = SDL_CreateWindow(window_title_.c_str(), 0, 0, window_width,
-                               window_height, SDL_WINDOW_SHOWN);
-    CHECK_ALLOC(window_);
+    window_.reset(SDL_CreateWindow(
+        window_title_.c_str(), SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        window_width, window_height, SDL_WINDOW_SHOWN));
+    CHECK_ALLOC(window_.get());
 
     uint32_t render_flags =
         SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC;
     int render_index = -1;
-    rend_ = SDL_CreateRenderer(window_, render_index, render_flags);
+    rend_.reset(SDL_CreateRenderer(window_.get(), render_index, render_flags));
+    CHECK_ALLOC(rend_.get());
   }
 
-  ~ScreenDisplayImpl() {
-    SDL_DestroyWindow(window_);
-    SDL_DestroyRenderer(rend_);
+  ~GUIImpl() {
+    rend_.reset();
+    window_.reset();
     SDL_Quit();
   }
 
@@ -73,22 +74,24 @@ struct ScreenDisplay::ScreenDisplayImpl {
         int r = (int)data[i][j][0];
         int g = (int)data[i][j][0];
         int b = (int)data[i][j][0];
-        SDL_SetRenderDrawColor(rend_, data[i][j][0], data[i][j][1],
+        SDL_SetRenderDrawColor(rend_.get(), data[i][j][0], data[i][j][1],
                                data[i][j][2], 255);
-        SDL_RenderFillRect(rend_, &cell);
+        SDL_RenderFillRect(rend_.get(), &cell);
       }
     }
-    SDL_RenderPresent(rend_);
+    SDL_RenderPresent(rend_.get());
   }
 };
 
-ScreenDisplay::ScreenDisplay() { display_impl_ = new ScreenDisplayImpl(); }
-void ScreenDisplay::init(int window_width, int window_height) {
-  display_impl_->init(window_width, window_height);
+GUI::GUI() : gui_impl_{std::make_unique<GUIImpl>()} {}
+void GUI::init(int window_width, int window_height) {
+  gui_impl_->init(window_width, window_height);
 }
 
-void ScreenDisplay::update(uint8_t data[160][144][3], int scale) {
-  display_impl_->update(data, scale);
+GUI::~GUI() = default;
+
+void GUI::update(uint8_t data[160][144][3], int scale) {
+  gui_impl_->update(data, scale);
 }
 
 }  // namespace GB

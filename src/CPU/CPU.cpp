@@ -3,8 +3,8 @@
 #include <iomanip>
 #include <iostream>
 
+#include "GB/GUI.hpp"
 #include "GB/MMU.hpp"
-#include "GB/ScreenDisplay.hpp"
 
 namespace GB {
 
@@ -32,8 +32,8 @@ void CPU::loadROM(const char *rom_path) { mmu.loadROM(rom_path); }
 
 void CPU::update() {
   int interrupt_cycles = 0;
-  ScreenDisplay display = ScreenDisplay();
-  display.init(160, 144);
+  GUI gui = GUI();
+  gui.init(160, 144);
 
   int total_cycles{0};
   while (true) {
@@ -51,11 +51,9 @@ void CPU::update() {
     updateTimers(clock_cycles + interrupt_cycles);
     checkInterrupts();
 
-    std::cout << total_cycles << "\n";
-
     if (total_cycles > 69905) {
       total_cycles = 0;
-      display.update(ppu.display_buffer, 1);
+      gui.update(ppu.display_buffer, 1);
     }
   }
 }
