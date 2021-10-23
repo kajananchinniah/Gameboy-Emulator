@@ -12,6 +12,7 @@ struct Colour {
   uint8_t green;
   uint8_t blue;
   int32_t colour;
+  enum ColourCode { WHITE, LIGHT_GRAY, DARK_GRAY, BLACK };
   Colour() : red{0}, green{0}, blue{0}, colour{0} {}
   Colour(uint8_t r, uint8_t g, uint8_t b, int32_t c)
       : red{r}, green{g}, blue{b}, colour{c} {}
@@ -37,6 +38,9 @@ class PPU {
   static const unsigned int end_of_scanline_cycles{456};
   static const unsigned int max_scanline{153};
   unsigned int ppu_clock_cycles{0};
+  const unsigned int kRedDisplayBufferIndex{0};
+  const unsigned int kGreenDisplayBufferIndex{1};
+  const unsigned int kBlueDisplayBufferIndex{2};
 
   MMU *mmu;
 
