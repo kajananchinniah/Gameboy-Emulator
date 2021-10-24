@@ -41,8 +41,8 @@ void PPU::updatePPU(int clock_cycles) {
     return;
   }
 
-  ppu_clock_cycles += clock_cycles;
   updatePPULCD();
+  ppu_clock_cycles += clock_cycles;
   if (ppu_clock_cycles >= end_of_scanline_cycles) {
     prepareForNextScanLine();
   }
@@ -70,7 +70,10 @@ void PPU::updatePPULCD() {
       doVBlankMode();
       break;
   }
-  updateCoincidenceFlag();
+
+  if (ppu_clock_cycles >= 456) {
+    updateCoincidenceFlag();
+  }
 }
 
 void PPU::doOAMScanMode() {
@@ -102,7 +105,13 @@ void PPU::doHBlankMode() {
   }
 }
 
-void PPU::doVBlankMode() { return; }
+void PPU::doVBlankMode() {
+  if (mmu->getCurrentScanLine() > max_scanline) {
+    if (mmu->isMode1STATInterruptEnabled()) {
+      mmu->setLCDStatInterruptRequest();
+    }
+  }
+}
 
 void PPU::updateCoincidenceFlag() {
   if (mmu->isLYCEqualLY()) {
@@ -119,10 +128,8 @@ void PPU::prepareForNextScanLine() {
   mmu->incrementCurrentScanLine();
   ppu_clock_cycles = 0;
   if (mmu->getCurrentScanLine() == lcd_viewport_height) {
-    mmu->setPPUMode(PPUModes::V_BLANK);
     mmu->setVBlankInterruptRequest();
   } else if (mmu->getCurrentScanLine() > max_scanline) {
-    mmu->setPPUMode(PPUModes::OAM_SCAN);
     mmu->setCurrentScanLine(0);
   } else if (mmu->getCurrentScanLine() < lcd_viewport_height) {
     renderScanLine();
