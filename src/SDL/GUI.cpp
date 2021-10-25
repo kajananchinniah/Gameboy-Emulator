@@ -71,15 +71,20 @@ struct GUI::GUIImpl {
         cell.y = j * scale;
         cell.w = scale;
         cell.h = scale;
-        int r = (int)data[i][j][0];
-        int g = (int)data[i][j][0];
-        int b = (int)data[i][j][0];
         SDL_SetRenderDrawColor(rend_.get(), data[i][j][0], data[i][j][1],
                                data[i][j][2], 255);
         SDL_RenderFillRect(rend_.get(), &cell);
       }
     }
     SDL_RenderPresent(rend_.get());
+
+    // TODO: delete this once debugging done
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) {
+      if (event.type == SDL_QUIT) {
+        throw std::runtime_error("Done");
+      }
+    }
   }
 };
 
