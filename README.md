@@ -59,9 +59,8 @@ To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a
 - Codeslinger: http://www.codeslinger.co.uk/pages/projects/gameboy/beginning.html
   - High level tutorial for writing a gameboy emulator that I used when I was stuck and wanted another perspective on
     details of things
-  - My PPU implementation probably will also heavily inspired by this resource (since the technique used here is how to
-    avoid pixel fifo, however my implementation will diverge when pandocs / gameboy emulator development guide suggests
-    to do so)
+  - I used the blog for knowing how to render at the end of a scanline (since this isn't accurate to how a gameboy
+    actually renders)
 - Random NES website: http://archive.nes.science/nesdev-forums/f20/t15944.xhtmlhttp://archive.nes.science/nesdev-forums/f20/t15944.xhtml
   - Contains an explanation of DAA + implementation of DAA instruction that I copied for my DAA instruction
 - Eric's blog: https://ehaskins.com/2018-01-30%20Z80%20DAA/
