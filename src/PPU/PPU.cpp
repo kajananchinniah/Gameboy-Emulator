@@ -11,10 +11,10 @@ const std::unordered_map<int32_t, GB::Colour> colour_palette = {
      GB::Colour{0xFF, 0xFF, 0xFF, GB::Colour::ColourCode::WHITE}},
 
     {GB::Colour::ColourCode::LIGHT_GRAY,
-     GB::Colour{0xCC, 0xCC, 0xCC, GB::Colour::ColourCode::LIGHT_GRAY}},
+     GB::Colour{0xAA, 0xAA, 0xAA, GB::Colour::ColourCode::LIGHT_GRAY}},
 
     {GB::Colour::ColourCode::DARK_GRAY,
-     GB::Colour{0x77, 0x77, 0x77, GB::Colour::ColourCode::DARK_GRAY}},
+     GB::Colour{0x55, 0x55, 0x55, GB::Colour::ColourCode::DARK_GRAY}},
 
     {GB::Colour::ColourCode::BLACK,
      GB::Colour{0x00, 0x00, 0x00, GB::Colour::ColourCode::BLACK}}};
