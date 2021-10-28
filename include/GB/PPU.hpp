@@ -42,6 +42,7 @@ class PPU {
   const unsigned int kRedDisplayBufferIndex{0};
   const unsigned int kGreenDisplayBufferIndex{1};
   const unsigned int kBlueDisplayBufferIndex{2};
+  bool requested_coincidence_interrupt{false};
 
   MMU *mmu;
   static const uint16_t BGP_addr{0xFF47};

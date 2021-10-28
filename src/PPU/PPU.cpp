@@ -51,7 +51,8 @@ void PPU::updatePPU(int clock_cycles) {
 void PPU::resetPPU() {
   ppu_clock_cycles = 0;
   mmu->setCurrentScanLine(0);
-  mmu->setPPUMode(PPUModes::V_BLANK);
+  mmu->setPPUMode(PPUModes::H_BLANK);
+  requested_coincidence_interrupt = false;
 }
 
 void PPU::updatePPULCD() {
@@ -70,14 +71,11 @@ void PPU::updatePPULCD() {
       doVBlankMode();
       break;
   }
-
-  if (ppu_clock_cycles >= 456) {
-    updateCoincidenceFlag();
-  }
+  updateCoincidenceFlag();
 }
 
 void PPU::doOAMScanMode() {
-  if (ppu_clock_cycles < 80) {
+  if (ppu_clock_cycles >= 80) {
     mmu->setPPUMode(PPUModes::DRAWING);
     if (mmu->isMode2STATInterruptEnabled()) {
       mmu->setLCDStatInterruptRequest();
@@ -86,7 +84,7 @@ void PPU::doOAMScanMode() {
 }
 
 void PPU::doDrawingMode() {
-  if (ppu_clock_cycles < 252) {
+  if (ppu_clock_cycles >= 252) {
     mmu->setPPUMode(PPUModes::H_BLANK);
   }
 }
@@ -99,7 +97,7 @@ void PPU::doHBlankMode() {
 
     if (mmu->getCurrentScanLine() < lcd_viewport_height) {
       mmu->setPPUMode(PPUModes::OAM_SCAN);
-    } else {
+    } else if (mmu->getCurrentScanLine() == lcd_viewport_height) {
       mmu->setPPUMode(PPUModes::V_BLANK);
     }
   }
@@ -107,6 +105,7 @@ void PPU::doHBlankMode() {
 
 void PPU::doVBlankMode() {
   if (mmu->getCurrentScanLine() > max_scanline) {
+    mmu->setPPUMode(PPUModes::OAM_SCAN);
     if (mmu->isMode1STATInterruptEnabled()) {
       mmu->setLCDStatInterruptRequest();
     }
@@ -116,17 +115,19 @@ void PPU::doVBlankMode() {
 void PPU::updateCoincidenceFlag() {
   if (mmu->isLYCEqualLY()) {
     mmu->setCoincidenceFlag();
-    if (mmu->isLYCEqualLYSTATInterruptEnabled()) {
+    if (mmu->isLYCEqualLYSTATInterruptEnabled() &&
+        !requested_coincidence_interrupt) {
       mmu->setLCDStatInterruptRequest();
+      requested_coincidence_interrupt = true;
     }
-  } else {
-    mmu->resetCoincidenceFlag();
   }
 }
 
 void PPU::prepareForNextScanLine() {
   mmu->incrementCurrentScanLine();
-  ppu_clock_cycles = 0;
+  ppu_clock_cycles = ppu_clock_cycles - 456;
+  requested_coincidence_interrupt = false;
+  mmu->resetCoincidenceFlag();
   if (mmu->getCurrentScanLine() == lcd_viewport_height) {
     mmu->setVBlankInterruptRequest();
   } else if (mmu->getCurrentScanLine() > max_scanline) {
