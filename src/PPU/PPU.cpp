@@ -75,7 +75,7 @@ void PPU::updatePPULCD() {
 }
 
 void PPU::doOAMScanMode() {
-  if (ppu_clock_cycles >= 80) {
+  if (ppu_clock_cycles >= mode_2_cycles) {
     mmu->setPPUMode(PPUModes::DRAWING);
     if (mmu->isMode2STATInterruptEnabled()) {
       mmu->setLCDStatInterruptRequest();
@@ -84,7 +84,7 @@ void PPU::doOAMScanMode() {
 }
 
 void PPU::doDrawingMode() {
-  if (ppu_clock_cycles >= 252) {
+  if (ppu_clock_cycles >= mode_3_cycles) {
     mmu->setPPUMode(PPUModes::H_BLANK);
   }
 }

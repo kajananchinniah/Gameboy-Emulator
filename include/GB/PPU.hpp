@@ -39,9 +39,11 @@ class PPU {
   static const unsigned int end_of_scanline_cycles{456};
   static const unsigned int max_scanline{153};
   unsigned int ppu_clock_cycles{0};
-  const unsigned int kRedDisplayBufferIndex{0};
-  const unsigned int kGreenDisplayBufferIndex{1};
-  const unsigned int kBlueDisplayBufferIndex{2};
+  static const unsigned int kRedDisplayBufferIndex{0};
+  static const unsigned int kGreenDisplayBufferIndex{1};
+  static const unsigned int kBlueDisplayBufferIndex{2};
+  static const unsigned int mode_2_cycles{80};
+  static const unsigned int mode_3_cycles{252};
   bool requested_coincidence_interrupt{false};
 
   MMU *mmu;
