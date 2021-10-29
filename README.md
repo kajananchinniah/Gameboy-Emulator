@@ -60,7 +60,7 @@ To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a
   - High level tutorial for writing a gameboy emulator that I used when I was stuck and wanted another perspective on
     details of things
   - I used the blog for knowing how to render at the end of a scanline (since this isn't accurate to how a gameboy
-    actually renders). **Note**: the rendering algorithms themselves a lot of inaccuracies. 
+    actually renders). **Note**: the rendering algorithms themselves a lot of inaccuracies.
 - Random NES website: http://archive.nes.science/nesdev-forums/f20/t15944.xhtmlhttp://archive.nes.science/nesdev-forums/f20/t15944.xhtml
   - Contains an explanation of DAA + implementation of DAA instruction that I copied for my DAA instruction
 - Eric's blog: https://ehaskins.com/2018-01-30%20Z80%20DAA/
@@ -73,3 +73,5 @@ To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a
   - This inspired me to do all my rendering at the end of a scanline, rather than doing pixel fifo. I found the pixel
     fifo algorithm to be relatively complicated (and given how busy I've been, I didn't have enough time to understand
     the algorithm details, although I have a high level understanding, so I may revisit it later)
+- Reddit post asking about PPU reset: https://www.reddit.com/r/Gameboy/comments/a1c8h0/what_happens_when_a_gameboy_screen_is_disabled/
+  - Helped fix a bug where games would freeze at tile screen if LCD was disabled
