@@ -139,10 +139,11 @@ void PPU::prepareForNextScanLine() {
 
 void PPU::renderScanLine() {
   if (mmu->isBGAndWindowEnabled()) {
-    renderTiles();
+    renderBackground();
   }
 
   if (mmu->isSpritesEnabled()) {
+    return;
     renderSprites();
   }
 }

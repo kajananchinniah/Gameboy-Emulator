@@ -63,6 +63,16 @@ class PPU {
   void prepareForNextScanLine();
   void renderScanLine();
   void renderTiles();
+
+  // Background
+  void renderBackground();
+  uint16_t getBackgroundTileNumberYOffset();
+  uint16_t getBackgroundTileNumberXOffset(uint8_t pixel);
+  uint16_t getBackgroundMemoryAddress();
+  uint16_t getBackgroundTileDataYOffset();
+  uint16_t getBackgroundTileDataXOffset(uint8_t pixel);
+  uint8_t getBackgroundColourPosition(uint16_t data);
+
   uint8_t getBGAndWindowYPosition();
   uint16_t getBGAndWindowTileRow(uint8_t y_position);
   uint8_t getBGAndWindowXPosition(uint8_t pixel);
@@ -73,7 +83,6 @@ class PPU {
 
   bool shouldUseWindow();
   bool shouldUse8000Mode();
-  uint16_t getBackgroundMemoryAddress();
   void renderSprites();
   uint8_t getYPositionFromOAM(uint32_t entry);
   uint8_t getXPositionFromOAM(uint32_t entry);

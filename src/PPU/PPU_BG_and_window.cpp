@@ -99,6 +99,7 @@ bool PPU::shouldUse8000Mode() {
   }
 }
 
+/*
 uint16_t PPU::getBackgroundMemoryAddress() {
   // See: PPU Registers (https://hacktixme.ga/GBEDG/ppu/)
   if (shouldUseWindow()) {
@@ -115,5 +116,5 @@ uint16_t PPU::getBackgroundMemoryAddress() {
     }
   }
 }
-
+*/
 }  // namespace GB
