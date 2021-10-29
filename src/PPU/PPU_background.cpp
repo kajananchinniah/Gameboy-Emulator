@@ -17,11 +17,11 @@ void PPU::renderBackground() {
       tile_address = mmu->getPPU8800MethodAddress(tile_number);
     }
 
-    uint16_t tile_data_offset_y = getBackgroundTileDataYOffset();
-    uint8_t byte1 = mmu->read(tile_address + tile_data_offset_y);
-    uint8_t byte2 = mmu->read(tile_address + tile_data_offset_y + 1);
-    uint16_t tile_data_offset_x = getBackgroundTileDataXOffset(pixel);
-    uint8_t colour_position = getBackgroundColourPosition(tile_data_offset_x);
+    uint16_t tile_data_y_offset = getBackgroundTileDataYOffset();
+    uint8_t byte1 = mmu->read(tile_address + tile_data_y_offset);
+    uint8_t byte2 = mmu->read(tile_address + tile_data_y_offset + 1);
+    uint16_t tile_data_x_offset = getBackgroundTileDataXOffset(pixel);
+    uint8_t colour_position = getBackgroundColourPosition(tile_data_x_offset);
     uint8_t colour_id = get2BPPPixel(byte1, byte2, colour_position);
     Colour colour = decodeColour(colour_id, BGP_addr);
 
