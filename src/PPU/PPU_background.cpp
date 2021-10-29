@@ -3,12 +3,13 @@
 namespace GB {
 
 void PPU::renderBackground() {
-  uint16_t background_tile_y_offset = getBackgroundTileNumberYOffset();
+  uint16_t background_tile_number_y_offset = getBackgroundTileNumberYOffset();
   for (uint8_t pixel = 0; pixel < lcd_viewport_width; ++pixel) {
-    uint16_t background_tile_x_offset = getBackgroundTileNumberXOffset(pixel);
-    uint8_t tile_number =
-        mmu->read(getBackgroundMemoryAddress() + background_tile_x_offset +
-                  background_tile_y_offset);
+    uint16_t background_tile_number_x_offset =
+        getBackgroundTileNumberXOffset(pixel);
+    uint8_t tile_number = mmu->read(getBackgroundMemoryAddress() +
+                                    background_tile_number_x_offset +
+                                    background_tile_number_y_offset);
     uint16_t tile_address;
     if (shouldUse8000Mode()) {
       tile_address = mmu->getPPU8000MethodAddress(tile_number);
