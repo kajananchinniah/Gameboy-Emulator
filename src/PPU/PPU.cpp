@@ -129,6 +129,7 @@ void PPU::prepareForNextScanLine() {
   requested_coincidence_interrupt = false;
   mmu->resetCoincidenceFlag();
   if (mmu->getCurrentScanLine() == lcd_viewport_height) {
+    internal_window_counter = 0;
     mmu->setVBlankInterruptRequest();
   } else if (mmu->getCurrentScanLine() > max_scanline) {
     mmu->setCurrentScanLine(0);
@@ -140,6 +141,7 @@ void PPU::prepareForNextScanLine() {
 void PPU::renderScanLine() {
   if (mmu->isBGAndWindowEnabled()) {
     renderBackground();
+    renderWindow();
   }
 
   if (mmu->isSpritesEnabled()) {

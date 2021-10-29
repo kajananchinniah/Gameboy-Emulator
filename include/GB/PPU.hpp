@@ -44,6 +44,7 @@ class PPU {
   static const unsigned int kBlueDisplayBufferIndex{2};
   static const unsigned int mode_2_cycles{80};
   static const unsigned int mode_3_cycles{252};
+  uint16_t internal_window_counter{0};
   bool requested_coincidence_interrupt{false};
 
   MMU *mmu;
@@ -72,6 +73,16 @@ class PPU {
   uint16_t getBackgroundTileDataYOffset();
   uint16_t getBackgroundTileDataXOffset(uint8_t pixel);
   uint8_t getBackgroundColourPosition(uint16_t data);
+
+  // Window
+  void renderWindow();
+  bool shouldRenderWindow();
+  uint16_t getWindowTileNumberYOffset();
+  uint16_t getWindowTileNumberXOffset(uint8_t pixel);
+  uint16_t getWindowMemoryAddress();
+  uint16_t getWindowTileDataYOffset();
+  uint16_t getWindowTileDataXOffset(uint8_t pixel);
+  uint8_t getWindowColourPosition(uint16_t data);
 
   uint8_t getBGAndWindowYPosition();
   uint16_t getBGAndWindowTileRow(uint8_t y_position);
