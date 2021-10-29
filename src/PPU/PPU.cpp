@@ -176,6 +176,14 @@ uint8_t PPU::get2BPPPixel(uint8_t byte1, uint8_t byte2, int position) {
   return (high << 1) | low;
 }
 
+bool PPU::shouldUse8000Mode() {
+  if (mmu->isTileDataSelectSet()) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
 uint16_t PPU::get2BPPPixelRow(uint8_t byte1, uint8_t byte2) {
   uint16_t rval = 0x0000;
   for (int i = 0; i < 8; ++i) {
