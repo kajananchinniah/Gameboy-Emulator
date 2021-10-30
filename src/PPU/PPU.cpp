@@ -145,7 +145,6 @@ void PPU::renderScanLine() {
   }
 
   if (mmu->isSpritesEnabled()) {
-    return;
     renderSprites();
   }
 }

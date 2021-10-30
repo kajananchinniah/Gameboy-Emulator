@@ -33,7 +33,7 @@ void PPU::renderBackground() {
     display_buffer[pixel][scanline][kRedDisplayBufferIndex] = colour.red;
     display_buffer[pixel][scanline][kGreenDisplayBufferIndex] = colour.green;
     display_buffer[pixel][scanline][kBlueDisplayBufferIndex] = colour.blue;
-    display_buffer_colour[pixel][scanline] = colour;
+    display_buffer_colour_id[pixel][scanline] = colour_id;
   }
 }
 

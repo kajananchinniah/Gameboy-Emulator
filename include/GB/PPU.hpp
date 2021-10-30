@@ -1,7 +1,7 @@
 #ifndef INCLUDE_GB_PPU_HPP_
 #define INCLUDE_GB_PPU_HPP_
 
-#include <optional>
+#include <vector>
 
 #include "MMU.hpp"
 
@@ -29,7 +29,7 @@ class PPU {
   static const unsigned int lcd_viewport_width{160};
   static const unsigned int lcd_viewport_height{144};
   uint8_t display_buffer[lcd_viewport_width][lcd_viewport_height][3];
-  Colour display_buffer_colour[lcd_viewport_width][lcd_viewport_height];
+  uint8_t display_buffer_colour_id[lcd_viewport_width][lcd_viewport_height];
 
  private:
   static const unsigned int background_width{256};
@@ -84,34 +84,41 @@ class PPU {
   uint16_t getWindowTileDataXOffset(uint8_t pixel);
   uint8_t getWindowColourPosition(uint16_t data);
 
-  uint8_t getBGAndWindowYPosition();
-  uint16_t getBGAndWindowTileRow(uint8_t y_position);
-  uint8_t getBGAndWindowXPosition(uint8_t pixel);
-  uint16_t getBGAndWindowTileColumn(uint8_t x_position);
-  uint8_t getCurrentVerticalBGAndVerticalLine(uint8_t y_position);
-  uint8_t getBGAndWindowColourPosition(uint8_t x_position);
-  Colour decodeColour(uint8_t colour_id, uint16_t memory_addr);
-
-  bool shouldUseWindow();
-  bool shouldUse8000Mode();
+  // Sprite
+  struct SpriteOAMEntry {
+    uint8_t y;
+    uint8_t x;
+    uint8_t tile_number;
+    uint8_t sprite_flags;
+    uint16_t entry_address;
+  };
+  std::vector<SpriteOAMEntry> sprite_buffer;
   void renderSprites();
+  uint16_t getOAMSpriteAddress(uint16_t offset);
   uint8_t getYPositionFromOAM(uint32_t entry);
   uint8_t getXPositionFromOAM(uint32_t entry);
   uint8_t getTileNumberFromOAM(uint32_t entry);
   uint8_t getSpriteFlagsFromOAM(uint32_t entry);
   bool isValidSpriteOAMEntry(uint8_t y, uint8_t x);
-  void addSpriteToDisplayBuffer(uint8_t y, uint8_t x, uint8_t tile_num,
-                                uint8_t sprite_flags);
-  uint8_t getSpriteVerticalLine(uint8_t y_position, uint8_t sprite_flags);
-  uint16_t getSpriteDataAddress(uint8_t tile_number, uint8_t line);
+  void sortSpriteBufferByPriority();
+  static bool compareOAMEntry(const SpriteOAMEntry &left_entry,
+                              const SpriteOAMEntry &right_entry);
+  void addSpriteToDisplayBuffer(SpriteOAMEntry entry);
+  uint8_t getSpriteTileDataYOffset(uint8_t y_position, uint8_t sprite_flags);
+  uint16_t getSpriteTileDataAddress(uint8_t tile_number);
   uint8_t getSpriteColourPosition(int8_t tile_pixel, uint8_t sprite_flags);
   uint16_t getSpriteColourAddress(uint8_t sprite_flags);
-  int getSpritePixelLocation(uint8_t x_position, int8_t tile_pixel);
+  uint8_t getSpritePixelLocation(uint8_t x_position, int8_t tile_pixel);
+  bool shouldDrawPixel(uint8_t sprite_flags, uint8_t colour_id, uint8_t pixel,
+                       uint8_t scanline);
   bool shouldUsePalette1(uint8_t sprite_flags);
   bool shouldSpriteXFlip(uint8_t sprite_flags);
   bool shouldSpriteYFlip(uint8_t sprite_flags);
   bool isBackgroundPrioritized(uint8_t sprite_flags);
 
+  bool shouldUseWindow();
+  bool shouldUse8000Mode();
+  Colour decodeColour(uint8_t colour_id, uint16_t memory_addr);
   uint8_t getWindowHorizontalPosition();
   uint8_t getWindowVerticalPosition();
   uint8_t get2BPPPixel(uint8_t byte1, uint8_t byte2, int position);
