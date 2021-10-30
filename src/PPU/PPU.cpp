@@ -1,12 +1,39 @@
 #include "GB/PPU.hpp"
 
+#include <stdexcept>
 #include <unordered_map>
 
 namespace {
 
 enum PPUModes { OAM_SCAN = 2, DRAWING = 3, H_BLANK = 0, V_BLANK = 1 };
 
-const std::unordered_map<int32_t, GB::Colour> colour_palette = {
+const std::unordered_map<int32_t, GB::Colour> g_BGP_colour_palette = {
+    {GB::Colour::ColourCode::WHITE,
+     GB::Colour{0xFF, 0xFF, 0xFF, GB::Colour::ColourCode::WHITE}},
+
+    {GB::Colour::ColourCode::LIGHT_GRAY,
+     GB::Colour{0xAA, 0xAA, 0xAA, GB::Colour::ColourCode::LIGHT_GRAY}},
+
+    {GB::Colour::ColourCode::DARK_GRAY,
+     GB::Colour{0x55, 0x55, 0x55, GB::Colour::ColourCode::DARK_GRAY}},
+
+    {GB::Colour::ColourCode::BLACK,
+     GB::Colour{0x00, 0x00, 0x00, GB::Colour::ColourCode::BLACK}}};
+
+const std::unordered_map<int32_t, GB::Colour> g_OBP0_colour_palette = {
+    {GB::Colour::ColourCode::WHITE,
+     GB::Colour{0xFF, 0xFF, 0xFF, GB::Colour::ColourCode::WHITE}},
+
+    {GB::Colour::ColourCode::LIGHT_GRAY,
+     GB::Colour{0xAA, 0xAA, 0xAA, GB::Colour::ColourCode::LIGHT_GRAY}},
+
+    {GB::Colour::ColourCode::DARK_GRAY,
+     GB::Colour{0x55, 0x55, 0x55, GB::Colour::ColourCode::DARK_GRAY}},
+
+    {GB::Colour::ColourCode::BLACK,
+     GB::Colour{0x00, 0x00, 0x00, GB::Colour::ColourCode::BLACK}}};
+
+const std::unordered_map<int32_t, GB::Colour> g_OBP1_colour_palette = {
     {GB::Colour::ColourCode::WHITE,
      GB::Colour{0xFF, 0xFF, 0xFF, GB::Colour::ColourCode::WHITE}},
 
@@ -166,7 +193,20 @@ Colour PPU::decodeColour(uint8_t colour_id, uint16_t palette_addr) {
       decoded_colour = getBit(7, palette) << 1 | getBit(6, palette);
       break;
   }
-  return colour_palette.at(decoded_colour);
+  return getRGBColour(decoded_colour, palette_addr);
+}
+
+Colour PPU::getRGBColour(int decoded_colour, uint16_t palette_addr) {
+  switch (palette_addr) {
+    case BGP_addr:
+      return g_BGP_colour_palette.at(decoded_colour);
+    case OBP0_addr:
+      return g_OBP0_colour_palette.at(decoded_colour);
+    case OBP1_addr:
+      return g_OBP1_colour_palette.at(decoded_colour);
+    default:
+      throw std::runtime_error("Received invalid palette address!");
+  }
 }
 
 uint8_t PPU::get2BPPPixel(uint8_t byte1, uint8_t byte2, int position) {

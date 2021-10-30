@@ -118,7 +118,8 @@ class PPU {
 
   bool shouldUseWindow();
   bool shouldUse8000Mode();
-  Colour decodeColour(uint8_t colour_id, uint16_t memory_addr);
+  Colour decodeColour(uint8_t colour_id, uint16_t palette_addr);
+  Colour getRGBColour(int decoded_colour, uint16_t palette_addr);
   uint8_t getWindowHorizontalPosition();
   uint8_t getWindowVerticalPosition();
   uint8_t get2BPPPixel(uint8_t byte1, uint8_t byte2, int position);
