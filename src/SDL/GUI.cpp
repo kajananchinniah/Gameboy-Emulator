@@ -37,6 +37,8 @@ struct GUI::GUIImpl {
   std::unique_ptr<SDL_Renderer, decltype(&SDL_DestroyRenderer)> rend_;
   std::unique_ptr<SDL_Texture, decltype(&SDL_DestroyTexture)> texture_;
   std::string window_title_{"Gameboy Emulator"};
+  static constexpr uint32_t kGBWidth{160};
+  static constexpr uint32_t kGBHeight{144};
 
   GUIImpl()
       : window_{nullptr, SDL_DestroyWindow},
@@ -55,27 +57,24 @@ struct GUI::GUIImpl {
     int render_index = -1;
     rend_.reset(SDL_CreateRenderer(window_.get(), render_index, render_flags));
     CHECK_ALLOC(rend_.get());
+
+    texture_.reset(SDL_CreateTexture(rend_.get(), SDL_PIXELFORMAT_ARGB8888,
+                                     SDL_TEXTUREACCESS_STREAMING, kGBWidth,
+                                     kGBHeight));
+    CHECK_ALLOC(texture_.get());
+    SDL_SetWindowResizable(window_.get(), SDL_TRUE);
   }
 
   ~GUIImpl() {
     rend_.reset();
     window_.reset();
+    texture_.reset();
     SDL_Quit();
   }
 
-  void update(uint8_t data[160][144][3], int scale) {
-    SDL_Rect cell;
-    for (int i = 0; i < 160; ++i) {
-      for (int j = 0; j < 144; ++j) {
-        cell.x = i * scale;
-        cell.y = j * scale;
-        cell.w = scale;
-        cell.h = scale;
-        SDL_SetRenderDrawColor(rend_.get(), data[i][j][0], data[i][j][1],
-                               data[i][j][2], 255);
-        SDL_RenderFillRect(rend_.get(), &cell);
-      }
-    }
+  void update(uint8_t data[160 * 144 * 4], int pitch) {
+    SDL_UpdateTexture(texture_.get(), nullptr, data, 160 * sizeof(uint8_t) * 4);
+    SDL_RenderCopy(rend_.get(), texture_.get(), nullptr, nullptr);
     SDL_RenderPresent(rend_.get());
 
     // TODO: delete this once debugging done
@@ -95,8 +94,8 @@ void GUI::init(int window_width, int window_height) {
 
 GUI::~GUI() = default;
 
-void GUI::update(uint8_t data[160][144][3], int scale) {
-  gui_impl_->update(data, scale);
+void GUI::update(uint8_t data[160 * 144 * 4], int pitch) {
+  gui_impl_->update(data, pitch);
 }
 
 }  // namespace GB

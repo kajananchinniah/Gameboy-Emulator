@@ -28,7 +28,7 @@ class PPU {
 
   static const unsigned int lcd_viewport_width{160};
   static const unsigned int lcd_viewport_height{144};
-  uint8_t display_buffer[lcd_viewport_width][lcd_viewport_height][3];
+  uint8_t display_buffer[lcd_viewport_width * lcd_viewport_height * 4];
   uint8_t display_buffer_colour_id[lcd_viewport_width][lcd_viewport_height];
 
  private:
@@ -42,6 +42,7 @@ class PPU {
   static const unsigned int kRedDisplayBufferIndex{0};
   static const unsigned int kGreenDisplayBufferIndex{1};
   static const unsigned int kBlueDisplayBufferIndex{2};
+  static const unsigned int kAlphaDisplayBufferIndex{3};
   static const unsigned int mode_2_cycles{80};
   static const unsigned int mode_3_cycles{252};
   uint16_t internal_window_counter{0};

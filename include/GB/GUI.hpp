@@ -11,7 +11,7 @@ class GUI {
   GUI();
   ~GUI();
   void init(int window_width, int window_height);
-  void update(uint8_t data[160][144][3], int scale);
+  void update(uint8_t data[160 * 144 * 4], int scale);
 
  private:
   struct GUIImpl;
