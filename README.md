@@ -75,3 +75,5 @@ To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a
     the algorithm details, although I have a high level understanding, so I may revisit it later)
 - Reddit post asking about PPU reset: https://www.reddit.com/r/Gameboy/comments/a1c8h0/what_happens_when_a_gameboy_screen_is_disabled/
   - Helped fix a bug where games would freeze at tile screen if LCD was disabled
+- A bunch of SDL2 resources such as: http://slouken.blogspot.com/2011/02/streaming-textures-with-sdl-13.html,
+  https://stackoverflow.com/questions/20753726/rendering-pixels-from-array-of-rgb-values-in-sdl-1-2 and https://stackoverflow.com/questions/52031503/how-to-render-a-rectangle-sdl2-texture-from-a-buffer-of-hex-values
