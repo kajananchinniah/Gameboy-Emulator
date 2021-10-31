@@ -231,4 +231,12 @@ uint16_t PPU::get2BPPPixelRow(uint8_t byte1, uint8_t byte2) {
   return rval;
 }
 
+void PPU::draw(uint8_t pixel, uint8_t scanline, Colour colour,
+               uint8_t colour_id) {
+  display_buffer[pixel][scanline][kRedDisplayBufferIndex] = colour.red;
+  display_buffer[pixel][scanline][kGreenDisplayBufferIndex] = colour.green;
+  display_buffer[pixel][scanline][kBlueDisplayBufferIndex] = colour.blue;
+  display_buffer_colour_id[pixel][scanline] = colour_id;
+}
+
 }  // namespace GB

@@ -106,10 +106,7 @@ void PPU::addSpriteToDisplayBuffer(SpriteOAMEntry entry) {
     }
 
     if (shouldDrawPixel(entry.sprite_flags, colour_id, pixel, scanline)) {
-      display_buffer[pixel][scanline][kRedDisplayBufferIndex] = colour.red;
-      display_buffer[pixel][scanline][kGreenDisplayBufferIndex] = colour.green;
-      display_buffer[pixel][scanline][kBlueDisplayBufferIndex] = colour.blue;
-      display_buffer_colour_id[pixel][scanline] = colour_id;
+      draw(pixel, scanline, colour, colour_id);
     }
   }
 }

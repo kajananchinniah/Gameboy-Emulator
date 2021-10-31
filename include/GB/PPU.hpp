@@ -64,6 +64,7 @@ class PPU {
   void prepareForNextScanLine();
   void renderScanLine();
   void renderTiles();
+  void draw(uint8_t pixel, uint8_t scanline, Colour colour, uint8_t colour_id);
 
   // Background
   void renderBackground();
