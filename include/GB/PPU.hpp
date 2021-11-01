@@ -25,10 +25,13 @@ class PPU {
   void updatePPU(int clock_cycles);
   unsigned int getLCDViewportWidth() { return 160; }
   unsigned int getLCDViewportHeight() { return 144; }
+  int getDisplayBufferPitch();
 
   static const unsigned int lcd_viewport_width{160};
   static const unsigned int lcd_viewport_height{144};
-  uint8_t display_buffer[lcd_viewport_width * lcd_viewport_height * 4];
+  static const unsigned int num_display_buffer_channels{4};
+  uint8_t display_buffer[lcd_viewport_width * lcd_viewport_height *
+                         num_display_buffer_channels];
   uint8_t display_buffer_colour_id[lcd_viewport_width][lcd_viewport_height];
 
  private:

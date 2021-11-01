@@ -52,6 +52,10 @@ namespace GB {
 PPU::PPU(MMU *mmu) { this->mmu = mmu; }
 PPU::~PPU() {}
 
+int PPU::getDisplayBufferPitch() {
+  return lcd_viewport_width * sizeof(uint8_t) * num_display_buffer_channels;
+}
+
 uint8_t PPU::getWindowHorizontalPosition() {
   uint8_t WX = mmu->getWindowXRegister();
   return WX - 0x7;
@@ -233,8 +237,10 @@ uint16_t PPU::get2BPPPixelRow(uint8_t byte1, uint8_t byte2) {
 
 void PPU::draw(uint8_t pixel, uint8_t scanline, Colour colour,
                uint8_t colour_id) {
-  size_t effective_idx = scanline * 160 * 4 + pixel * 4;
-  display_buffer[effective_idx + kAlphaDisplayBufferIndex] = 0x00;
+  size_t effective_idx =
+      scanline * lcd_viewport_width * num_display_buffer_channels +
+      pixel * num_display_buffer_channels;
+  display_buffer[effective_idx + kAlphaDisplayBufferIndex] = 0xFF;
   display_buffer[effective_idx + kRedDisplayBufferIndex] = colour.red;
   display_buffer[effective_idx + kGreenDisplayBufferIndex] = colour.green;
   display_buffer[effective_idx + kBlueDisplayBufferIndex] = colour.blue;

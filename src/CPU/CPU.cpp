@@ -53,7 +53,7 @@ void CPU::update() {
 
     if (total_cycles > 69905) {
       total_cycles = 0;
-      gui.update(ppu.display_buffer, 1);
+      gui.update(ppu.display_buffer, ppu.getDisplayBufferPitch());
     }
   }
 }

@@ -73,7 +73,7 @@ struct GUI::GUIImpl {
   }
 
   void update(uint8_t data[160 * 144 * 4], int pitch) {
-    SDL_UpdateTexture(texture_.get(), nullptr, data, 160 * sizeof(uint8_t) * 4);
+    SDL_UpdateTexture(texture_.get(), nullptr, data, pitch);
     SDL_RenderCopy(rend_.get(), texture_.get(), nullptr, nullptr);
     SDL_RenderPresent(rend_.get());
 
