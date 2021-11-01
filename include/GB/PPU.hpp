@@ -129,6 +129,7 @@ class PPU {
   uint8_t getWindowVerticalPosition();
   uint8_t get2BPPPixel(uint8_t byte1, uint8_t byte2, int position);
   uint16_t get2BPPPixelRow(uint8_t byte1, uint8_t byte2);
+  size_t getFlattenedIndex(uint8_t pixel, uint8_t scanline);
 
   uint8_t getBit(uint8_t n, uint8_t value) { return ((value >> n) & 0x01); }
   bool checkBit(uint8_t n, uint8_t value) {

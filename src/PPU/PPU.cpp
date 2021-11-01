@@ -235,11 +235,14 @@ uint16_t PPU::get2BPPPixelRow(uint8_t byte1, uint8_t byte2) {
   return rval;
 }
 
+size_t PPU::getFlattenedIndex(uint8_t pixel, uint8_t scanline) {
+  return scanline * lcd_viewport_width * num_display_buffer_channels +
+         pixel * num_display_buffer_channels;
+}
+
 void PPU::draw(uint8_t pixel, uint8_t scanline, Colour colour,
                uint8_t colour_id) {
-  size_t effective_idx =
-      scanline * lcd_viewport_width * num_display_buffer_channels +
-      pixel * num_display_buffer_channels;
+  size_t effective_idx = getFlattenedIndex(pixel, scanline);
   display_buffer[effective_idx + kAlphaDisplayBufferIndex] = 0xFF;
   display_buffer[effective_idx + kRedDisplayBufferIndex] = colour.red;
   display_buffer[effective_idx + kGreenDisplayBufferIndex] = colour.green;
