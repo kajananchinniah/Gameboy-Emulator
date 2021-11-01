@@ -32,7 +32,7 @@ void CPU::loadROM(const char *rom_path) { mmu.loadROM(rom_path); }
 
 void CPU::update() {
   int interrupt_cycles = 0;
-  GUI gui = GUI();
+  GUI gui;
   gui.init(160, 144);
 
   int total_cycles{0};
