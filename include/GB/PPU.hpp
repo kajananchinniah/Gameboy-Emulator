@@ -23,16 +23,16 @@ class PPU {
   explicit PPU(MMU *mmu);
   ~PPU();
   void updatePPU(int clock_cycles);
-  unsigned int getLCDViewportWidth() { return 160; }
-  unsigned int getLCDViewportHeight() { return 144; }
+  unsigned int getLCDViewportWidth();
+  unsigned int getLCDViewportHeight();
   std::vector<uint8_t> getDisplayBuffer();
   int getDisplayBufferPitch();
 
+ private:
   static const unsigned int lcd_viewport_width{160};
   static const unsigned int lcd_viewport_height{144};
   static const unsigned int num_display_buffer_channels{4};
 
- private:
   std::vector<uint8_t> display_buffer;
   uint8_t display_buffer_colour_id[lcd_viewport_width][lcd_viewport_height];
 

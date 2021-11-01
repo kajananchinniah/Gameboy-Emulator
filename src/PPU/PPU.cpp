@@ -62,6 +62,9 @@ int PPU::getDisplayBufferPitch() {
   return lcd_viewport_width * sizeof(uint8_t) * num_display_buffer_channels;
 }
 
+unsigned int PPU::getLCDViewportWidth() { return lcd_viewport_width; }
+unsigned int PPU::getLCDViewportHeight() { return lcd_viewport_height; }
+
 uint8_t PPU::getWindowHorizontalPosition() {
   uint8_t WX = mmu->getWindowXRegister();
   return WX - 0x7;
