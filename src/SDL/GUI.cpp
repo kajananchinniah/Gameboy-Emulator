@@ -3,6 +3,7 @@
 #include <memory>
 #include <stdexcept>
 #include <string>
+#include <vector>
 
 #include "SDL2/SDL.h"
 
@@ -72,8 +73,8 @@ struct GUI::GUIImpl {
     SDL_Quit();
   }
 
-  void update(uint8_t data[160 * 144 * 4], int pitch) {
-    SDL_UpdateTexture(texture_.get(), nullptr, data, pitch);
+  void update(std::vector<uint8_t> data, int pitch) {
+    SDL_UpdateTexture(texture_.get(), nullptr, data.data(), pitch);
     SDL_RenderCopy(rend_.get(), texture_.get(), nullptr, nullptr);
     SDL_RenderPresent(rend_.get());
 
@@ -94,7 +95,7 @@ void GUI::init(int window_width, int window_height) {
 
 GUI::~GUI() = default;
 
-void GUI::update(uint8_t data[160 * 144 * 4], int pitch) {
+void GUI::update(std::vector<uint8_t> data, int pitch) {
   gui_impl_->update(data, pitch);
 }
 

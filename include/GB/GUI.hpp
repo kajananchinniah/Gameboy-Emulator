@@ -3,6 +3,7 @@
 
 #include <cstdint>
 #include <memory>
+#include <vector>
 
 namespace GB {
 
@@ -11,7 +12,7 @@ class GUI {
   GUI();
   ~GUI();
   void init(int window_width, int window_height);
-  void update(uint8_t data[160 * 144 * 4], int scale);
+  void update(std::vector<uint8_t> data, int scale);
 
  private:
   struct GUIImpl;

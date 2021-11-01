@@ -30,8 +30,7 @@ class PPU {
   static const unsigned int lcd_viewport_width{160};
   static const unsigned int lcd_viewport_height{144};
   static const unsigned int num_display_buffer_channels{4};
-  uint8_t display_buffer[lcd_viewport_width * lcd_viewport_height *
-                         num_display_buffer_channels];
+  std::vector<uint8_t> display_buffer;
 
  private:
   uint8_t display_buffer_colour_id[lcd_viewport_width][lcd_viewport_height];

@@ -49,7 +49,11 @@ const std::unordered_map<int32_t, GB::Colour> g_OBP1_colour_palette = {
 }  // namespace
 
 namespace GB {
-PPU::PPU(MMU *mmu) { this->mmu = mmu; }
+PPU::PPU(MMU *mmu) {
+  this->mmu = mmu;
+  display_buffer.resize(lcd_viewport_width * lcd_viewport_height *
+                        num_display_buffer_channels);
+}
 PPU::~PPU() {}
 
 int PPU::getDisplayBufferPitch() {
