@@ -56,6 +56,8 @@ PPU::PPU(MMU *mmu) {
 }
 PPU::~PPU() {}
 
+std::vector<uint8_t> PPU::getDisplayBuffer() { return display_buffer; }
+
 int PPU::getDisplayBufferPitch() {
   return lcd_viewport_width * sizeof(uint8_t) * num_display_buffer_channels;
 }

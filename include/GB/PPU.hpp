@@ -25,14 +25,15 @@ class PPU {
   void updatePPU(int clock_cycles);
   unsigned int getLCDViewportWidth() { return 160; }
   unsigned int getLCDViewportHeight() { return 144; }
+  std::vector<uint8_t> getDisplayBuffer();
   int getDisplayBufferPitch();
 
   static const unsigned int lcd_viewport_width{160};
   static const unsigned int lcd_viewport_height{144};
   static const unsigned int num_display_buffer_channels{4};
-  std::vector<uint8_t> display_buffer;
 
  private:
+  std::vector<uint8_t> display_buffer;
   uint8_t display_buffer_colour_id[lcd_viewport_width][lcd_viewport_height];
   static const unsigned int background_width{256};
   static const unsigned int background_height{256};
