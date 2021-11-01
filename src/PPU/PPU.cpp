@@ -53,6 +53,7 @@ PPU::PPU(MMU *mmu) {
   this->mmu = mmu;
   display_buffer.resize(lcd_viewport_width * lcd_viewport_height *
                         num_display_buffer_channels);
+  display_buffer_colour_id.resize(lcd_viewport_width * lcd_viewport_height);
 }
 PPU::~PPU() {}
 
@@ -244,19 +245,25 @@ uint16_t PPU::get2BPPPixelRow(uint8_t byte1, uint8_t byte2) {
   return rval;
 }
 
-size_t PPU::getFlattenedIndex(uint8_t pixel, uint8_t scanline) {
+size_t PPU::getFlattenedDisplayBufferIndex(uint8_t pixel, uint8_t scanline) {
   return scanline * lcd_viewport_width * num_display_buffer_channels +
          pixel * num_display_buffer_channels;
 }
 
+size_t PPU::getFlattenedDisplayBufferColourIDIndex(uint8_t pixel,
+                                                   uint8_t scanline) {
+  return scanline * lcd_viewport_width + pixel;
+}
+
 void PPU::draw(uint8_t pixel, uint8_t scanline, Colour colour,
                uint8_t colour_id) {
-  size_t effective_idx = getFlattenedIndex(pixel, scanline);
+  size_t effective_idx = getFlattenedDisplayBufferIndex(pixel, scanline);
   display_buffer[effective_idx + kAlphaDisplayBufferIndex] = 0xFF;
   display_buffer[effective_idx + kRedDisplayBufferIndex] = colour.red;
   display_buffer[effective_idx + kGreenDisplayBufferIndex] = colour.green;
   display_buffer[effective_idx + kBlueDisplayBufferIndex] = colour.blue;
-  display_buffer_colour_id[pixel][scanline] = colour_id;
+  display_buffer_colour_id[getFlattenedDisplayBufferColourIDIndex(
+      pixel, scanline)] = colour_id;
 }
 
 }  // namespace GB

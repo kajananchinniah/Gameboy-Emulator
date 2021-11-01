@@ -29,13 +29,12 @@ class PPU {
   int getDisplayBufferPitch();
 
  private:
+  std::vector<uint8_t> display_buffer;
+  std::vector<uint8_t> display_buffer_colour_id;
+
   static const unsigned int lcd_viewport_width{160};
   static const unsigned int lcd_viewport_height{144};
   static const unsigned int num_display_buffer_channels{4};
-
-  std::vector<uint8_t> display_buffer;
-  uint8_t display_buffer_colour_id[lcd_viewport_width][lcd_viewport_height];
-
   static const unsigned int background_width{256};
   static const unsigned int background_height{256};
   static const unsigned int window_width{256};
@@ -132,7 +131,9 @@ class PPU {
   uint8_t getWindowVerticalPosition();
   uint8_t get2BPPPixel(uint8_t byte1, uint8_t byte2, int position);
   uint16_t get2BPPPixelRow(uint8_t byte1, uint8_t byte2);
-  size_t getFlattenedIndex(uint8_t pixel, uint8_t scanline);
+  size_t getFlattenedDisplayBufferIndex(uint8_t pixel, uint8_t scanline);
+  size_t getFlattenedDisplayBufferColourIDIndex(uint8_t pixel,
+                                                uint8_t scanline);
 
   uint8_t getBit(uint8_t n, uint8_t value) { return ((value >> n) & 0x01); }
   bool checkBit(uint8_t n, uint8_t value) {
