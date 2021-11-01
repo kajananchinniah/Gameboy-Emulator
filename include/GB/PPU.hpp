@@ -35,19 +35,21 @@ class PPU {
  private:
   std::vector<uint8_t> display_buffer;
   uint8_t display_buffer_colour_id[lcd_viewport_width][lcd_viewport_height];
+
   static const unsigned int background_width{256};
   static const unsigned int background_height{256};
   static const unsigned int window_width{256};
   static const unsigned int window_height{256};
   static const unsigned int end_of_scanline_cycles{456};
   static const unsigned int max_scanline{153};
-  unsigned int ppu_clock_cycles{0};
   static const unsigned int kRedDisplayBufferIndex{0};
   static const unsigned int kGreenDisplayBufferIndex{1};
   static const unsigned int kBlueDisplayBufferIndex{2};
   static const unsigned int kAlphaDisplayBufferIndex{3};
   static const unsigned int mode_2_cycles{80};
   static const unsigned int mode_3_cycles{252};
+
+  unsigned int ppu_clock_cycles{0};
   uint16_t internal_window_counter{0};
   bool requested_coincidence_interrupt{false};
 
@@ -58,6 +60,7 @@ class PPU {
   static const uint16_t background_map1_addr{0x9C00};
   static const uint16_t background_map2_addr{0x9800};
 
+  // LCD / general
   void resetPPU();
   void updatePPULCD();
   void doOAMScanMode();
@@ -121,7 +124,7 @@ class PPU {
   bool shouldSpriteYFlip(uint8_t sprite_flags);
   bool isBackgroundPrioritized(uint8_t sprite_flags);
 
-  bool shouldUseWindow();
+  // Misc
   bool shouldUse8000Mode();
   Colour decodeColour(uint8_t colour_id, uint16_t palette_addr);
   Colour getRGBColour(int decoded_colour, uint16_t palette_addr);
