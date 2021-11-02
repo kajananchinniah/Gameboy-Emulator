@@ -35,7 +35,11 @@ void CPU::update() {
   GUI gui;
   gui.init(160, 144);
 
-  int total_cycles{0};
+  int render_cycles{0};
+  const int rendering_frequency(CPU_FREQUENCY / 60);
+
+  int input_cycles{0};
+  const int input_polling_frequency(CPU_FREQUENCY / 2500);
   while (true) {
     int clock_cycles;
     if (is_halted) {
@@ -46,13 +50,22 @@ void CPU::update() {
       clock_cycles = executeOpcode(opcode);
     }
 
-    total_cycles += clock_cycles + interrupt_cycles;
+    render_cycles += clock_cycles + interrupt_cycles;
+    input_cycles += clock_cycles + interrupt_cycles;
     ppu.updatePPU(clock_cycles + interrupt_cycles);
     updateTimers(clock_cycles + interrupt_cycles);
     checkInterrupts();
 
-    if (total_cycles > 69905) {
-      total_cycles = 0;
+    if (input_cycles > input_polling_frequency) {
+      input_cycles = 0;
+      JoyPadButton input = gui.getKeyboardInput();
+      if (input != 0) {
+        std::cout << input << "\n";
+      }
+    }
+
+    if (render_cycles > rendering_frequency) {
+      render_cycles = 0;
       gui.update(ppu.getDisplayBuffer(), ppu.getDisplayBufferPitch());
     }
   }
