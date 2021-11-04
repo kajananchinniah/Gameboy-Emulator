@@ -59,9 +59,7 @@ void CPU::update() {
     if (input_cycles > input_polling_frequency) {
       input_cycles = 0;
       JoyPadButton input = gui.getKeyboardInput();
-      if (input != 0) {
-        std::cout << input << "\n";
-      }
+      mmu.updateJoyPadState(input);
     }
 
     if (render_cycles > rendering_frequency) {

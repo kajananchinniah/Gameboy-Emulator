@@ -5,6 +5,8 @@
 #include <cstdint>
 #include <vector>
 
+#include "GB/GUI.hpp"
+
 namespace GB {
 class MMU {
  public:
@@ -132,6 +134,8 @@ class MMU {
 
   uint32_t getOAMSpriteEntry(uint16_t offset);
 
+  void updateJoyPadState(JoyPadButton input);
+
  private:
   static const int address_space = 0x10000;
   std::array<uint8_t, address_space> memory;
@@ -160,6 +164,16 @@ class MMU {
   static const uint16_t OAM_addr = 0xFE00;
 
   void doDMATransferToOAM(uint8_t data);
+
+  static const uint16_t JOYP_addr = 0xFF00;
+  uint8_t joypad_state{0xFF};
+  void handleJoyPadRelease(JoyPadButton input);
+  void handleJoyPadPress(JoyPadButton input);
+  bool shouldRequestJoyPadInterrupt(JoyPadButton input,
+                                    bool is_button_not_held);
+  bool isActionSelectButtonsEnabled();
+  bool isDirectionalSelectButtonsEnabled();
+  uint8_t getJOYPRegister();
 
   bool checkBit(uint8_t n, uint8_t value) {
     if ((value >> n) & 0x01) {

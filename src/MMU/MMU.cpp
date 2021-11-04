@@ -70,7 +70,7 @@ void MMU::write(uint16_t address, uint8_t data) {
     memory[LY_addr] = 0x00;
   } else if (address == DMA_addr) {
     doDMATransferToOAM(data);
-  } else {
+  } else if (address >= 0x8000) {
     memory[address] = data;
   }
 }
@@ -83,7 +83,13 @@ void MMU::doDMATransferToOAM(uint8_t data) {
   }
 }
 
-uint8_t MMU::read(uint16_t address) { return memory[address]; }
+uint8_t MMU::read(uint16_t address) {
+  if (address == JOYP_addr) {
+    return getJOYPRegister();
+  } else {
+    return memory[address];
+  }
+}
 
 void MMU::clearMemory() {
   for (size_t i = 0; i < memory.size(); i++) {
