@@ -134,6 +134,7 @@ void MMU::loadROM(const char* rom_path) {
   updateMemoryBankController();
   updateROMSize();
   updateRAMSize();
+  std::cout << (int)memory_bank_controller << "\n";
 
   // TODO: don't need this anymore probably
   // But I don't want to refactor my writing / reading code extensively

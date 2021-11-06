@@ -146,6 +146,10 @@ class MMU {
   std::vector<std::array<uint8_t, ram_bank_space>> ram_banks;
 
   uint8_t memory_bank_controller{0x00};
+  uint8_t current_rom_bank{0x01};
+  uint8_t current_ram_bank{0x00};
+  bool ram_enabled{false};
+  uint8_t banking_mode{0x00};
 
   void updateMemoryBankController();
   void updateROMSize();
@@ -164,6 +168,12 @@ class MMU {
   void handleBankedRAMWrite_MBC0(uint16_t address, uint8_t data);
   uint8_t handleBankedROMRead_MBC0(uint16_t address);
   uint8_t handleBankedRAMRead_MBC0(uint16_t address);
+
+  // MBC1
+  void handleBankedROMWrite_MBC1(uint16_t address, uint8_t data);
+  void handleBankedRAMWrite_MBC1(uint16_t address, uint8_t data);
+  uint8_t handleBankedROMRead_MBC1(uint16_t address);
+  uint8_t handleBankedRAMRead_MBC1(uint16_t address);
 
   // Timer registesr
   static const uint16_t DIV_addr = 0xFF04;
