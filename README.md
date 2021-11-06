@@ -8,6 +8,8 @@ time, but sometimes I was too busy to work on it). I generally tried to refactor
 - Super Mario Land
 - Legend of Zelda Link's Awakening
   - Currently not working; crashes at startup due to STOP instruction (this shouldn't be called)
+- Super Mario Land 2
+  - Currently not working; crashes at startup due to illegal opcode access (this also shouldn't be called...)
 
 ## Notes on implementation
 Originally, the plan was to write this in modern C++. That clearly did not pan out. The gameboy instruction set is quite
