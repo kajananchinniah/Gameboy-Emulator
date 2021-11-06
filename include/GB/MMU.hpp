@@ -140,6 +140,30 @@ class MMU {
   static const int address_space = 0x10000;
   std::array<uint8_t, address_space> memory;
   std::vector<uint8_t> read_only_memory;
+  static const int rom_bank_space{0x4000};
+  std::vector<std::array<uint8_t, rom_bank_space>> rom_banks;
+  static const int ram_bank_space{0x100};
+  std::vector<std::array<uint8_t, ram_bank_space>> ram_banks;
+
+  uint8_t memory_bank_controller{0x00};
+
+  void updateMemoryBankController();
+  void updateROMSize();
+  void updateRAMSize();
+  void transferROMToBanks();
+
+  void handleBankedROMWrite(uint16_t address, uint8_t data);
+  void handleBankedRAMWrite(uint16_t address, uint8_t data);
+  void handleEchoWrite(uint16_t address, uint8_t data);
+  uint8_t handleBankedROMRead(uint16_t address);
+  uint8_t handleBankedRAMRead(uint16_t address);
+  uint8_t handleEchoRead(uint16_t address);
+
+  // MBc0
+  void handleBankedROMWrite_MBC0(uint16_t address, uint8_t data);
+  void handleBankedRAMWrite_MBC0(uint16_t address, uint8_t data);
+  uint8_t handleBankedROMRead_MBC0(uint16_t address);
+  uint8_t handleBankedRAMRead_MBC0(uint16_t address);
 
   // Timer registesr
   static const uint16_t DIV_addr = 0xFF04;
