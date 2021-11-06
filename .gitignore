@@ -3,3 +3,6 @@ build/
 
 # Ignore test roms
 tests/test_roms/
+
+# Ignore Gameboy ROMs
+*.gb
