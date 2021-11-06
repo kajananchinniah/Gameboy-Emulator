@@ -16,9 +16,8 @@ time, but sometimes I was too busy to work on it). I generally tried to refactor
 ### Pictures
 ![Super Mario Land](resources/super_mario_land.png?raw=true "Super Mario Land")
 ![Tetris](resources/tetris.png?raw=true "Tetris")
-![Dr Mario](resources/dr_mario.png?raw=true "Dr Mario")
 
-Note: for the above 3 screenshots, I used this colour scheme: https://lospec.com/palette-list/kirokaze-gameboy
+I used this colour scheme: https://lospec.com/palette-list/kirokaze-gameboy
 I'm planning on using a different one later
 
 ### Gifs
