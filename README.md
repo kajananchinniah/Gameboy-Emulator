@@ -11,6 +11,19 @@ time, but sometimes I was too busy to work on it). I generally tried to refactor
 - Super Mario Land 2
   - Currently not working; crashes at startup due to illegal opcode access (this also shouldn't be called...)
 
+
+## Screenshots
+### Pictures
+![Super Mario Land](resources/super_mario_land.png?raw=true "Super Mario Land")
+![Tetris](resources/tetris.png?raw=true "Tetris")
+![Dr Mario](resources/dr_mario.png?raw=true "Dr Mario")
+
+Note: for the above 3 screenshots, I used this colour scheme: https://lospec.com/palette-list/kirokaze-gameboy
+I'm planning on using a different one later
+
+### Gifs
+TODO
+
 ## Notes on implementation
 Originally, the plan was to write this in modern C++. That clearly did not pan out. The gameboy instruction set is quite
 large so I ended up implementing it a pretty messy way. In hindsight, with better plan, there are lots of chunks that I
