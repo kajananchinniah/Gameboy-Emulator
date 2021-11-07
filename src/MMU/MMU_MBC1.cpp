@@ -11,8 +11,7 @@ void MMU::handleBankedROMWrite_MBC1(uint16_t address, uint8_t data) {
       ram_enabled = false;
     }
   } else if (address >= 0x2000 && address <= 0x3FFF) {
-    current_rom_bank = current_rom_bank & 0xE0;
-    current_rom_bank = current_rom_bank | (data & 0x1F);
+    current_rom_bank = (current_rom_bank & 0xE0) | (data & 0x1F);
     if (current_rom_bank == 0x00 || current_rom_bank == 0x20 ||
         current_rom_bank == 0x40 || current_rom_bank == 0x60) {
       current_rom_bank++;
@@ -20,11 +19,10 @@ void MMU::handleBankedROMWrite_MBC1(uint16_t address, uint8_t data) {
   } else if (address >= 0x4000 && address <= 0x5FFF) {
     // See:
     // https://retrocomputing.stackexchange.com/questions/11732/how-does-the-gameboys-memory-bank-switching-work
-    uint8_t code = data & 0x03;
     if (banking_mode == 0x00) {
-      current_rom_bank = current_rom_bank & 0x1F;
-      current_rom_bank = current_rom_bank | (code << 5);
-      if (current_rom_bank == 0) {
+      current_rom_bank = (current_rom_bank & 0x1F) | ((data & 0xE0) << 5);
+      if (current_rom_bank == 0x00 || current_rom_bank == 0x20 ||
+          current_rom_bank == 0x40 || current_rom_bank == 0x60) {
         current_rom_bank++;
       }
     } else {
@@ -32,12 +30,11 @@ void MMU::handleBankedROMWrite_MBC1(uint16_t address, uint8_t data) {
     }
 
   } else if (address >= 0x6000 && address <= 0x7FFF) {
-    banking_mode = data & 0x1;
+    banking_mode = data & 0x01;
+    // ROM mode
     if (banking_mode == 0x00) {
       current_ram_bank = 0x00;
     }
-  } else {
-    memory[address] = data;
   }
 }
 

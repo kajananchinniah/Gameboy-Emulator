@@ -142,7 +142,7 @@ class MMU {
   std::vector<uint8_t> read_only_memory;
   static const int rom_bank_space{0x4000};
   std::vector<std::array<uint8_t, rom_bank_space>> rom_banks;
-  static const int ram_bank_space{0x100};
+  static const int ram_bank_space{0x2000};
   std::vector<std::array<uint8_t, ram_bank_space>> ram_banks;
 
   uint8_t memory_bank_controller{0x00};
