@@ -133,7 +133,7 @@ uint16_t PPU::getSpriteTileDataAddress(uint8_t tile_number) {
 
 uint8_t PPU::getSpriteColourPosition(int8_t tile_pixel, uint8_t sprite_flags) {
   uint8_t colour_position = tile_pixel;
-  if (!shouldSpriteXFlip(sprite_flags)) {
+  if (shouldSpriteXFlip(sprite_flags)) {
     // 8 bits in one byte
     colour_position = 7 - colour_position;
   }
@@ -149,7 +149,7 @@ uint16_t PPU::getSpriteColourAddress(uint8_t sprite_flags) {
 }
 
 uint8_t PPU::getSpritePixelLocation(uint8_t x_position, int8_t tile_pixel) {
-  return tile_pixel + x_position;
+  return 7 - tile_pixel + x_position;
 }
 
 bool PPU::shouldDrawPixel(uint8_t sprite_flags, uint8_t colour_id,
