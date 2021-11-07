@@ -7,10 +7,11 @@ time, but sometimes I was too busy to work on it). I generally tried to refactor
 - Tetris
 - Super Mario Land
 - Legend of Zelda Link's Awakening
-  - Currently not working; crashes at startup due to STOP instruction (this shouldn't be called)
 - Super Mario Land 2
-  - Currently not working; crashes at startup due to illegal opcode access (this also shouldn't be called...)
 
+**Note** There are some graphical issues since some tiles are being incorrectly read (this can be seen in Link's
+Awakening). Super Mario Land's top also sometimes flashes. This is likely due to incorrect PPU rendering (I don't fully
+pass dmg-acid2 yet)
 
 ## Screenshots
 ### Pictures
