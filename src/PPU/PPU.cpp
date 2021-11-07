@@ -46,6 +46,9 @@ unsigned int PPU::getLCDViewportHeight() { return kLCDViewPortHeight; }
 
 uint8_t PPU::getWindowHorizontalPosition() {
   uint8_t WX = mmu->getWindowXRegister();
+  if (WX <= 0x7) {
+    return 0;
+  }
   return WX - 0x7;
 }
 
