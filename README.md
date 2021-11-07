@@ -10,7 +10,7 @@ Currently, I don't have any form of saving emulated yet.
 - Super Mario Land
 - Legend of Zelda Link's Awakening
 - Super Mario Land 2
-- Pokemon Red (basically just the beginning of the game)
+- Pokemon Red
 
 I tested mostly just the beginning of these games few mins of these games so note that. I don't using this emulator for playing games.
 
