@@ -13,7 +13,7 @@ Currently, I don't have any form of saving emulated yet.
 
 **Note** There are some graphical issues since some tiles are being incorrectly read (this can be seen in Link's
 Awakening). Super Mario Land's top also sometimes flashes. This is likely due to incorrect PPU rendering (I don't fully
-pass dmg-acid2 yet)
+pass dmg-acid2 yet). I also haven't tested games until the end so there may be errors that show up later on.
 
 ## Screenshots
 ### Pictures
