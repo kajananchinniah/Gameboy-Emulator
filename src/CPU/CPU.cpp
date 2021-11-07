@@ -51,13 +51,13 @@ void CPU::update() {
     updateTimers(clock_cycles + interrupt_cycles);
     checkInterrupts();
 
-    if (input_cycles > input_polling_frequency) {
+    if (input_cycles > kInputPollingFrequency) {
       input_cycles = 0;
       JoyPadButton input = gui.getKeyboardInput();
       mmu.updateJoyPadState(input);
     }
 
-    if (render_cycles > rendering_frequency) {
+    if (render_cycles > kRenderingFrequency) {
       render_cycles = 0;
       gui.update(ppu.getDisplayBuffer(), ppu.getDisplayBufferPitch());
     }
@@ -146,8 +146,8 @@ void CPU::updateTimers(int clock_cycles) {
 
 void CPU::updateDivTimer(int clock_cycles) {
   div_timer_count += clock_cycles;
-  while (div_timer_count >= CPU_FREQUENCY / DIV_UPDATE_FREQUENCY) {
-    div_timer_count = div_timer_count - CPU_FREQUENCY / DIV_UPDATE_FREQUENCY;
+  while (div_timer_count >= kCPUFrequency / kDivUpdateFrequency) {
+    div_timer_count = div_timer_count - kCPUFrequency / kDivUpdateFrequency;
     mmu.incrementDividerRegister(1);
   }
 }
@@ -155,8 +155,8 @@ void CPU::updateDivTimer(int clock_cycles) {
 void CPU::updateOtherTimers(int clock_cycles) {
   int frequency = getClockFrequency();
   timer_count += clock_cycles;
-  while (timer_count >= CPU_FREQUENCY / frequency) {
-    timer_count = timer_count - CPU_FREQUENCY / frequency;
+  while (timer_count >= kCPUFrequency / frequency) {
+    timer_count = timer_count - kCPUFrequency / frequency;
     if (mmu.willTimerCounterRegisterOverflow()) {
       mmu.resetTimerCounterRegister();
       mmu.setTimerInterrupt();
