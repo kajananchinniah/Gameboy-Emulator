@@ -8,15 +8,14 @@ Currently, I don't have any form of saving emulated yet.
 - Dr Mario
 - Tetris
 - Super Mario Land
+  - Top sometimes flashes
 - Legend of Zelda Link's Awakening
+  - Bottom window not rendering (e.g. heart count, current items, etc)
 - Super Mario Land 2
 - Pokemon Red
+  - Has some graphics issues (e.g. random tiles flash on bootup)
 
 I tested mostly just the beginning of these games few mins of these games so note that. I don't using this emulator for playing games.
-
-**Note** There are some graphical issues since some tiles are being incorrectly read (this can be seen in Link's
-Awakening). Super Mario Land's top also sometimes flashes. Pokemon Red has also shown some graphical glitches. This is likely due to incorrect PPU rendering (I don't fully
-pass dmg-acid2 yet). I also haven't tested games until the end so there may be errors that show up later on.
 
 ## Screenshots
 ### Pictures
