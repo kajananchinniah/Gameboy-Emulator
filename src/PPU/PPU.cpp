@@ -8,43 +8,22 @@ namespace {
 enum PPUModes { OAM_SCAN = 2, DRAWING = 3, H_BLANK = 0, V_BLANK = 1 };
 
 const std::unordered_map<int32_t, GB::Colour> g_BGP_colour_palette = {
-    {GB::Colour::ColourCode::WHITE,
-     GB::Colour{0xFF, 0xFF, 0xFF, GB::Colour::ColourCode::WHITE}},
-
-    {GB::Colour::ColourCode::LIGHT_GRAY,
-     GB::Colour{0xAA, 0xAA, 0xAA, GB::Colour::ColourCode::LIGHT_GRAY}},
-
-    {GB::Colour::ColourCode::DARK_GRAY,
-     GB::Colour{0x55, 0x55, 0x55, GB::Colour::ColourCode::DARK_GRAY}},
-
-    {GB::Colour::ColourCode::BLACK,
-     GB::Colour{0x00, 0x00, 0x00, GB::Colour::ColourCode::BLACK}}};
+    {GB::Colour::ColourCode::WHITE, GB::Colour{0xFF, 0xFF, 0xFF}},
+    {GB::Colour::ColourCode::LIGHT_GRAY, GB::Colour{0xAA, 0xAA, 0xAA}},
+    {GB::Colour::ColourCode::DARK_GRAY, GB::Colour{0x55, 0x55, 0x55}},
+    {GB::Colour::ColourCode::BLACK, GB::Colour{0x00, 0x00, 0x00}}};
 
 const std::unordered_map<int32_t, GB::Colour> g_OBP0_colour_palette = {
-    {GB::Colour::ColourCode::WHITE,
-     GB::Colour{0xFF, 0xFF, 0xFF, GB::Colour::ColourCode::WHITE}},
-
-    {GB::Colour::ColourCode::LIGHT_GRAY,
-     GB::Colour{0xAA, 0xAA, 0xAA, GB::Colour::ColourCode::LIGHT_GRAY}},
-
-    {GB::Colour::ColourCode::DARK_GRAY,
-     GB::Colour{0x55, 0x55, 0x55, GB::Colour::ColourCode::DARK_GRAY}},
-
-    {GB::Colour::ColourCode::BLACK,
-     GB::Colour{0x00, 0x00, 0x00, GB::Colour::ColourCode::BLACK}}};
+    {GB::Colour::ColourCode::WHITE, GB::Colour{0xFF, 0xFF, 0xFF}},
+    {GB::Colour::ColourCode::LIGHT_GRAY, GB::Colour{0xAA, 0xAA, 0xAA}},
+    {GB::Colour::ColourCode::DARK_GRAY, GB::Colour{0x55, 0x55, 0x55}},
+    {GB::Colour::ColourCode::BLACK, GB::Colour{0x00, 0x00, 0x00}}};
 
 const std::unordered_map<int32_t, GB::Colour> g_OBP1_colour_palette = {
-    {GB::Colour::ColourCode::WHITE,
-     GB::Colour{0xFF, 0xFF, 0xFF, GB::Colour::ColourCode::WHITE}},
-
-    {GB::Colour::ColourCode::LIGHT_GRAY,
-     GB::Colour{0xAA, 0xAA, 0xAA, GB::Colour::ColourCode::LIGHT_GRAY}},
-
-    {GB::Colour::ColourCode::DARK_GRAY,
-     GB::Colour{0x55, 0x55, 0x55, GB::Colour::ColourCode::DARK_GRAY}},
-
-    {GB::Colour::ColourCode::BLACK,
-     GB::Colour{0x00, 0x00, 0x00, GB::Colour::ColourCode::BLACK}}};
+    {GB::Colour::ColourCode::WHITE, GB::Colour{0xFF, 0xFF, 0xFF}},
+    {GB::Colour::ColourCode::LIGHT_GRAY, GB::Colour{0xAA, 0xAA, 0xAA}},
+    {GB::Colour::ColourCode::DARK_GRAY, GB::Colour{0x55, 0x55, 0x55}},
+    {GB::Colour::ColourCode::BLACK, GB::Colour{0x00, 0x00, 0x00}}};
 
 }  // namespace
 

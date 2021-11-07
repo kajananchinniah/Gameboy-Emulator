@@ -11,11 +11,9 @@ struct Colour {
   uint8_t red;
   uint8_t green;
   uint8_t blue;
-  int32_t colour;
   enum ColourCode { WHITE, LIGHT_GRAY, DARK_GRAY, BLACK };
-  Colour() : red{0}, green{0}, blue{0}, colour{0} {}
-  Colour(uint8_t r, uint8_t g, uint8_t b, int32_t c)
-      : red{r}, green{g}, blue{b}, colour{c} {}
+  Colour() : red{0}, green{0}, blue{0} {}
+  Colour(uint8_t r, uint8_t g, uint8_t b) : red{r}, green{g}, blue{b} {}
 };
 
 class PPU {
