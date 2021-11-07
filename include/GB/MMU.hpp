@@ -137,13 +137,13 @@ class MMU {
   void updateJoyPadState(JoyPadButton input);
 
  private:
-  static const int address_space = 0x10000;
-  std::array<uint8_t, address_space> memory;
+  static const int kAddressSpace = 0x10000;
+  std::array<uint8_t, kAddressSpace> memory;
   std::vector<uint8_t> read_only_memory;
-  static const int rom_bank_space{0x4000};
-  std::vector<std::array<uint8_t, rom_bank_space>> rom_banks;
-  static const int ram_bank_space{0x2000};
-  std::vector<std::array<uint8_t, ram_bank_space>> ram_banks;
+  static const int kROMSpace{0x4000};
+  std::vector<std::array<uint8_t, kROMSpace>> rom_banks;
+  static const int kRAMSpace{0x2000};
+  std::vector<std::array<uint8_t, kRAMSpace>> ram_banks;
 
   uint8_t memory_bank_controller{0x00};
   uint8_t current_rom_bank{0x01};

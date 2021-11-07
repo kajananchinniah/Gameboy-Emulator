@@ -134,7 +134,6 @@ void MMU::loadROM(const char* rom_path) {
   updateMemoryBankController();
   updateROMSize();
   updateRAMSize();
-  std::cout << (int)memory_bank_controller << "\n";
 
   // TODO: don't need this anymore probably
   // But I don't want to refactor my writing / reading code extensively
@@ -147,7 +146,6 @@ void MMU::loadROM(const char* rom_path) {
 
 void MMU::updateMemoryBankController() {
   constexpr uint16_t controller_type_addr{0x0147};
-  std::cout << (int)read_only_memory[controller_type_addr] << "\n\n";
   switch (read_only_memory[controller_type_addr]) {
     case 0x00:
       memory_bank_controller = 0x00;
