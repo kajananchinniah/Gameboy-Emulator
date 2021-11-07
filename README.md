@@ -2,6 +2,8 @@
 This is my messy implementation of a gameboy emulator using C++. I've been working on this on and off (whenever I had
 time, but sometimes I was too busy to work on it). I generally tried to refactor after finishing a subset of emulator though.
 
+Currently, I don't have any form of saving emulated yet.
+
 ## Games Tested
 - Dr Mario
 - Tetris
