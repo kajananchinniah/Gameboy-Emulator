@@ -10,8 +10,8 @@ void PPU::renderWindow() {
   uint16_t window_tile_number_y_offset = getWindowTileNumberYOffset();
   // Note: horizontal window position represents the starting x position of the
   // rectangle window
-  for (uint8_t pixel = getWindowHorizontalPosition();
-       pixel < lcd_viewport_width; ++pixel) {
+  for (uint8_t pixel = getWindowHorizontalPosition(); pixel < kLCDViewPortWidth;
+       ++pixel) {
     uint16_t window_tile_number_x_offset = getWindowTileNumberXOffset(pixel);
     uint8_t tile_number =
         mmu->read(getWindowMemoryAddress() + window_tile_number_x_offset +
@@ -32,7 +32,7 @@ void PPU::renderWindow() {
     Colour colour = decodeColour(colour_id, BGP_addr);
 
     uint8_t scanline = mmu->getCurrentScanLine();
-    if (scanline >= lcd_viewport_height) {
+    if (scanline >= kLCDViewPortHeight) {
       continue;
     }
 
@@ -44,7 +44,7 @@ void PPU::renderWindow() {
 bool PPU::shouldRenderWindow() {
   if (mmu->isWindowDisplayEnabled() &&
       getWindowVerticalPosition() <= mmu->getCurrentScanLine() &&
-      getWindowHorizontalPosition() < lcd_viewport_width) {
+      getWindowHorizontalPosition() < kLCDViewPortWidth) {
     return true;
   } else {
     return false;

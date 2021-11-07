@@ -4,7 +4,7 @@ namespace GB {
 
 void PPU::renderBackground() {
   uint16_t background_tile_number_y_offset = getBackgroundTileNumberYOffset();
-  for (uint8_t pixel = 0; pixel < lcd_viewport_width; ++pixel) {
+  for (uint8_t pixel = 0; pixel < kLCDViewPortWidth; ++pixel) {
     uint16_t background_tile_number_x_offset =
         getBackgroundTileNumberXOffset(pixel);
     uint8_t tile_number = mmu->read(getBackgroundMemoryAddress() +
@@ -26,7 +26,7 @@ void PPU::renderBackground() {
     Colour colour = decodeColour(colour_id, BGP_addr);
 
     uint8_t scanline = mmu->getCurrentScanLine();
-    if (scanline >= lcd_viewport_height) {
+    if (scanline >= kLCDViewPortHeight) {
       continue;
     }
 

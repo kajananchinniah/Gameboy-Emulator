@@ -101,7 +101,7 @@ void PPU::addSpriteToDisplayBuffer(SpriteOAMEntry entry) {
     uint8_t pixel = getSpritePixelLocation(entry.x, tile_pixel);
     uint8_t scanline = mmu->getCurrentScanLine();
 
-    if (scanline >= lcd_viewport_height || pixel >= lcd_viewport_width) {
+    if (scanline >= kLCDViewPortHeight || pixel >= kLCDViewPortWidth) {
       continue;
     }
 

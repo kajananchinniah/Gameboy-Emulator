@@ -32,21 +32,21 @@ class PPU {
   std::vector<uint8_t> display_buffer;
   std::vector<uint8_t> display_buffer_colour_id;
 
-  static const unsigned int lcd_viewport_width{160};
-  static const unsigned int lcd_viewport_height{144};
-  static const unsigned int num_display_buffer_channels{4};
-  static const unsigned int background_width{256};
-  static const unsigned int background_height{256};
-  static const unsigned int window_width{256};
-  static const unsigned int window_height{256};
-  static const unsigned int end_of_scanline_cycles{456};
-  static const unsigned int max_scanline{153};
+  static const unsigned int kLCDViewPortWidth{160};
+  static const unsigned int kLCDViewPortHeight{144};
+  static const unsigned int kNumDisplayBufferChannels{4};
+  static const unsigned int kBackgroundWidth{256};
+  static const unsigned int kBackgroundHeight{256};
+  static const unsigned int kWindowWidth{256};
+  static const unsigned int kWindowHeight{256};
+  static const unsigned int kEndOfScanLineCycles{456};
+  static const unsigned int kMaxScanLine{153};
   static const unsigned int kRedDisplayBufferIndex{0};
   static const unsigned int kGreenDisplayBufferIndex{1};
   static const unsigned int kBlueDisplayBufferIndex{2};
   static const unsigned int kAlphaDisplayBufferIndex{3};
-  static const unsigned int mode_2_cycles{80};
-  static const unsigned int mode_3_cycles{252};
+  static const unsigned int kMode2Cycles{80};
+  static const unsigned int kMode3Cycles{252};
 
   unsigned int ppu_clock_cycles{0};
   uint16_t internal_window_counter{0};

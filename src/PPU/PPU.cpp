@@ -51,20 +51,20 @@ const std::unordered_map<int32_t, GB::Colour> g_OBP1_colour_palette = {
 namespace GB {
 PPU::PPU(MMU *mmu) {
   this->mmu = mmu;
-  display_buffer.resize(lcd_viewport_width * lcd_viewport_height *
-                        num_display_buffer_channels);
-  display_buffer_colour_id.resize(lcd_viewport_width * lcd_viewport_height);
+  display_buffer.resize(kLCDViewPortWidth * kLCDViewPortHeight *
+                        kNumDisplayBufferChannels);
+  display_buffer_colour_id.resize(kLCDViewPortWidth * kLCDViewPortHeight);
 }
 PPU::~PPU() {}
 
 std::vector<uint8_t> PPU::getDisplayBuffer() { return display_buffer; }
 
 int PPU::getDisplayBufferPitch() {
-  return lcd_viewport_width * sizeof(uint8_t) * num_display_buffer_channels;
+  return kLCDViewPortWidth * sizeof(uint8_t) * kNumDisplayBufferChannels;
 }
 
-unsigned int PPU::getLCDViewportWidth() { return lcd_viewport_width; }
-unsigned int PPU::getLCDViewportHeight() { return lcd_viewport_height; }
+unsigned int PPU::getLCDViewportWidth() { return kLCDViewPortWidth; }
+unsigned int PPU::getLCDViewportHeight() { return kLCDViewPortHeight; }
 
 uint8_t PPU::getWindowHorizontalPosition() {
   uint8_t WX = mmu->getWindowXRegister();
@@ -84,7 +84,7 @@ void PPU::updatePPU(int clock_cycles) {
 
   updatePPULCD();
   ppu_clock_cycles += clock_cycles;
-  if (ppu_clock_cycles >= end_of_scanline_cycles) {
+  if (ppu_clock_cycles >= kEndOfScanLineCycles) {
     prepareForNextScanLine();
   }
 }
@@ -116,7 +116,7 @@ void PPU::updatePPULCD() {
 }
 
 void PPU::doOAMScanMode() {
-  if (ppu_clock_cycles >= mode_2_cycles) {
+  if (ppu_clock_cycles >= kMode2Cycles) {
     mmu->setPPUMode(PPUModes::DRAWING);
     if (mmu->isMode2STATInterruptEnabled()) {
       mmu->setLCDStatInterruptRequest();
@@ -125,27 +125,27 @@ void PPU::doOAMScanMode() {
 }
 
 void PPU::doDrawingMode() {
-  if (ppu_clock_cycles >= mode_3_cycles) {
+  if (ppu_clock_cycles >= kMode3Cycles) {
     mmu->setPPUMode(PPUModes::H_BLANK);
   }
 }
 
 void PPU::doHBlankMode() {
-  if (ppu_clock_cycles >= end_of_scanline_cycles) {
+  if (ppu_clock_cycles >= kEndOfScanLineCycles) {
     if (mmu->isMode0STATInterruptEnabled()) {
       mmu->setLCDStatInterruptRequest();
     }
 
-    if (mmu->getCurrentScanLine() < lcd_viewport_height) {
+    if (mmu->getCurrentScanLine() < kLCDViewPortHeight) {
       mmu->setPPUMode(PPUModes::OAM_SCAN);
-    } else if (mmu->getCurrentScanLine() == lcd_viewport_height) {
+    } else if (mmu->getCurrentScanLine() == kLCDViewPortHeight) {
       mmu->setPPUMode(PPUModes::V_BLANK);
     }
   }
 }
 
 void PPU::doVBlankMode() {
-  if (mmu->getCurrentScanLine() > max_scanline) {
+  if (mmu->getCurrentScanLine() > kMaxScanLine) {
     mmu->setPPUMode(PPUModes::OAM_SCAN);
     if (mmu->isMode1STATInterruptEnabled()) {
       mmu->setLCDStatInterruptRequest();
@@ -169,12 +169,12 @@ void PPU::prepareForNextScanLine() {
   ppu_clock_cycles = ppu_clock_cycles - 456;
   requested_coincidence_interrupt = false;
   mmu->resetCoincidenceFlag();
-  if (mmu->getCurrentScanLine() == lcd_viewport_height) {
+  if (mmu->getCurrentScanLine() == kLCDViewPortHeight) {
     internal_window_counter = 0;
     mmu->setVBlankInterruptRequest();
-  } else if (mmu->getCurrentScanLine() > max_scanline) {
+  } else if (mmu->getCurrentScanLine() > kMaxScanLine) {
     mmu->setCurrentScanLine(0);
-  } else if (mmu->getCurrentScanLine() < lcd_viewport_height) {
+  } else if (mmu->getCurrentScanLine() < kLCDViewPortHeight) {
     renderScanLine();
   }
 }
@@ -246,13 +246,13 @@ uint16_t PPU::get2BPPPixelRow(uint8_t byte1, uint8_t byte2) {
 }
 
 size_t PPU::getFlattenedDisplayBufferIndex(uint8_t pixel, uint8_t scanline) {
-  return scanline * lcd_viewport_width * num_display_buffer_channels +
-         pixel * num_display_buffer_channels;
+  return scanline * kLCDViewPortWidth * kNumDisplayBufferChannels +
+         pixel * kNumDisplayBufferChannels;
 }
 
 size_t PPU::getFlattenedDisplayBufferColourIDIndex(uint8_t pixel,
                                                    uint8_t scanline) {
-  return scanline * lcd_viewport_width + pixel;
+  return scanline * kLCDViewPortWidth + pixel;
 }
 
 void PPU::draw(uint8_t pixel, uint8_t scanline, Colour colour,
