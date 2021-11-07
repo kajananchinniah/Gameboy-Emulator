@@ -10,7 +10,6 @@ Currently, I don't have any form of saving emulated yet.
 - Super Mario Land
   - Top sometimes flashes
 - Legend of Zelda Link's Awakening
-  - Bottom window not rendering (e.g. heart count, current items, etc)
 - Super Mario Land 2
 - Pokemon Red
   - Has some graphics issues (e.g. random tiles flash on bootup)
