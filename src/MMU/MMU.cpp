@@ -147,6 +147,7 @@ void MMU::loadROM(const char* rom_path) {
 
 void MMU::updateMemoryBankController() {
   constexpr uint16_t controller_type_addr{0x0147};
+  std::cout << (int)read_only_memory[controller_type_addr] << "\n\n";
   switch (read_only_memory[controller_type_addr]) {
     case 0x00:
       memory_bank_controller = 0x00;
@@ -159,6 +160,9 @@ void MMU::updateMemoryBankController() {
       break;
     case 0x03:
       memory_bank_controller = 0x01;
+      break;
+    case 0x13:
+      memory_bank_controller = 0x3;
       break;
     default:
       throw std::runtime_error("Unsupported banking");

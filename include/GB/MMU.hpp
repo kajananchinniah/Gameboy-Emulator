@@ -175,6 +175,12 @@ class MMU {
   uint8_t handleBankedROMRead_MBC1(uint16_t address);
   uint8_t handleBankedRAMRead_MBC1(uint16_t address);
 
+  // MBC3
+  void handleBankedROMWrite_MBC3(uint16_t address, uint8_t data);
+  void handleBankedRAMWrite_MBC3(uint16_t address, uint8_t data);
+  uint8_t handleBankedROMRead_MBC3(uint16_t address);
+  uint8_t handleBankedRAMRead_MBC3(uint16_t address);
+
   // Timer registesr
   static const uint16_t DIV_addr = 0xFF04;
   static const uint16_t TIMA_addr = 0xFF05;
