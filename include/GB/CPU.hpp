@@ -33,9 +33,13 @@ class CPU {
   bool ran_instr{false};
   bool is_halted{false};
   int div_timer_count{0};
-  const int CPU_FREQUENCY{4194304};       // In Hz
-  const int DIV_UPDATE_FREQUENCY{16384};  // In Hz
+  static const int CPU_FREQUENCY{4194304};       // In Hz
+  static const int DIV_UPDATE_FREQUENCY{16384};  // In Hz
   int timer_count{0};
+  int render_cycles{0};
+  int input_cycles{0};
+  static const int rendering_frequency = CPU_FREQUENCY / 60;
+  static const int input_polling_frequency = CPU_FREQUENCY / 2500;
 
   void updateTimers(int clock_cycles);
   void updateDivTimer(int clock_cycles);

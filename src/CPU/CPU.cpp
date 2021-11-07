@@ -35,11 +35,6 @@ void CPU::update() {
   GUI gui;
   gui.init(160, 144);
 
-  int render_cycles{0};
-  const int rendering_frequency(CPU_FREQUENCY / 60);
-
-  int input_cycles{0};
-  const int input_polling_frequency(CPU_FREQUENCY / 2500);
   while (true) {
     int clock_cycles;
     if (is_halted) {
