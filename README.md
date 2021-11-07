@@ -10,9 +10,10 @@ Currently, I don't have any form of saving emulated yet.
 - Super Mario Land
 - Legend of Zelda Link's Awakening
 - Super Mario Land 2
+- Pokemon Red (basically just the beginning of the game)
 
 **Note** There are some graphical issues since some tiles are being incorrectly read (this can be seen in Link's
-Awakening). Super Mario Land's top also sometimes flashes. This is likely due to incorrect PPU rendering (I don't fully
+Awakening). Super Mario Land's top also sometimes flashes. Pokemon Red has also shown some graphical glitches. This is likely due to incorrect PPU rendering (I don't fully
 pass dmg-acid2 yet). I also haven't tested games until the end so there may be errors that show up later on.
 
 ## Screenshots
@@ -97,6 +98,7 @@ To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a
   - This inspired me to do all my rendering at the end of a scanline, rather than doing pixel fifo. I found the pixel
     fifo algorithm to be relatively complicated (and given how busy I've been, I didn't have enough time to understand
     the algorithm details, although I have a high level understanding, so I may revisit it later)
+  - I also consulted this to figure how much of MBC3 I needed to emulate Pokemon
 - Reddit post asking about PPU reset: https://www.reddit.com/r/Gameboy/comments/a1c8h0/what_happens_when_a_gameboy_screen_is_disabled/
   - Helped fix a bug where games would freeze at tile screen if LCD was disabled
 - A bunch of SDL2 resources such as: http://slouken.blogspot.com/2011/02/streaming-textures-with-sdl-13.html,
