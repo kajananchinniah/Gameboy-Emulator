@@ -4,14 +4,28 @@ time, but sometimes I was too busy to work on it). I generally tried to refactor
 
 ## Screenshots
 ### Pictures
-![Super Mario Land](resources/super_mario_land.png?raw=true "Super Mario Land")
-![Tetris](resources/tetris.png?raw=true "Tetris")
+<p align="center">
+  <img src="resources/super_mario_land.png" width="200" height="200"/>
+  <img src="resources/tetris.png" width="200" height="200"/>
+</p>
+<p align="center">
+  <img src="resources/pokemon.png" width="200" height="200"/>
+  <img src="resources/link_awakening.png" width="200" height="200"/>
+</p>
 
-I used this colour scheme: https://lospec.com/palette-list/kirokaze-gameboy
-I'm planning on using a different one later
+Note I took these pictures when I had a small bug in rendering (Red and Blue channels were swapped).
+
+I used this colour scheme: https://lospec.com/palette-list/kirokaze-gameboy for the background. This is also the colour scheme for my emulator.
+For sprites, I used the colour scheme used here: https://binji.github.io/posts/pokegb/
 
 ### Gifs
-TODO
+<p align="center">
+  <img src="resources/pokemon.gif" width="200" height="200"/>
+  <img src="resources/link_awakening.gif" width="200" height="200"/>
+</p>
+
+I used this colour scheme for Link's Awakening: https://lospec.com/palette-list/kirokaze-gameboy
+For Pokemon, I used this: https://binji.github.io/posts/pokegb/
 
 ## Installation
 These instructions are targeted towards Ubuntu 18.04. I don't know the installation process for other operating systems.
@@ -73,6 +87,13 @@ Space | Select
 Enter | Start
 Window Exit | Quit **with** overwrite save file
 Escape | Quit **without** overwrite save file
+
+## Configuring the Emulator
+For configurations, for now, direct modification of the source code + recompilation is required. To change the colour schemes, `src/PPU/PPU.cpp` has 3 unordered maps for changing colours in an anonymous namespace at the top of the file. These can be modified from the emulator directly to whatever colour. I used 3 to provide further flexibility (it's why the sprites and background have different colours for example).
+
+For modifying the save file name, this can be done in the `src/CPU/CPU.cpp` in the `loadROM` function.
+
+As a future TODO, I might expose these parameters in the future for modification during runtime.
 
 ## Games Tested
 - Dr Mario
