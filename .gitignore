@@ -6,3 +6,6 @@ tests/test_roms/
 
 # Ignore Gameboy ROMs
 *.gb
+
+# Ignore save files
+*.sav
