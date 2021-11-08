@@ -29,7 +29,13 @@ CPU::CPU() : mmu{MMU()}, ppu{PPU(&mmu)} {
   SP.setSP(0xFFFE);
 }
 
-void CPU::loadROM(const char *rom_path) { mmu.loadROM(rom_path); }
+void CPU::loadROM(const char *rom_path) {
+  save_state_filename = std::string(rom_path);
+  save_state_filename =
+      save_state_filename.substr(0, save_state_filename.find_last_of('.')) +
+      ".sav";
+  mmu.loadROM(rom_path);
+}
 
 void CPU::saveState(const char *state_path) {
   std::ofstream save_state_file(state_path, std::ios::binary);
@@ -123,8 +129,7 @@ void CPU::runEmulator() {
   }
 
   if (gui.shouldSave()) {
-    const char *save_state_filename{"test.sav"};
-    saveState(save_state_filename);
+    saveState(save_state_filename.c_str());
   }
 }
 

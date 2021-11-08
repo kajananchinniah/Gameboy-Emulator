@@ -21,6 +21,7 @@ class CPU {
  private:
   void printStatus();
 
+  std::string save_state_filename;
   MMU mmu;
   PPU ppu;
 
