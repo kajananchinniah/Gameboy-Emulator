@@ -42,9 +42,9 @@ class PPU {
   static const unsigned int kWindowHeight{256};
   static const unsigned int kEndOfScanLineCycles{456};
   static const unsigned int kMaxScanLine{153};
-  static const unsigned int kRedDisplayBufferIndex{0};
+  static const unsigned int kRedDisplayBufferIndex{2};
   static const unsigned int kGreenDisplayBufferIndex{1};
-  static const unsigned int kBlueDisplayBufferIndex{2};
+  static const unsigned int kBlueDisplayBufferIndex{0};
   static const unsigned int kAlphaDisplayBufferIndex{3};
   static const unsigned int kMode2Cycles{80};
   static const unsigned int kMode3Cycles{252};
