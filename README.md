@@ -27,6 +27,29 @@ I'm planning on using a different one later
 ### Gifs
 TODO
 
+## Controls
+Keyboard Input | Gameboy Input
+---    | ---
+Up | Up
+Down | Down
+Left | Left
+Right | Right
+Z | A
+X | B
+Space | Select
+Enter | Start
+Window Exit | Quit **with** overwrite save file
+Escape | Quit **without** overwrite save file
+
+## Future TODOs
+If I decide to pursue this again, I may do the following:
+- Make CPU cycle accurate
+- Switch to PPU fifo
+- Refactoring of code to better integrate everything together
+- Add audio support
+- Expose colour palette + controllers, etc to allow for more customization
+- Loading configs from file maybe
+
 ## Notes on implementation
 Originally, the plan was to write this in modern C++. That clearly did not pan out. The gameboy instruction set is quite
 large so I ended up implementing it a pretty messy way. In hindsight, with better plan, there are lots of chunks that I
@@ -54,6 +77,14 @@ somewhat badly planned parts of this due to it.
 I also copied over a lot of code in multiple files / components (e.g. getBit, setBit, etc). In the future, I think
 having a utils or common file that would contain code that I see being used often is a good idea just to increase code
 reuse.
+
+As I will mention later, my PPU implementation is inaccurate (because it relies on end of scanline rendering). This was
+simpler, and my implementation ended up being a combination of the tutorial by CodeSlinger and the PPU description by the Gameboy Emulator Development Guide. In the future, I might refactor the follow what the real gameboy actually does (e.g. Pixel FIFO) to increase accuracy of my emulator but I'm happy with the results despite the low accuracy.
+
+For ROM banking, I implemented enough of MBC3 to play Pokemon and enough of MBC1 to play games. I felt this was
+sufficient. In the future, I might add more features (e.g. battery, latch clock, etc), but for now it's fine without. To
+save, I instead just dumped all the data into a `.sav` file and called it a day. This soln worked well (and provides the
+convenience of saving even in games without saving).
 
 ## Note on Tests
 Originally I had planned on unit testing every function I wrote via GTest. While this approach is fine, I realized that
