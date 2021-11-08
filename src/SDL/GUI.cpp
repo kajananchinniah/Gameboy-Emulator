@@ -40,6 +40,7 @@ struct GUI::GUIImpl {
   std::string window_title_{"Gameboy Emulator"};
   static constexpr uint32_t kGBWidth{160};
   static constexpr uint32_t kGBHeight{144};
+  bool should_quit{false};
 
   GUIImpl()
       : window_{nullptr, SDL_DestroyWindow},
@@ -84,7 +85,7 @@ struct GUI::GUIImpl {
     while (SDL_PollEvent(&event)) {
       switch (event.type) {
         case SDL_QUIT:
-          exit(0);
+          should_quit = true;
         case SDL_KEYDOWN:
           return getKeyboardDownInput(event);
         case SDL_KEYUP:
@@ -97,7 +98,7 @@ struct GUI::GUIImpl {
   JoyPadButton getKeyboardDownInput(SDL_Event event) {
     switch (event.key.keysym.scancode) {
       case SDL_SCANCODE_ESCAPE:
-        return JoyPadButton::kSaveButtonPressed;
+        should_quit = true;
       case SDL_SCANCODE_RIGHT:
         return JoyPadButton::kRightButtonPressed;
       case SDL_SCANCODE_LEFT:
@@ -141,6 +142,8 @@ struct GUI::GUIImpl {
         return JoyPadButton::kNoInput;
     }
   }
+
+  bool shouldQuit() { return should_quit; }
 };
 
 GUI::GUI() : gui_impl_{std::make_unique<GUIImpl>()} {}
@@ -155,5 +158,6 @@ void GUI::update(std::vector<uint8_t> data, int pitch) {
 }
 
 JoyPadButton GUI::getKeyboardInput() { return gui_impl_->getKeyboardInput(); }
+bool GUI::shouldQuit() { return gui_impl_->shouldQuit(); }
 
 }  // namespace GB

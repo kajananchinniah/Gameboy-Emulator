@@ -14,7 +14,7 @@ class CPU {
  public:
   CPU();
   void loadROM(const char *rom_path);
-  void update();
+  void runEmulator();
   void saveState(const char *state_path);
   void loadState(const char *state_path);
 
@@ -42,6 +42,9 @@ class CPU {
   int input_cycles{0};
   static const int kRenderingFrequency = kCPUFrequency / 60;
   static const int kInputPollingFrequency = kCPUFrequency / 2500;
+
+  void updateEmulatorState();
+  int updateCPU();
 
   void updateTimers(int clock_cycles);
   void updateDivTimer(int clock_cycles);

@@ -6,5 +6,5 @@ int main(int argc, char *argv[]) {
   if (argc >= 3) {
     cpu.loadState(argv[2]);
   }
-  cpu.update();
+  cpu.runEmulator();
 }

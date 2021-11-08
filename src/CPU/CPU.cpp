@@ -65,7 +65,6 @@ void CPU::saveState(const char *state_path) {
   mmu.saveState(save_state_file);
   ppu.saveState(save_state_file);
   save_state_file.close();
-  exit(0);
 }
 
 void CPU::loadState(const char *state_path) {
@@ -105,35 +104,16 @@ void CPU::loadState(const char *state_path) {
   save_state_file.close();
 }
 
-void CPU::update() {
-  int interrupt_cycles = 0;
+void CPU::runEmulator() {
   GUI gui;
-  gui.init(160, 144);
-
-  while (true) {
-    int clock_cycles;
-    if (is_halted) {
-      clock_cycles = 4;
-    } else {
-      uint8_t opcode = mmu.read(PC.getPCValue());
-      PC.incrementPC(1);
-      clock_cycles = executeOpcode(opcode);
-    }
-
-    render_cycles += clock_cycles + interrupt_cycles;
-    input_cycles += clock_cycles + interrupt_cycles;
-    ppu.updatePPU(clock_cycles + interrupt_cycles);
-    updateTimers(clock_cycles + interrupt_cycles);
-    checkInterrupts();
+  gui.init(ppu.getLCDViewportWidth(), ppu.getLCDViewportHeight());
+  while (!gui.shouldQuit()) {
+    updateEmulatorState();
 
     if (input_cycles > kInputPollingFrequency) {
       input_cycles = 0;
       JoyPadButton input = gui.getKeyboardInput();
-      if (input == JoyPadButton::kSaveButtonPressed) {
-        saveState("test.sav");
-      } else {
-        mmu.updateJoyPadState(input);
-      }
+      mmu.updateJoyPadState(input);
     }
 
     if (render_cycles > kRenderingFrequency) {
@@ -141,6 +121,31 @@ void CPU::update() {
       gui.update(ppu.getDisplayBuffer(), ppu.getDisplayBufferPitch());
     }
   }
+
+  const char *save_state_filename{"test.sav"};
+  saveState(save_state_filename);
+}
+
+void CPU::updateEmulatorState() {
+  int clock_cycles = updateCPU();
+
+  render_cycles += clock_cycles;
+  input_cycles += clock_cycles;
+  ppu.updatePPU(clock_cycles);
+  updateTimers(clock_cycles);
+  checkInterrupts();
+}
+
+int CPU::updateCPU() {
+  int clock_cycles = 0;
+  if (is_halted) {
+    clock_cycles = 4;
+  } else {
+    uint8_t opcode = mmu.read(PC.getPCValue());
+    PC.incrementPC(1);
+    clock_cycles = executeOpcode(opcode);
+  }
+  return clock_cycles;
 }
 
 int CPU::checkInterrupts() {

@@ -25,7 +25,6 @@ enum JoyPadButton {
   kBButtonPressed = 6,
   kSelectButtonPressed = 7,
   kStartButtonPressed = 8,
-  kSaveButtonPressed = 9
 };
 
 class GUI {
@@ -35,6 +34,7 @@ class GUI {
   void init(int window_width, int window_height);
   void update(std::vector<uint8_t> data, int scale);
   JoyPadButton getKeyboardInput();
+  bool shouldQuit();
 
  private:
   struct GUIImpl;
