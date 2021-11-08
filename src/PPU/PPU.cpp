@@ -247,4 +247,38 @@ void PPU::draw(uint8_t pixel, uint8_t scanline, Colour colour,
       pixel, scanline)] = colour_id;
 }
 
+void PPU::saveState(std::ofstream &save_state_file) {
+  save_state_file.write(reinterpret_cast<char *>(display_buffer.data()),
+                        display_buffer.size() * sizeof(uint8_t));
+  save_state_file.write(
+      reinterpret_cast<char *>(display_buffer_colour_id.data()),
+      display_buffer_colour_id.size() * sizeof(uint8_t));
+
+  save_state_file.write(reinterpret_cast<char *>(&ppu_clock_cycles),
+                        sizeof(unsigned int));
+  save_state_file.write(reinterpret_cast<char *>(&internal_window_counter),
+                        sizeof(uint16_t));
+  save_state_file.write(
+      reinterpret_cast<char *>(&requested_coincidence_interrupt), sizeof(bool));
+  save_state_file.write(reinterpret_cast<char *>(sprite_buffer.data()),
+                        sprite_buffer.size() * sizeof(SpriteOAMEntry));
+}
+
+void PPU::loadState(std::ifstream &save_state_file) {
+  save_state_file.read(reinterpret_cast<char *>(display_buffer.data()),
+                       display_buffer.size() * sizeof(uint8_t));
+  save_state_file.read(
+      reinterpret_cast<char *>(display_buffer_colour_id.data()),
+      display_buffer_colour_id.size() * sizeof(uint8_t));
+
+  save_state_file.read(reinterpret_cast<char *>(&ppu_clock_cycles),
+                       sizeof(unsigned int));
+  save_state_file.read(reinterpret_cast<char *>(&internal_window_counter),
+                       sizeof(uint16_t));
+  save_state_file.read(
+      reinterpret_cast<char *>(&requested_coincidence_interrupt), sizeof(bool));
+  save_state_file.read(reinterpret_cast<char *>(sprite_buffer.data()),
+                       sprite_buffer.size() * sizeof(SpriteOAMEntry));
+}
+
 }  // namespace GB

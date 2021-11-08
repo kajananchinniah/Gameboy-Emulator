@@ -24,7 +24,8 @@ enum JoyPadButton {
   kAButtonPressed = 5,
   kBButtonPressed = 6,
   kSelectButtonPressed = 7,
-  kStartButtonPressed = 8
+  kStartButtonPressed = 8,
+  kSaveButtonPressed = 9
 };
 
 class GUI {

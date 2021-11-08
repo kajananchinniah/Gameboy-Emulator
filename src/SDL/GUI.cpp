@@ -97,7 +97,7 @@ struct GUI::GUIImpl {
   JoyPadButton getKeyboardDownInput(SDL_Event event) {
     switch (event.key.keysym.scancode) {
       case SDL_SCANCODE_ESCAPE:
-        exit(0);
+        return JoyPadButton::kSaveButtonPressed;
       case SDL_SCANCODE_RIGHT:
         return JoyPadButton::kRightButtonPressed;
       case SDL_SCANCODE_LEFT:

@@ -1,6 +1,7 @@
 #ifndef INCLUDE_GB_PPU_HPP_
 #define INCLUDE_GB_PPU_HPP_
 
+#include <fstream>
 #include <vector>
 
 #include "MMU.hpp"
@@ -25,6 +26,8 @@ class PPU {
   unsigned int getLCDViewportHeight();
   std::vector<uint8_t> getDisplayBuffer();
   int getDisplayBufferPitch();
+  void saveState(std::ofstream &save_state_file);
+  void loadState(std::ifstream &save_state_file);
 
  private:
   std::vector<uint8_t> display_buffer;

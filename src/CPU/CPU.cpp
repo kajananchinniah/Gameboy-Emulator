@@ -1,5 +1,6 @@
 #include "GB/CPU.hpp"
 
+#include <fstream>
 #include <iomanip>
 #include <iostream>
 
@@ -30,6 +31,80 @@ CPU::CPU() : mmu{MMU()}, ppu{PPU(&mmu)} {
 
 void CPU::loadROM(const char *rom_path) { mmu.loadROM(rom_path); }
 
+void CPU::saveState(const char *state_path) {
+  std::ofstream save_state_file(state_path, std::ios::binary);
+  if (!save_state_file) {
+    throw std::runtime_error("Could not write to save state file");
+  }
+  uint16_t register_value = AF.getFullValue();
+  save_state_file.write(reinterpret_cast<char *>(&register_value),
+                        sizeof(uint16_t));
+  register_value = BC.getFullValue();
+  save_state_file.write(reinterpret_cast<char *>(&register_value),
+                        sizeof(uint16_t));
+  register_value = DE.getFullValue();
+  save_state_file.write(reinterpret_cast<char *>(&register_value),
+                        sizeof(uint16_t));
+  register_value = HL.getFullValue();
+  save_state_file.write(reinterpret_cast<char *>(&register_value),
+                        sizeof(uint16_t));
+  register_value = SP.getSPValue();
+  save_state_file.write(reinterpret_cast<char *>(&register_value),
+                        sizeof(uint16_t));
+  register_value = PC.getPCValue();
+  save_state_file.write(reinterpret_cast<char *>(&register_value),
+                        sizeof(uint16_t));
+  save_state_file.write(reinterpret_cast<char *>(&IME), sizeof(bool));
+  save_state_file.write(reinterpret_cast<char *>(&ran_instr), sizeof(bool));
+  save_state_file.write(reinterpret_cast<char *>(&is_halted), sizeof(bool));
+  save_state_file.write(reinterpret_cast<char *>(&div_timer_count),
+                        sizeof(int));
+  save_state_file.write(reinterpret_cast<char *>(&timer_count), sizeof(int));
+  save_state_file.write(reinterpret_cast<char *>(&render_cycles), sizeof(int));
+  save_state_file.write(reinterpret_cast<char *>(&input_cycles), sizeof(int));
+  mmu.saveState(save_state_file);
+  ppu.saveState(save_state_file);
+  save_state_file.close();
+  exit(0);
+}
+
+void CPU::loadState(const char *state_path) {
+  std::ifstream save_state_file(state_path, std::ios::binary);
+  if (!save_state_file) {
+    throw std::runtime_error("Could not read save state file");
+  }
+
+  uint16_t register_value;
+  save_state_file.read(reinterpret_cast<char *>(&register_value),
+                       sizeof(uint16_t));
+  AF.setFullValue(register_value);
+  save_state_file.read(reinterpret_cast<char *>(&register_value),
+                       sizeof(uint16_t));
+  BC.setFullValue(register_value);
+  save_state_file.read(reinterpret_cast<char *>(&register_value),
+                       sizeof(uint16_t));
+  DE.setFullValue(register_value);
+  save_state_file.read(reinterpret_cast<char *>(&register_value),
+                       sizeof(uint16_t));
+  HL.setFullValue(register_value);
+  save_state_file.read(reinterpret_cast<char *>(&register_value),
+                       sizeof(uint16_t));
+  SP.setSP(register_value);
+  save_state_file.read(reinterpret_cast<char *>(&register_value),
+                       sizeof(uint16_t));
+  PC.setPC(register_value);
+  save_state_file.read(reinterpret_cast<char *>(&IME), sizeof(bool));
+  save_state_file.read(reinterpret_cast<char *>(&ran_instr), sizeof(bool));
+  save_state_file.read(reinterpret_cast<char *>(&is_halted), sizeof(bool));
+  save_state_file.read(reinterpret_cast<char *>(&div_timer_count), sizeof(int));
+  save_state_file.read(reinterpret_cast<char *>(&timer_count), sizeof(int));
+  save_state_file.read(reinterpret_cast<char *>(&render_cycles), sizeof(int));
+  save_state_file.read(reinterpret_cast<char *>(&input_cycles), sizeof(int));
+  mmu.loadState(save_state_file);
+  ppu.loadState(save_state_file);
+  save_state_file.close();
+}
+
 void CPU::update() {
   int interrupt_cycles = 0;
   GUI gui;
@@ -54,7 +129,11 @@ void CPU::update() {
     if (input_cycles > kInputPollingFrequency) {
       input_cycles = 0;
       JoyPadButton input = gui.getKeyboardInput();
-      mmu.updateJoyPadState(input);
+      if (input == JoyPadButton::kSaveButtonPressed) {
+        saveState("test.sav");
+      } else {
+        mmu.updateJoyPadState(input);
+      }
     }
 
     if (render_cycles > kRenderingFrequency) {

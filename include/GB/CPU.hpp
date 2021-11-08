@@ -15,6 +15,8 @@ class CPU {
   CPU();
   void loadROM(const char *rom_path);
   void update();
+  void saveState(const char *state_path);
+  void loadState(const char *state_path);
 
  private:
   void printStatus();

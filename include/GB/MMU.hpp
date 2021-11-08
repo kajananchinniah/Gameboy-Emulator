@@ -15,6 +15,8 @@ class MMU {
   // MMU
   void initialize();
   void loadROM(const char* file_path);
+  void saveState(std::ofstream& save_state_file);
+  void loadState(std::ifstream& save_state_file);
   void write(uint16_t address, uint8_t data);
   uint8_t read(uint16_t address);
   void clearMemory();
@@ -150,6 +152,7 @@ class MMU {
   uint8_t current_ram_bank{0x00};
   bool ram_enabled{false};
   uint8_t banking_mode{0x00};
+  uint8_t joypad_state{0xFF};
 
   void updateMemoryBankController();
   void updateROMSize();
@@ -206,7 +209,6 @@ class MMU {
   void doDMATransferToOAM(uint8_t data);
 
   static const uint16_t JOYP_addr = 0xFF00;
-  uint8_t joypad_state{0xFF};
   void handleJoyPadRelease(JoyPadButton input);
   void handleJoyPadPress(JoyPadButton input);
   bool shouldRequestJoyPadInterrupt(JoyPadButton input,

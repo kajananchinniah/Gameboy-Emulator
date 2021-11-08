@@ -121,7 +121,7 @@ void MMU::clearMemory() {
     memory[i] = 0x00;
   }
 }
-void MMU::loadROM(const char* rom_path) {
+void MMU::loadROM(const char *rom_path) {
   // TODO: optimize memory management better due to banking
   std::ifstream rom_file(rom_path, std::ios::binary);
   if (!rom_file.is_open()) {
@@ -212,6 +212,46 @@ void MMU::transferROMToBanks() {
       rom_banks[bank_no][i] = read_only_memory[rom_idx + i];
     }
   }
+}
+
+void MMU::saveState(std::ofstream &save_state_file) {
+  save_state_file.write(reinterpret_cast<char *>(memory.data()),
+                        memory.size() * sizeof(uint8_t));
+  for (size_t ram_bank_no = 0; ram_bank_no < ram_banks.size(); ++ram_bank_no) {
+    save_state_file.write(
+        reinterpret_cast<char *>(ram_banks[ram_bank_no].data()),
+        ram_banks[ram_bank_no].size() * sizeof(uint8_t));
+  }
+
+  save_state_file.write(reinterpret_cast<char *>(&current_rom_bank),
+                        sizeof(uint8_t));
+  save_state_file.write(reinterpret_cast<char *>(&current_ram_bank),
+                        sizeof(uint8_t));
+  save_state_file.write(reinterpret_cast<char *>(&ram_enabled), sizeof(bool));
+  save_state_file.write(reinterpret_cast<char *>(&banking_mode),
+                        sizeof(uint8_t));
+  save_state_file.write(reinterpret_cast<char *>(&joypad_state),
+                        sizeof(uint8_t));
+}
+
+void MMU::loadState(std::ifstream &save_state_file) {
+  save_state_file.read(reinterpret_cast<char *>(memory.data()),
+                       memory.size() * sizeof(uint8_t));
+  for (size_t ram_bank_no = 0; ram_bank_no < ram_banks.size(); ++ram_bank_no) {
+    save_state_file.read(
+        reinterpret_cast<char *>(ram_banks[ram_bank_no].data()),
+        ram_banks[ram_bank_no].size() * sizeof(uint8_t));
+  }
+
+  save_state_file.read(reinterpret_cast<char *>(&current_rom_bank),
+                       sizeof(uint8_t));
+  save_state_file.read(reinterpret_cast<char *>(&current_ram_bank),
+                       sizeof(uint8_t));
+  save_state_file.read(reinterpret_cast<char *>(&ram_enabled), sizeof(bool));
+  save_state_file.read(reinterpret_cast<char *>(&banking_mode),
+                       sizeof(uint8_t));
+  save_state_file.read(reinterpret_cast<char *>(&joypad_state),
+                       sizeof(uint8_t));
 }
 
 }  // namespace GB
