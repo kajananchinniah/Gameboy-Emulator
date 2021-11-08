@@ -13,6 +13,53 @@ I'm planning on using a different one later
 ### Gifs
 TODO
 
+## Installation
+These instructions are targeted towards Ubuntu 18.04. I don't know the installation process for other operating systems.
+
+First, clone the repo wherever you want.
+
+Install CMakeLists:
+```
+sudo apt-get install cmake
+```
+
+Install SDL2:
+```
+sudo apt-get install libsdl2-*
+```
+
+You can install GTest if you want to run that one test I wrote but probably not worth it. I've commented out the code
+that part that uses it (since I ended up not really using it)
+
+Compile and build (assuming you are at the repo directory):
+```
+mkdir build
+cd build
+cmake ..
+make
+```
+
+The generate file will be called `gb-emulator`, and will be located in the `build` folder.
+
+I think that's about it, but I haven't verified the installation part (since I already have the dependencies). I also
+have a Dockerfile that can do it for you, but I haven't looked into how to get graphics to display in Docker yet and how
+to mount a volume to it (so that files can be moved back and forth).
+
+## Using the Emulator
+To run with a ROM for the first time:
+```
+./gb-emulator <path-to-gb-file>
+```
+
+To run with a ROM with a sav file:
+```
+./gb-emulator <path-to-gb-file> <path-to-sav-file>
+```
+
+You need to make sure you use the correct ROM and associated sav file. To see how to save files, see the controllers.
+Note: the emulator doesn't support other emulators sav files. The format I use is just a straight dump of a bunch of
+different variables in binary format. This lets you start right back where you ended.
+
 ## Controls
 Keyboard Input | Gameboy Input
 ---    | ---

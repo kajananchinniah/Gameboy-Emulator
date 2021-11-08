@@ -12,14 +12,9 @@ set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O3")
 
 ## Find packages ##
-find_package(GTest REQUIRED)
 find_package(SDL2 REQUIRED)
 
-## Include CTest ##
-include(CTest)
-
 ## Include directories ##
-include_directories(${GTEST_INCLUDE_DIRS})
 include_directories(include)
 include_directories(${SDL2_INCLUDE_DIRS})
 
@@ -42,11 +37,15 @@ AUX_SOURCE_DIRECTORY(src/CPU cpu_sources)
 add_library(cpu ${cpu_sources})
 target_link_libraries(cpu registers mmu ppu gui)
 
-add_executable(main src/main.cpp)
-target_link_libraries(main cpu)
+## Create Main Executable ##
+add_executable(gb-emulator src/main.cpp)
+target_link_libraries(gb-emulator cpu)
 
 ## Testing ##
 # Registers test
-add_executable(test_registers tests/test_registers.cpp)
-target_link_libraries(test_registers registers ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
-add_test(NAME TestRegisters COMMAND test_registers)
+# find_package(GTest REQUIRED)
+# include(CTest)
+# include_directories(${GTEST_INCLUDE_DIRS})
+# add_executable(test_registers tests/test_registers.cpp)
+# target_link_libraries(test_registers registers ${GTEST_LIBRARIES} ${GTEST_MAIN_LIBRARIES} pthread)
+# add_test(NAME TestRegisters COMMAND test_registers)
