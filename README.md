@@ -2,18 +2,6 @@
 This is my messy implementation of a gameboy emulator using C++. I've been working on this on and off (whenever I had
 time, but sometimes I was too busy to work on it). I generally tried to refactor after finishing a subset of emulator though.
 
-## Games Tested
-- Dr Mario
-- Tetris
-- Super Mario Land
-  - Top sometimes flashes
-- Legend of Zelda Link's Awakening
-- Super Mario Land 2
-- Pokemon Red
-  - Has some graphics issues (e.g. random tiles flash on bootup)
-
-I tested mostly just the beginning of these games few mins of these games so note that. I don't recommend using this emulator for playing games.
-
 ## Screenshots
 ### Pictures
 ![Super Mario Land](resources/super_mario_land.png?raw=true "Super Mario Land")
@@ -38,6 +26,18 @@ Space | Select
 Enter | Start
 Window Exit | Quit **with** overwrite save file
 Escape | Quit **without** overwrite save file
+
+## Games Tested
+- Dr Mario
+- Tetris
+- Super Mario Land
+  - Top sometimes flashes
+- Legend of Zelda Link's Awakening
+- Super Mario Land 2
+- Pokemon Red
+  - Has some graphics issues (e.g. random tiles flash on bootup)
+
+I tested mostly just the beginning of these games few mins of these games so note that. I don't recommend using this emulator for playing games.
 
 ## Future TODOs
 If I decide to pursue this again, I may do the following:
