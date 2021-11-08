@@ -15,7 +15,8 @@ time, but sometimes I was too busy to work on it). I generally tried to refactor
 
 Note I took these pictures when I had a small bug in rendering (Red and Blue channels were swapped).
 
-I used this colour scheme: https://lospec.com/palette-list/kirokaze-gameboy for the background. This is also the colour scheme for my emulator.
+I used this colour scheme: https://lospec.com/palette-list/kirokaze-gameboy for the background. This is also the colour scheme for my emulator for both sprites + background.
+
 For sprites, I used the colour scheme used here: https://binji.github.io/posts/pokegb/
 
 ### Gifs
@@ -24,7 +25,9 @@ For sprites, I used the colour scheme used here: https://binji.github.io/posts/p
   <img src="resources/link_awakening.gif" width="200" height="200"/>
 </p>
 
-I used this colour scheme for Link's Awakening: https://lospec.com/palette-list/kirokaze-gameboy. For Pokemon, I used this: https://binji.github.io/posts/pokegb/
+I used this colour scheme for Link's Awakening: https://lospec.com/palette-list/kirokaze-gameboy.
+
+For Pokemon, I used this: https://binji.github.io/posts/pokegb/
 
 ## Installation
 These instructions are targeted towards Ubuntu 18.04. I don't know the installation process for other operating systems.
