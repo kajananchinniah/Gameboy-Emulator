@@ -35,6 +35,7 @@ class GUI {
   void update(std::vector<uint8_t> data, int scale);
   JoyPadButton getKeyboardInput();
   bool shouldQuit();
+  bool shouldSave();
 
  private:
   struct GUIImpl;

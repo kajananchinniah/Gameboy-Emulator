@@ -41,6 +41,7 @@ struct GUI::GUIImpl {
   static constexpr uint32_t kGBWidth{160};
   static constexpr uint32_t kGBHeight{144};
   bool should_quit{false};
+  bool should_save{false};
 
   GUIImpl()
       : window_{nullptr, SDL_DestroyWindow},
@@ -84,8 +85,11 @@ struct GUI::GUIImpl {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
       switch (event.type) {
-        case SDL_QUIT:
+        case SDL_QUIT: {
           should_quit = true;
+          should_save = true;
+          return JoyPadButton::kNoInput;
+        }
         case SDL_KEYDOWN:
           return getKeyboardDownInput(event);
         case SDL_KEYUP:
@@ -97,8 +101,10 @@ struct GUI::GUIImpl {
 
   JoyPadButton getKeyboardDownInput(SDL_Event event) {
     switch (event.key.keysym.scancode) {
-      case SDL_SCANCODE_ESCAPE:
+      case SDL_SCANCODE_ESCAPE: {
         should_quit = true;
+        return JoyPadButton::kNoInput;
+      }
       case SDL_SCANCODE_RIGHT:
         return JoyPadButton::kRightButtonPressed;
       case SDL_SCANCODE_LEFT:
@@ -144,6 +150,7 @@ struct GUI::GUIImpl {
   }
 
   bool shouldQuit() { return should_quit; }
+  bool shouldSave() { return should_save; }
 };
 
 GUI::GUI() : gui_impl_{std::make_unique<GUIImpl>()} {}
@@ -159,5 +166,6 @@ void GUI::update(std::vector<uint8_t> data, int pitch) {
 
 JoyPadButton GUI::getKeyboardInput() { return gui_impl_->getKeyboardInput(); }
 bool GUI::shouldQuit() { return gui_impl_->shouldQuit(); }
+bool GUI::shouldSave() { return gui_impl_->shouldSave(); }
 
 }  // namespace GB

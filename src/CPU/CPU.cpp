@@ -122,8 +122,10 @@ void CPU::runEmulator() {
     }
   }
 
-  const char *save_state_filename{"test.sav"};
-  saveState(save_state_filename);
+  if (gui.shouldSave()) {
+    const char *save_state_filename{"test.sav"};
+    saveState(save_state_filename);
+  }
 }
 
 void CPU::updateEmulatorState() {
