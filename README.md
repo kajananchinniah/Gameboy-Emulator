@@ -47,6 +47,8 @@ If I decide to pursue this again, I may do the following:
 - Add audio support
 - Expose colour palette + controllers, etc to allow for more customization
 - Loading configs from file maybe
+- Support renaming of save file, using multiple save files, not overwriting it, etc
+- Better GUI (e.g. buttons to load game, etc)
 
 ## Notes on implementation
 Originally, the plan was to write this in modern C++. That clearly did not pan out. The gameboy instruction set is quite
