@@ -24,8 +24,7 @@ For sprites, I used the colour scheme used here: https://binji.github.io/posts/p
   <img src="resources/link_awakening.gif" width="200" height="200"/>
 </p>
 
-I used this colour scheme for Link's Awakening: https://lospec.com/palette-list/kirokaze-gameboy
-For Pokemon, I used this: https://binji.github.io/posts/pokegb/
+I used this colour scheme for Link's Awakening: https://lospec.com/palette-list/kirokaze-gameboy. For Pokemon, I used this: https://binji.github.io/posts/pokegb/
 
 ## Installation
 These instructions are targeted towards Ubuntu 18.04. I don't know the installation process for other operating systems.
