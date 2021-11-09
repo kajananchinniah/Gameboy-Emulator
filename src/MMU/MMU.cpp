@@ -122,12 +122,14 @@ void MMU::clearMemory() {
   }
 }
 void MMU::loadROM(const char *rom_path) {
+  // TODO: use file directly instead of transferring to vector (more efficient)
   std::ifstream rom_file(rom_path, std::ios::binary);
   if (!rom_file.is_open()) {
     throw std::runtime_error("Cannot read ROM: " + std::string(rom_path));
   }
 
   std::vector<uint8_t> read_only_memory;
+
   while (rom_file) {
     read_only_memory.push_back(rom_file.get());
   }
@@ -202,6 +204,9 @@ void MMU::updateRAMSize(const std::vector<uint8_t> &read_only_memory) {
 
 void MMU::transferROMToMainMemory(
     const std::vector<uint8_t> &read_only_memory) {
+  // TODO: don't actually need to copy memory into {0x0000, 0x8000}
+  // since it's copied into the rom banks anyways. Change MBC0 to use
+  // rom_banks, offset read/writes and reduce memory's address space
   constexpr uint16_t ROM_max_addr{0x8000};
   for (size_t i = 0; i < ROM_max_addr; i++) {
     memory.at(i) = read_only_memory.at(i);
