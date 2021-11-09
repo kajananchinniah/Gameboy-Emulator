@@ -134,13 +134,7 @@ void MMU::loadROM(const char *rom_path) {
   updateMemoryBankController();
   updateROMSize();
   updateRAMSize();
-
-  // TODO: don't need this anymore probably
-  // But I don't want to refactor my writing / reading code extensively
-  for (size_t i = 0; i < 0x8000; i++) {
-    memory.at(i) = read_only_memory.at(i);
-  }
-
+  transferROMToMainMemory();
   transferROMToBanks();
 }
 
@@ -201,6 +195,13 @@ void MMU::updateRAMSize() {
       break;
     default:
       throw std::runtime_error("Unsupported RAM size");
+  }
+}
+
+void MMU::transferROMToMainMemory() {
+  constexpr uint16_t ROM_max_addr{0x8000};
+  for (size_t i = 0; i < ROM_max_addr; i++) {
+    memory.at(i) = read_only_memory.at(i);
   }
 }
 

@@ -157,6 +157,7 @@ class MMU {
   void updateMemoryBankController();
   void updateROMSize();
   void updateRAMSize();
+  void transferROMToMainMemory();
   void transferROMToBanks();
 
   void handleBankedROMWrite(uint16_t address, uint8_t data);
