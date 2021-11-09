@@ -117,8 +117,8 @@ uint8_t MMU::handleEchoRead(uint16_t address) {
 }
 
 void MMU::clearMemory() {
-  for (size_t i = 0; i < memory.size(); i++) {
-    memory.at(i) = 0x00;
+  for (auto &memory_elem : memory) {
+    memory_elem = 0x00;
   }
 }
 void MMU::loadROM(const char *rom_path) {
@@ -154,7 +154,7 @@ void MMU::updateMemoryBankController() {
       memory_bank_controller = 0x01;
       break;
     case 0x13:
-      memory_bank_controller = 0x3;
+      memory_bank_controller = 0x03;
       break;
     default:
       throw std::runtime_error("Unsupported banking");
@@ -206,12 +206,14 @@ void MMU::transferROMToMainMemory() {
 }
 
 void MMU::transferROMToBanks() {
-  for (size_t bank_no = 0, rom_idx = 0;
+  size_t rom_idx = 0;
+  for (size_t bank_no = 0;
        bank_no < rom_banks.size() && rom_idx < read_only_memory.size();
-       bank_no++, rom_idx += 0x4000) {
-    for (size_t i = 0; i < 0x4000; ++i) {
+       ++bank_no) {
+    for (size_t i = 0; i < rom_banks.at(bank_no).size(); ++i) {
       rom_banks.at(bank_no).at(i) = read_only_memory.at(rom_idx + i);
     }
+    rom_idx += rom_banks.at(bank_no).size();
   }
 }
 
