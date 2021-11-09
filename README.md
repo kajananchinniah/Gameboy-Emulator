@@ -107,7 +107,7 @@ As a future TODO, I might expose these parameters in the future for modification
 - Pokemon Red
   - Has some graphics issues (e.g. random tiles flash on bootup)
 
-I tested mostly just the beginning of these games few mins of these games so note that. I don't recommend using this emulator for playing games.
+I tested mostly just the beginning of these games few mins of these games so note that. I don't recommend using this emulator for playing games unless you're fine with potential bugs creeping up (at worst, losing your save data).
 
 ## Future TODOs
 If I decide to pursue this again, I may do the following:
@@ -119,7 +119,8 @@ If I decide to pursue this again, I may do the following:
 - Loading configs from file maybe
 - Support renaming of save file, using multiple save files, not overwriting it, etc
 - Better GUI (e.g. buttons to load game, etc)
-- Add further safety to the code (e.g. prevent not using gb files for rom)
+- Add safety to the code (e.g. prevent not using gb files for rom). I have some safe practices but my code overall isn't
+  really safe
 
 ## Notes on implementation
 Originally, the plan was to write this in modern C++. That clearly did not pan out. The gameboy instruction set is quite
