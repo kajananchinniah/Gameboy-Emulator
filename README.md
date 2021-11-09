@@ -119,6 +119,7 @@ If I decide to pursue this again, I may do the following:
 - Loading configs from file maybe
 - Support renaming of save file, using multiple save files, not overwriting it, etc
 - Better GUI (e.g. buttons to load game, etc)
+- Add further safety to the code (e.g. prevent not using gb files for rom)
 
 ## Notes on implementation
 Originally, the plan was to write this in modern C++. That clearly did not pan out. The gameboy instruction set is quite
@@ -166,7 +167,7 @@ For CPU instructions, I used blargg's tests. This can be found at: https://gbdev
 
 I currently pass the CPU instruction test and the instruction timing test.
 
-I also mostly pass dmg-acid2 (see: https://github.com/mattcurrie/dmg-acid2). However, there are a few graphical errors (namely the smile extends slightly too much, ther are 2 white bars that are approx 1 pixel in height and go from the left side of the face's edge to the eye and from the right side of the mouth to the face's edge). I also have some dots under `HELLO WORLD!`. Also, note if you use multiple colours, the output resembles CGB running in DMG mode rather than the DMG mode. I plan on debugging this later on but it doesn't seem to affect playing games much. 
+I also mostly pass dmg-acid2 (see: https://github.com/mattcurrie/dmg-acid2). However, there are a few graphical errors (namely the smile extends slightly too much, ther are 2 white bars that are approx 1 pixel in height and go from the left side of the face's edge to the eye and from the right side of the mouth to the face's edge). I also have some dots under `HELLO WORLD!`. Also, note if you use multiple colours, the output resembles CGB running in DMG mode rather than the DMG mode. I plan on debugging this later on but it doesn't seem to affect playing games much.
 
 TODO: add screenshots
 
