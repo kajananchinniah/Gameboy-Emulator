@@ -240,12 +240,12 @@ size_t PPU::getFlattenedDisplayBufferColourIDIndex(uint8_t pixel,
 void PPU::draw(uint8_t pixel, uint8_t scanline, Colour colour,
                uint8_t colour_id) {
   size_t effective_idx = getFlattenedDisplayBufferIndex(pixel, scanline);
-  display_buffer[effective_idx + kAlphaDisplayBufferIndex] = 0xFF;
-  display_buffer[effective_idx + kRedDisplayBufferIndex] = colour.red;
-  display_buffer[effective_idx + kGreenDisplayBufferIndex] = colour.green;
-  display_buffer[effective_idx + kBlueDisplayBufferIndex] = colour.blue;
-  display_buffer_colour_id[getFlattenedDisplayBufferColourIDIndex(
-      pixel, scanline)] = colour_id;
+  display_buffer.at(effective_idx + kAlphaDisplayBufferIndex) = 0xFF;
+  display_buffer.at(effective_idx + kRedDisplayBufferIndex) = colour.red;
+  display_buffer.at(effective_idx + kGreenDisplayBufferIndex) = colour.green;
+  display_buffer.at(effective_idx + kBlueDisplayBufferIndex) = colour.blue;
+  display_buffer_colour_id.at(
+      getFlattenedDisplayBufferColourIDIndex(pixel, scanline)) = colour_id;
 }
 
 void PPU::saveState(std::ofstream &save_state_file) {

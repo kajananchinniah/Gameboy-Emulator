@@ -72,17 +72,17 @@ bool MMU::shouldRequestJoyPadInterrupt(JoyPadButton input,
 }
 
 bool MMU::isActionSelectButtonsEnabled() {
-  uint8_t JOYP = memory[JOYP_addr];
+  uint8_t JOYP = memory.at(JOYP_addr);
   return !checkBit(4, JOYP);
 }
 
 bool MMU::isDirectionalSelectButtonsEnabled() {
-  uint8_t JOYP = memory[JOYP_addr];
+  uint8_t JOYP = memory.at(JOYP_addr);
   return !checkBit(5, JOYP);
 }
 
 uint8_t MMU::getJOYPRegister() {
-  uint8_t JOYP = memory[JOYP_addr];
+  uint8_t JOYP = memory.at(JOYP_addr);
   JOYP = JOYP | 0xC0;  // Set the top 2 bits
   if (isDirectionalSelectButtonsEnabled()) {
     uint8_t top = joypad_state >> 4;

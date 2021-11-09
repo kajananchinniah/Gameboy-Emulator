@@ -157,8 +157,8 @@ bool PPU::shouldDrawPixel(uint8_t sprite_flags, uint8_t colour_id,
   if (colour_id == 0) {
     return false;
   } else if (isBackgroundPrioritized(sprite_flags) &&
-             display_buffer_colour_id[getFlattenedDisplayBufferColourIDIndex(
-                 pixel, scanline)] != 0) {
+             display_buffer_colour_id.at(getFlattenedDisplayBufferColourIDIndex(
+                 pixel, scanline)) != 0) {
     return false;
   }
   return true;
