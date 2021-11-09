@@ -1,7 +1,6 @@
 #include "GB/MMU.hpp"
 
 #include <fstream>
-#include <iostream>
 
 namespace GB {
 
@@ -129,7 +128,6 @@ void MMU::loadROM(const char *rom_path) {
   }
 
   std::vector<uint8_t> read_only_memory;
-
   while (rom_file) {
     read_only_memory.push_back(rom_file.get());
   }
