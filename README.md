@@ -211,3 +211,6 @@ To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a
   https://stackoverflow.com/questions/20753726/rendering-pixels-from-array-of-rgb-values-in-sdl-1-2 and https://stackoverflow.com/questions/52031503/how-to-render-a-rectangle-sdl2-texture-from-a-buffer-of-hex-values
 - Retrocomputing stack exchange question: https://retrocomputing.stackexchange.com/questions/11732/how-does-the-gameboys-memory-bank-switching-work
   - Provided an explanation for how MBC1 worked and clarified things that I was confused about
+- Reddit post asking about coincidence issues: https://www.reddit.com/r/EmuDev/comments/kjrfl3/problems_with_the_coincidencelylyc_interrupt/
+  - Helped fix one of my PPU flashing bugs + inspired me to separate window & background logic to make it easier to use
+    the gameboy development guide
