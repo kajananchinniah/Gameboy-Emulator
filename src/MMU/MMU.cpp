@@ -217,10 +217,9 @@ void MMU::transferROMToBanks() {
 void MMU::saveState(std::ofstream &save_state_file) {
   save_state_file.write(reinterpret_cast<char *>(memory.data()),
                         memory.size() * sizeof(uint8_t));
-  for (size_t ram_bank_no = 0; ram_bank_no < ram_banks.size(); ++ram_bank_no) {
-    save_state_file.write(
-        reinterpret_cast<char *>(ram_banks.at(ram_bank_no).data()),
-        ram_banks.at(ram_bank_no).size() * sizeof(uint8_t));
+  for (auto &ram_bank : ram_banks) {
+    save_state_file.write(reinterpret_cast<char *>(ram_bank.data()),
+                          ram_bank.size() * sizeof(uint8_t));
   }
 
   save_state_file.write(reinterpret_cast<char *>(&current_rom_bank),
@@ -237,10 +236,9 @@ void MMU::saveState(std::ofstream &save_state_file) {
 void MMU::loadState(std::ifstream &save_state_file) {
   save_state_file.read(reinterpret_cast<char *>(memory.data()),
                        memory.size() * sizeof(uint8_t));
-  for (size_t ram_bank_no = 0; ram_bank_no < ram_banks.size(); ++ram_bank_no) {
-    save_state_file.read(
-        reinterpret_cast<char *>(ram_banks.at(ram_bank_no).data()),
-        ram_banks.at(ram_bank_no).size() * sizeof(uint8_t));
+  for (auto &ram_bank : ram_banks) {
+    save_state_file.read(reinterpret_cast<char *>(ram_bank.data()),
+                         ram_bank.size() * sizeof(uint8_t));
   }
 
   save_state_file.read(reinterpret_cast<char *>(&current_rom_bank),
