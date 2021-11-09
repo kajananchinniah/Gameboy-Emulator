@@ -122,23 +122,25 @@ void MMU::clearMemory() {
   }
 }
 void MMU::loadROM(const char *rom_path) {
-  // TODO: optimize memory management better due to banking
   std::ifstream rom_file(rom_path, std::ios::binary);
   if (!rom_file.is_open()) {
     throw std::runtime_error("Cannot read ROM: " + std::string(rom_path));
   }
+
+  std::vector<uint8_t> read_only_memory;
   while (rom_file) {
     read_only_memory.push_back(rom_file.get());
   }
 
-  updateMemoryBankController();
-  updateROMSize();
-  updateRAMSize();
-  transferROMToMainMemory();
-  transferROMToBanks();
+  updateMemoryBankController(read_only_memory);
+  updateROMSize(read_only_memory);
+  updateRAMSize(read_only_memory);
+  transferROMToMainMemory(read_only_memory);
+  transferROMToBanks(read_only_memory);
 }
 
-void MMU::updateMemoryBankController() {
+void MMU::updateMemoryBankController(
+    const std::vector<uint8_t> &read_only_memory) {
   constexpr uint16_t controller_type_addr{0x0147};
   switch (read_only_memory.at(controller_type_addr)) {
     case 0x00:
@@ -161,7 +163,7 @@ void MMU::updateMemoryBankController() {
   }
 }
 
-void MMU::updateROMSize() {
+void MMU::updateROMSize(const std::vector<uint8_t> &read_only_memory) {
   constexpr uint16_t ROM_size_addr{0x0148};
   uint8_t code = read_only_memory.at(ROM_size_addr);
   if (code > 0x08) {
@@ -171,7 +173,7 @@ void MMU::updateROMSize() {
   rom_banks.resize(num_banks);
 }
 
-void MMU::updateRAMSize() {
+void MMU::updateRAMSize(const std::vector<uint8_t> &read_only_memory) {
   constexpr uint16_t RAM_size_addr{0x0149};
   uint8_t code = read_only_memory.at(RAM_size_addr);
   switch (code) {
@@ -198,14 +200,15 @@ void MMU::updateRAMSize() {
   }
 }
 
-void MMU::transferROMToMainMemory() {
+void MMU::transferROMToMainMemory(
+    const std::vector<uint8_t> &read_only_memory) {
   constexpr uint16_t ROM_max_addr{0x8000};
   for (size_t i = 0; i < ROM_max_addr; i++) {
     memory.at(i) = read_only_memory.at(i);
   }
 }
 
-void MMU::transferROMToBanks() {
+void MMU::transferROMToBanks(const std::vector<uint8_t> &read_only_memory) {
   size_t rom_idx = 0;
   for (size_t bank_no = 0;
        bank_no < rom_banks.size() && rom_idx < read_only_memory.size();

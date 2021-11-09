@@ -141,7 +141,6 @@ class MMU {
  private:
   static const int kAddressSpace = 0x10000;
   std::array<uint8_t, kAddressSpace> memory;
-  std::vector<uint8_t> read_only_memory;
   static const int kROMSpace{0x4000};
   std::vector<std::array<uint8_t, kROMSpace>> rom_banks;
   static const int kRAMSpace{0x2000};
@@ -154,11 +153,11 @@ class MMU {
   uint8_t banking_mode{0x00};
   uint8_t joypad_state{0xFF};
 
-  void updateMemoryBankController();
-  void updateROMSize();
-  void updateRAMSize();
-  void transferROMToMainMemory();
-  void transferROMToBanks();
+  void updateMemoryBankController(const std::vector<uint8_t>& read_only_memory);
+  void updateROMSize(const std::vector<uint8_t>& read_only_memory);
+  void updateRAMSize(const std::vector<uint8_t>& read_only_memory);
+  void transferROMToMainMemory(const std::vector<uint8_t>& read_only_memory);
+  void transferROMToBanks(const std::vector<uint8_t>& read_only_memory);
 
   void handleBankedROMWrite(uint16_t address, uint8_t data);
   void handleBankedRAMWrite(uint16_t address, uint8_t data);
