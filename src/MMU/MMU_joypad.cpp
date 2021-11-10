@@ -8,26 +8,26 @@ namespace {
 bool isDirectionalInput(GB::JoyPadButton input) {
   bool direction_input = false;
   direction_input =
-      direction_input | (input == GB::JoyPadButton::kRightButtonPressed);
+      direction_input || (input == GB::JoyPadButton::kRightButtonPressed);
   direction_input =
-      direction_input | (input == GB::JoyPadButton::kRightButtonPressed);
+      direction_input || (input == GB::JoyPadButton::kLeftButtonPressed);
   direction_input =
-      direction_input | (input == GB::JoyPadButton::kRightButtonPressed);
+      direction_input || (input == GB::JoyPadButton::kUpButtonPressed);
   direction_input =
-      direction_input | (input == GB::JoyPadButton::kRightButtonPressed);
+      direction_input || (input == GB::JoyPadButton::kDownButtonPressed);
   return direction_input;
 }
 
 bool isActionInput(GB::JoyPadButton input) {
   bool direction_input = false;
   direction_input =
-      direction_input | (input == GB::JoyPadButton::kAButtonPressed);
+      direction_input || (input == GB::JoyPadButton::kAButtonPressed);
   direction_input =
-      direction_input | (input == GB::JoyPadButton::kBButtonPressed);
+      direction_input || (input == GB::JoyPadButton::kBButtonPressed);
   direction_input =
-      direction_input | (input == GB::JoyPadButton::kSelectButtonPressed);
+      direction_input || (input == GB::JoyPadButton::kSelectButtonPressed);
   direction_input =
-      direction_input | (input == GB::JoyPadButton::kStartButtonPressed);
+      direction_input || (input == GB::JoyPadButton::kStartButtonPressed);
   return direction_input;
 }
 
