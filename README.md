@@ -168,9 +168,12 @@ For CPU instructions, I used blargg's tests. This can be found at: https://gbdev
 
 I currently pass the CPU instruction test and the instruction timing test.
 
-I also mostly pass dmg-acid2 (see: https://github.com/mattcurrie/dmg-acid2). However, there are a few graphical errors (namely the smile extends slightly too much, ther are 2 white bars that are approx 1 pixel in height and go from the left side of the face's edge to the eye and from the right side of the mouth to the face's edge). I also have some dots under `HELLO WORLD!`. Also, note if you use multiple colours, the output resembles CGB running in DMG mode rather than the DMG mode. I plan on debugging this later on but it doesn't seem to affect playing games much.
+I also mostly pass dmg-acid2 (see: https://github.com/mattcurrie/dmg-acid2). However, there are a few graphical errors (namely the smile extends slightly too much, ther are 2 white bars that are approx 1 pixel in height and go from the left side of the face's edge to the eye and from the right side of the mouth to the face's edge). I also have some dots under `HELLO WORLD!`. I plan on debugging this later on but it doesn't seem to affect playing games much. Also, note if you use multiple colours, the output resembles CGB running in DMG mode rather than the DMG mode (this behavior is correct, but you will see a similar graphical glitch to the below screenshot).
 
-TODO: add screenshots
+<p align="center">
+  <img src="resources/dmg_acid_fail.png" width="200" height="200"/>
+</p>
+
 
 ## Debugging Acknowledgements
 To get started on debugging my opcodes, I used BGB (https://bgb.bircd.org/) as a dissassembler on blargg's tests. This is a high accuracy emulator (see: https://gbdev.gg8.se/wiki/articles/Test_ROMs). I mainly used this to compare the output of the disassembler with my program (by printing out the status of my registers). This helped me find minor bugs that really messed up everyhing such as accidental infinite loops due to mixing up the order of registers in some instructions. Once I got past the requirements for blargg's tests initialization, I shifted to using it exclusively because it was a more scalable testing method.
