@@ -44,14 +44,31 @@ Install SDL2:
 sudo apt-get install libsdl2-*
 ```
 
+Install Ninja:
+```
+sudo apt-get install ninja-build
+```
+
 You can install GTest if you want to run that one test I wrote but probably not worth it. I've commented out the code
 that part that uses it (since I ended up not really using it)
 
 Compile and build (assuming you are at the repo directory):
+
+If using a newer CMake version:
 ```
 cmake -S . -B build -G Ninja
 cmake --build build
 ```
+
+Otherwise:
+```
+mkdir build
+cd build
+cmake .. -G Ninja
+ninja
+```
+
+Note: traditional Makefiles are fine too (just remove the `-G Ninja` part) but the compilation is slower.
 
 The generate file will be called `gb-emulator`, and will be located in the `build` folder.
 
