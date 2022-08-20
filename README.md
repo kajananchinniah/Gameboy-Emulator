@@ -49,17 +49,14 @@ that part that uses it (since I ended up not really using it)
 
 Compile and build (assuming you are at the repo directory):
 ```
-mkdir build
-cd build
-cmake ..
-make
+cmake -S . -B build -G Ninja
+cmake --build build
 ```
 
 The generate file will be called `gb-emulator`, and will be located in the `build` folder.
 
-I think that's about it, but I haven't verified the installation part (since I already have the dependencies). I also
-have a Dockerfile that can do it for you, but I haven't looked into how to get graphics to display in Docker yet and how
-to mount a volume to it (so that files can be moved back and forth).
+In the future, I plan on adding dependency management via Conan. Unfortunately I
+ran into issues with glibc on my machine and will do this later.
 
 ## Using the Emulator
 To run with a ROM for the first time:
